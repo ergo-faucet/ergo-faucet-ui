@@ -7,7 +7,9 @@
     "prepare": "husky install",
     "build": "next build",
     "start": "next start",
-    "lint": "next lint"
+    "prettify": "prettier --write . --ignore-path .gitignore",
+    "lint": "next lint --fix && npm run prettify",
+    "type-check": "tsc --noEmit",
   },
   "dependencies": {
     "class-variance-authority": "^0.7.1",
