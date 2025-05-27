@@ -9,7 +9,7 @@
     "start": "next start",
     "prettify": "prettier --write . --ignore-path .gitignore",
     "lint": "next lint --fix && npm run prettify",
-    "type-check": "tsc --noEmit",
+    "type-check": "tsc --noEmit"
   },
   "dependencies": {
     "class-variance-authority": "^0.7.1",
