@@ -1,8 +1,3 @@
-
 export default function Home() {
-  return (
-    <>
-      Ergo Facuet UI
-    </>
-  );
+  return <>Ergo Faucet UI</>;
 }
