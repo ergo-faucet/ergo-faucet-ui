@@ -5,7 +5,7 @@
   "type": "module",
   "scripts": {
     "dev": "next dev",
-    "prepare": "husky install",
+    "prepare": "husky",
     "build": "next build",
     "start": "next start",
     "prettify": "prettier --write . --ignore-path .gitignore",
@@ -32,10 +32,13 @@
     "autoprefixer": "^10.4.21",
     "eslint": "^9",
     "eslint-config-next": "15.3.4",
-    "husky": "^8.0.0",
-    "eslint-config-prettier": "^9.1.0",
-    "lint-staged": "^13.0.3",
-    "prettier": "^3.3.3",
+    "eslint-config-prettier": "^10.1.5",
+    "eslint-plugin-jsx-a11y": "^6.10.2",
+    "eslint-plugin-prettier": "^5.5.1",
+    "husky": "^9.1.7",
+    "lint-staged": "^16.1.2",
+    "prettier": "^3.6.2",
+    "prettier-plugin-tailwindcss": "^0.6.13",
     "tailwindcss": "^4",
     "typescript": "^5"
   }
