@@ -5,7 +5,7 @@
   "type": "module",
   "scripts": {
     "dev": "next dev",
-    "prepare": "husky",
+    "prepare": "husky install",
     "build": "next build",
     "start": "next start",
     "prettify": "prettier --write . --ignore-path .gitignore",
@@ -40,6 +40,6 @@
     "prettier": "^3.6.2",
     "prettier-plugin-tailwindcss": "^0.6.13",
     "tailwindcss": "^4",
-    "typescript": "^5"
+    "typescript": "^5.3.3"
   }
 }
