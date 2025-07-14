@@ -79,6 +79,8 @@
   --color-dark-green-ergo-navbar: #031a26;
   --color-beige-ergo-navbar: #968e77;
   --color-yellow-ergo-navbar: #fdc317;
+  --color-gray-text-ergo-navbar: #575757;
+  --color-gray-ergo-navbar: #968e77;
 }
 
 @theme inline {
