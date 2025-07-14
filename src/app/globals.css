@@ -74,6 +74,13 @@
   --sidebar-ring: oklch(0.439 0 0);
 }
 
+@theme {
+  --color-green-ergo-navbar: #0d2a32;
+  --color-dark-green-ergo-navbar: #031a26;
+  --color-beige-ergo-navbar: #968e77;
+  --color-yellow-ergo-navbar: #fdc317;
+}
+
 @theme inline {
   --color-background: var(--background);
   --color-foreground: var(--foreground);

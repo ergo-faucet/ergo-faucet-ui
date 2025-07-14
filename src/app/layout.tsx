@@ -1,5 +1,6 @@
 import type { Metadata } from "next";
 import "./globals.css";
+import { Providers } from "@/providers";
 
 export const metadata: Metadata = {
   title: "Ergo Fuacet UI",
@@ -12,8 +13,10 @@ export default function RootLayout({
   children: React.ReactNode;
 }>) {
   return (
-    <html lang="en">
-      <body className={`antialiased`}>{children}</body>
+    <html lang="en" suppressHydrationWarning>
+      <body className={`antialiased transition-colors`}>
+        <Providers>{children}</Providers>
+      </body>
     </html>
   );
 }
