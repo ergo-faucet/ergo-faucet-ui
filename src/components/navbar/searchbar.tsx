@@ -17,7 +17,7 @@ const Searchbar = () => {
         <button className='group'>
           <IoSearch
             size={27}
-            className='text-gray-text-ergo-navbar dark:text-yellow-ergo-navbar transition-transform duration-300 ease-in-out group-hover:scale-125'
+            className='text-beige-ergo-navbar dark:text-yellow-ergo-navbar transition-transform duration-300 ease-in-out group-hover:scale-125'
           />
         </button>
         <input
@@ -27,7 +27,7 @@ const Searchbar = () => {
           onChange={(e) => setSearchQuery(e.target.value)}
           onFocus={() => setIsFocused(true)}
           onBlur={() => setIsFocused(false)}
-          className='placeholder-gray-text-ergo-navbar ml-3 w-full text-xl font-medium tracking-widest text-gray-800 focus:outline-none dark:text-white dark:placeholder-neutral-300'
+          className='placeholder-beige-ergo-navbar ml-3 w-full text-xl font-medium tracking-widest text-gray-800 focus:outline-none dark:text-white dark:placeholder-neutral-300'
         />
       </div>
 
@@ -40,7 +40,7 @@ const Searchbar = () => {
         >
           <VscSettings
             size={28}
-            className='text-gray-text-ergo-navbar dark:text-yellow-ergo-navbar scale-x-[-1] stroke-[0.5px]'
+            className='text-beige-ergo-navbar dark:text-yellow-ergo-navbar scale-x-[-1] stroke-[0.5px]'
           />
         </button>
       </div>
