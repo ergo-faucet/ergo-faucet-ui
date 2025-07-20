@@ -14,12 +14,12 @@ const LeftNavbar = () => {
         <MdOutlineExplore size={50} />
         <span>Explore</span>
       </div>
-      {/* explore */}
+      {/* history */}
       <div className='flex flex-col items-center justify-center text-black dark:text-gray-200'>
         <RiHistoryLine size={35} />
         <span>History</span>
       </div>
-      {/* explore */}
+      {/* about us */}
       <div className='flex flex-col items-center justify-center text-black dark:text-gray-200'>
         <HiUsers className='scale-x-[-1]' size={40} />
         <span>About Us</span>
