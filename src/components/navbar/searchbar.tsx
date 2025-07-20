@@ -45,7 +45,7 @@ const Searchbar = () => {
         >
           <VscSettings
             size={28}
-            className='text-gray-text-ergo-navbar dark:text-yellow-ergo-navbar scale-x-[-1] stroke-[0.5px]'
+            className='text-beige-ergo-navbar dark:text-yellow-ergo-navbar scale-x-[-1] stroke-[0.5px]'
           />
         </button>
       </div>
