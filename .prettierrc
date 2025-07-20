@@ -2,12 +2,8 @@
   "singleQuote": true,
   "jsxSingleQuote": true,
   "quoteProps": "consistent",
-  "importOrder": [
-    "^(@?react|@?next)",
-    "<THIRD_PARTY_MODULES>",
-    "^@/(.*)$",
-    "^[.](.*)"
-  ],
+  "printWidth": 120,
+  "importOrder": ["^(@?react|@?next)", "<THIRD_PARTY_MODULES>", "^@/(.*)$", "^[.](.*)"],
   "importOrderCaseInsensitive": true,
   "importOrderParserPlugins": [
     "typescript",
@@ -17,5 +13,10 @@
   ],
   "importOrderSeparation": true,
   "importOrderSortSpecifiers": false,
-  "plugins": ["@trivago/prettier-plugin-sort-imports"]
+  "plugins": [
+    "@trivago/prettier-plugin-sort-imports",
+    "prettier-plugin-tailwindcss",
+    "prettier-plugin-classnames",
+    "prettier-plugin-merge"
+  ]
 }
