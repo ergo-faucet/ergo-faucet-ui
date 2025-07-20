@@ -2,19 +2,14 @@ import { Inter } from 'next/font/google';
 import { FaBitcoin, FaExternalLinkAlt } from 'react-icons/fa';
 import { SiTether } from 'react-icons/si';
 
+import { TokenDetailsTypes } from '@/types';
+
 const inter = Inter({
   subsets: ['latin'],
   weight: ['300'],
 });
 
-interface TokenDetails {
-  type: 'bitcoin' | 'tether';
-  amount: number;
-  contractAddress: string;
-  href: string;
-}
-
-const TokenDetails = ({ type, amount, contractAddress, href }: TokenDetails) => {
+const TokenDetails = ({ type, amount, contractAddress, href }: TokenDetailsTypes) => {
   return (
     // container
     <div
