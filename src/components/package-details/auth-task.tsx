@@ -2,15 +2,15 @@ import { IoCheckmarkCircleSharp } from 'react-icons/io5';
 
 import { ClickToCompleteButton } from '@/components/package-details/buttons';
 import GenerateIcon from '@/lib/generate-icon';
-import { authType } from '@/types';
+import { AuthType } from '@/types';
 
 interface AuthTaskProps {
-  authType: authType;
+  authType: AuthType;
   title: string;
   isCompleted: boolean;
 }
 
-const AuthTask = ({ authType, title, isCompleted }: AuthTaskProps) => {
+const AuthTask = ({ authType, isCompleted }: AuthTaskProps) => {
   return (
     // container
     <div
@@ -21,7 +21,6 @@ const AuthTask = ({ authType, title, isCompleted }: AuthTaskProps) => {
       <div className='flex h-9 w-25 flex-row items-center'>
         {/* TODO: add other icons based on new types later */}
         {<GenerateIcon authType={authType} />}
-        <span className='pl-2.5 text-sm font-semibold tracking-wider text-black'>{title}</span>
       </div>
 
       {/* status */}

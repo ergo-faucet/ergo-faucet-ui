@@ -1,14 +1,24 @@
 import DiscordIcon from '@/components/icons/discord';
 import GoogleIcon from '@/components/icons/google';
-import { authType } from '@/types';
+import { AuthType } from '@/types';
 
-const GenerateIcon = ({ authType }: { authType: authType }) => {
+const GenerateIcon = ({ authType }: { authType: AuthType }) => {
   switch (authType) {
     case 'google':
-      return <GoogleIcon />;
+      return (
+        <>
+          <GoogleIcon />
+          <span className='pl-2.5 text-sm font-semibold tracking-wider text-black'>Google</span>
+        </>
+      );
       break;
     case 'discord':
-      return <DiscordIcon />;
+      return (
+        <>
+          <DiscordIcon />
+          <span className='pl-2.5 text-sm font-semibold tracking-wider text-black'>Discord</span>
+        </>
+      );
       break;
     default:
       return null;
