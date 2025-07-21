@@ -1,18 +1,8 @@
 import { IoCheckmarkCircleSharp } from 'react-icons/io5';
 
+import { ClickToCompleteButton } from '@/components/package-details/buttons';
 import GenerateIcon from '@/lib/generate-icon';
 import { authType } from '@/types';
-
-const ClickToCompleteButton = () => {
-  return (
-    <button
-      className='bg-gold-ergo mr-1 h-4 w-19 rounded-[5px] text-[8px] font-semibold text-white shadow-md/50 shadow-black
-        hover:bg-amber-800'
-    >
-      Click to complete
-    </button>
-  );
-};
 
 interface AuthTaskProps {
   authType: authType;
