@@ -5,7 +5,10 @@ import DiscordIcon from '@/components/icons/discord';
 
 const ClickToCompleteButton = () => {
   return (
-    <button className='w-19 h-4 rounded-[5px] mr-1 bg-gold-ergo hover:bg-amber-800 text-white text-[8px] font-semibold shadow-md/50 shadow-black'>
+    <button
+      className='bg-gold-ergo mr-1 h-4 w-19 rounded-[5px] text-[8px] font-semibold text-white shadow-md/50 shadow-black
+        hover:bg-amber-800'
+    >
       Click to complete
     </button>
   );
@@ -20,25 +23,23 @@ interface AuthTaskProps {
 const AuthTask = ({ authType, title, isCompleted }: AuthTaskProps) => {
   return (
     // container
-    <div className='bg-white dark:bg-light-green-ergo w-72 h-11 border border-[#27548A]/35 flex px-2 items-center justify-between rounded-[5px] transition-colors duration-300'>
+    <div
+      className='dark:bg-light-green-ergo flex h-11 w-72 items-center justify-between rounded-[5px] border
+        border-[#27548A]/35 bg-white px-2 transition-colors duration-300'
+    >
       {/* icon and title */}
-      <div className='flex flex-row items-center w-25 h-9'>
+      <div className='flex h-9 w-25 flex-row items-center'>
         {/* TODO: add other icons based on new types later */}
         {authType === 'google' ? (
-          <FcGoogle className='size-9 bg-white rounded-full' />
+          <FcGoogle className='size-9 rounded-full bg-white' />
         ) : authType === 'discord' ? (
           <DiscordIcon />
         ) : null}
-        <span className='font-semibold text-sm tracking-wider pl-2.5 text-black'>
-          {title}
-        </span>
+        <span className='pl-2.5 text-sm font-semibold tracking-wider text-black'>{title}</span>
       </div>
       {/* status */}
       {isCompleted ? (
-        <IoCheckmarkCircleSharp
-          className='text-[#183B4E] dark:text-[#0E2B33]'
-          size={18}
-        />
+        <IoCheckmarkCircleSharp className='text-[#183B4E] dark:text-[#0E2B33]' size={18} />
       ) : (
         <ClickToCompleteButton />
       )}
