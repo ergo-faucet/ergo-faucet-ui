@@ -1,7 +1,7 @@
-import { FcGoogle } from 'react-icons/fc';
 import { IoCheckmarkCircleSharp } from 'react-icons/io5';
 
-import DiscordIcon from '@/components/icons/discord';
+import GenerateIcon from '@/lib/generate-icon';
+import { authType } from '@/types';
 
 const ClickToCompleteButton = () => {
   return (
@@ -15,7 +15,7 @@ const ClickToCompleteButton = () => {
 };
 
 interface AuthTaskProps {
-  authType: 'google' | 'discord';
+  authType: authType;
   title: string;
   isCompleted: boolean;
 }
@@ -30,13 +30,10 @@ const AuthTask = ({ authType, title, isCompleted }: AuthTaskProps) => {
       {/* icon and title */}
       <div className='flex h-9 w-25 flex-row items-center'>
         {/* TODO: add other icons based on new types later */}
-        {authType === 'google' ? (
-          <FcGoogle className='size-9 rounded-full bg-white' />
-        ) : authType === 'discord' ? (
-          <DiscordIcon />
-        ) : null}
+        {<GenerateIcon authType={authType} />}
         <span className='pl-2.5 text-sm font-semibold tracking-wider text-black'>{title}</span>
       </div>
+
       {/* status */}
       {isCompleted ? (
         <IoCheckmarkCircleSharp className='text-[#183B4E] dark:text-[#0E2B33]' size={18} />
