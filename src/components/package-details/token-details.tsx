@@ -1,7 +1,9 @@
 import { Inter } from 'next/font/google';
 import { FaExternalLinkAlt } from 'react-icons/fa';
 
-import { formatAmount, GenerateTokenIcon } from '@/lib';
+import Avatar from '@mui/material/Avatar';
+
+import { formatAmount } from '@/lib';
 import { Asset } from '@/types';
 
 const inter = Inter({
@@ -24,8 +26,8 @@ const TokenDetails = ({ asset }: TokenDetailsProps) => {
         items-center justify-between`}
     >
       {/* token name & logo */}
-      <div className='flex items-start justify-center gap-2'>
-        <GenerateTokenIcon name={asset.name} />
+      <div className='flex items-center justify-center gap-2'>
+        <Avatar sx={{ bgcolor: '#4B9448', color: 'white' }}>{asset.name.charAt(0).toUpperCase()}</Avatar>
         <span>{asset.name}</span>
       </div>
 
