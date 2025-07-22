@@ -1,6 +1,8 @@
 import { Inter } from 'next/font/google';
-import { FaBitcoin, FaExternalLinkAlt } from 'react-icons/fa';
-import { SiTether } from 'react-icons/si';
+import { FaExternalLinkAlt } from 'react-icons/fa';
+
+import { GenerateAssetTypeIcon } from '@/lib';
+import { AssetType } from '@/types';
 
 const inter = Inter({
   subsets: ['latin'],
@@ -8,7 +10,7 @@ const inter = Inter({
 });
 
 interface TokenDetails {
-  type: 'bitcoin' | 'tether';
+  type: AssetType;
   amount: number;
   contractAddress: string;
   href: string;
@@ -22,17 +24,7 @@ const TokenDetails = ({ type, amount, contractAddress, href }: TokenDetails) => 
         items-center justify-between`}
     >
       {/* name and logo */}
-      <div className='ml-2 flex items-center justify-center gap-x-2'>
-        {/* logo */}
-        {type === 'bitcoin' ? (
-          <FaBitcoin className='rounded-full bg-white text-amber-500' size={20} />
-        ) : type === 'tether' ? (
-          <SiTether className='rounded-full bg-transparent text-[#009393]' size={20} />
-        ) : null}
-
-        {/* name */}
-        {type === 'bitcoin' ? <span>Bitcoin token</span> : type === 'tether' ? <span>Tether token</span> : null}
-      </div>
+      <GenerateAssetTypeIcon assetType={type} />
 
       {/* amount */}
       <span className='font-bold'>{amount}</span>

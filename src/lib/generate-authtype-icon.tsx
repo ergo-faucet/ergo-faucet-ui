@@ -2,7 +2,7 @@ import DiscordIcon from '@/components/icons/discord';
 import GoogleIcon from '@/components/icons/google';
 import { AuthType } from '@/types';
 
-const GenerateIcon = ({ authType }: { authType: AuthType }) => {
+const GenerateAuthTypeIcon = ({ authType }: { authType: AuthType }) => {
   switch (authType) {
     case 'google':
       return (
@@ -25,4 +25,4 @@ const GenerateIcon = ({ authType }: { authType: AuthType }) => {
   }
 };
 
-export default GenerateIcon;
+export { GenerateAuthTypeIcon };
