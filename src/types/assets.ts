@@ -1,5 +1,6 @@
-export type AssetType = 'bitcoin' | 'tether' | 'ethereum';
 export interface Asset {
-  assetType: AssetType;
+  name: string;
   amount: number;
+  decimal: number;
+  tokenId: string;
 }

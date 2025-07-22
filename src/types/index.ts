@@ -1,2 +1,2 @@
 export type { AuthType } from './authType';
-export type { AssetType } from './assets';
+export type { Asset } from './assets';
