@@ -74,17 +74,6 @@
   --sidebar-ring: oklch(0.439 0 0);
 }
 
-@theme {
-  --color-green-ergo-navbar: #0d2a32;
-  --color-dark-green-ergo-navbar: #031a26;
-  --color-light-green-ergo: #4a6369;
-  --color-beige-ergo-navbar: #968e77;
-  --color-yellow-ergo-navbar: #fdc317;
-  --color-gray-text-ergo-navbar: #575757;
-  --color-gray-ergo-navbar: #968e77;
-  --color-gold-ergo: #a57101;
-}
-
 @theme inline {
   --color-background: var(--background);
   --color-foreground: var(--foreground);
@@ -131,4 +120,47 @@
   body {
     @apply bg-background text-foreground;
   }
+}
+
+/* brand color palettes */
+@theme {
+  /* General */
+  --color-green-ergo-navbar: #0d2a32;
+  --color-dark-green-ergo-navbar: #031a26;
+  --color-beige-ergo-navbar: #968e77;
+  --color-yellow-ergo-navbar: #fdc317;
+  --color-gray-text-ergo-navbar: #575757;
+  --color-gray-ergo-navbar: #968e77;
+
+  /* Greens */
+  --color-green-50: #cdfec9;
+  --color-green-100: #b3e9af;
+  --color-green-200: #99d395;
+  --color-green-300: #7fbe7b;
+  --color-green-400: #66a962;
+  --color-green-500: #4b9448;
+  --color-green-600: #2d7e2b;
+  --color-green-700: #006501;
+  --color-green-800: #004f00;
+  --color-green-900: #003b00;
+  --color-green-1000: #002700;
+  --color-green-1100: #001600;
+  --color-green-1200: #000700;
+  --color-green-1300: #000100;
+
+  /* Grays */
+  --color-gray-50: #eee;
+  --color-gray-100: #d8d8d8;
+  --color-gray-200: #c1c1c1;
+  --color-gray-300: #ababab;
+  --color-gray-400: #969696;
+  --color-gray-500: #808080;
+  --color-gray-600: #6a6a6a;
+  --color-gray-700: #515151;
+  --color-gray-800: #3e3e3e;
+  --color-gray-900: #2b2b2b;
+  --color-gray-1000: #1c1c1c;
+  --color-gray-1100: #0e0e0e;
+  --color-gray-1200: #040404;
+  --color-gray-1300: #000;
 }
