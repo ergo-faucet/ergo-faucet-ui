@@ -11,12 +11,12 @@ export default function AssetDetails({ assets }: AssetDetailsProps) {
     // container
     <div className={`${openSans.className} mx-auto w-[311px] bg-transparent p-4`}>
       {/* the table */}
-      <table className='w-full border-separate border-spacing-y-2 text-left text-sm text-white'>
+      <table className='w-full border-separate text-left text-sm text-white'>
         {/* headers */}
         <thead>
           <tr className='text-[10px] font-bold text-gray-800 dark:text-gray-300'>
-            <th className='pb-3 pl-3'>Asset Name</th>
-            <th className='pr-7 pb-3 text-right'>Amount</th>
+            <th className='pl-3'>Asset Name</th>
+            <th className='pr-7 text-right'>Amount</th>
           </tr>
         </thead>
 
