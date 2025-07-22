@@ -77,9 +77,12 @@
 @theme {
   --color-green-ergo-navbar: #0d2a32;
   --color-dark-green-ergo-navbar: #031a26;
+  --color-light-green-ergo: #4a6369;
   --color-beige-ergo-navbar: #968e77;
   --color-yellow-ergo-navbar: #fdc317;
   --color-gray-text-ergo-navbar: #575757;
+  --color-gray-ergo-navbar: #968e77;
+  --color-gold-ergo: #a57101;
 }
 
 @theme inline {
