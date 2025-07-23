@@ -4,9 +4,9 @@ import { Asset } from '@/types';
 
 const asset: Asset = {
   name: 'ergo token',
-  amount: 27,
+  amount: 5101,
   decimal: 2,
-  tokenId: '415i91fjiejf00jijfainfhhfafhoh',
+  tokenId: '8c81329fafafegag',
 };
 
 export default function Home() {
