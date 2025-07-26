@@ -1,23 +1,23 @@
-import BitcoinSmall from '@/icons/bitcoin-small';
-import Ethereum from '@/icons/ethereum';
-import { AssetType } from '@/types/assets';
+import DiscordIcon from '@/components/icons/discord';
+import GoogleIcon from '@/components/icons/google';
+import { AuthType } from '@/types';
 
-const GenerateIcon = ({ assetType }: { assetType: AssetType }) => {
-  switch (assetType) {
-    case 'bitcoin':
+const GenerateIcon = ({ authType }: { authType: AuthType }) => {
+  switch (authType) {
+    case 'google':
       return (
-        <div className='flex items-start justify-center'>
-          <BitcoinSmall />
-          <span className='pl-2.5 text-[10px] tracking-wider text-black dark:text-white'>Bitcoin token</span>
-        </div>
+        <>
+          <GoogleIcon />
+          <span className='pl-2.5 text-sm font-semibold tracking-wider text-black'>Google</span>
+        </>
       );
       break;
-    case 'tether':
+    case 'discord':
       return (
-        <div className='flex items-start justify-center'>
-          <Ethereum />
-          <span className='pl-2.5 text-[10px] tracking-wider text-black dark:text-white'>Ethereum token</span>
-        </div>
+        <>
+          <DiscordIcon />
+          <span className='pl-2.5 text-sm font-semibold tracking-wider text-black'>Discord</span>
+        </>
       );
       break;
     default:

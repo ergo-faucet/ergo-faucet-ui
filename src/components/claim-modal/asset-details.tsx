@@ -1,5 +1,4 @@
 import { openSans } from '@/fonts';
-import GenerateIcon from '@/lib/generate-icon';
 import { Asset } from '@/types';
 
 interface AssetDetailsProps {
@@ -9,7 +8,7 @@ interface AssetDetailsProps {
 export default function AssetDetails({ assets }: AssetDetailsProps) {
   return (
     // container
-    <div className={`${openSans.className} mx-auto w-[311px] bg-transparent p-4`}>
+    <div className={`${openSans.className} mx-auto h-auto w-[311px] bg-transparent p-4`}>
       {/* the table */}
       <table className='w-full border-separate text-left text-sm text-white'>
         {/* headers */}
@@ -27,12 +26,17 @@ export default function AssetDetails({ assets }: AssetDetailsProps) {
               <td colSpan={2}>
                 {/* aseet row */}
                 <div
-                  className='flex h-4 w-full items-center justify-between rounded-md border border-gray-700
+                  className='flex h-4 w-full items-center justify-between rounded-[5px] border border-gray-700
                     bg-transparent px-3 py-2 text-[10px] text-black dark:border-gray-500'
                 >
-                  {/* logo */}
-                  <div className='flex items-center gap-2 text-black dark:text-white'>
-                    <GenerateIcon assetType={asset.assetType} />
+                  {/* logo and name */}
+                  <div className='flex items-center gap-2 text-gray-700 dark:text-white'>
+                    {/* TODO : doable after the merge of token details component */}
+                    {/* <Avatar
+                      sx={{ bgcolor: avatarBackgroundColor, color: 'white', height: '21px', width: '21px', fontSize: '15px' }}
+                    >
+                      {asset.name.charAt(0).toUpperCase()}
+                    </Avatar> */}
                   </div>
                   {/* amount */}
                   <div className='pr-5 text-[10px] text-black dark:text-white'>{asset.amount}</div>
