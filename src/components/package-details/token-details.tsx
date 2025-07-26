@@ -2,14 +2,17 @@
 
 import { useTheme } from 'next-themes';
 import { Inter } from 'next/font/google';
+import { useState } from 'react';
 import { FaExternalLinkAlt } from 'react-icons/fa';
 
 import Avatar from '@mui/material/Avatar';
 
+import { copyToClipboard } from '@/lib/copy-to-clipboard';
 import { getFractionalPart, getWholePart } from '@/lib/format-amount';
 import { Asset } from '@/types';
 
 import { getAssetColors } from './select-color';
+import { TooltipTokenId } from './tooltip-tokenid';
 
 const inter = Inter({
   subsets: ['latin'],
@@ -24,6 +27,44 @@ const TokenDetails = ({ asset }: TokenDetailsProps) => {
   const url = process.env.EXPLORER_URL + '/tokens/' + asset.tokenId;
   const { theme } = useTheme();
   const avatarBackgroundColor = theme === 'light' ? getAssetColors(asset.name)[0] : getAssetColors(asset.name)[1];
+  const [open, setOpen] = useState(false);
+  const [clicked, setClicked] = useState(false);
+  const defaultTooltipText = <span className='text-green-300 dark:text-green-900'>click to copy</span>;
+  const [tooltipText, setTooltipText] = useState(defaultTooltipText);
+
+  const handleClick = async () => {
+    setOpen(true);
+    setClicked(true);
+
+    const success = await copyToClipboard(asset.tokenId);
+    if (success) {
+      setTooltipText(
+        <>
+          <span className='text-green-300 dark:text-green-900'>{asset.tokenId}</span>
+          <br />
+          <span className='dark:text-green-1000 text-green-50'>Copied to Clipboard!</span>
+        </>,
+      );
+    } else {
+      setTooltipText(<span className='text-red-600'>failed to copy</span>);
+    }
+
+    setTimeout(() => {
+      setOpen(false);
+      setClicked(false);
+      setTooltipText(defaultTooltipText);
+    }, 3000);
+  };
+
+  // hover control close it unless it's from a click
+  const handleTooltipClose = () => {
+    if (!clicked) setOpen(false);
+  };
+
+  // open from hover only if not clicked
+  const handleTooltipOpen = () => {
+    if (!clicked) setOpen(true);
+  };
 
   return (
     // container
@@ -52,7 +93,18 @@ const TokenDetails = ({ asset }: TokenDetailsProps) => {
       {/* token ID & link */}
       <div className='flex h-full items-center justify-end'>
         {/* token ID */}
-        <span className='max-w-[40px] truncate text-[8px] font-light'>{asset.tokenId}</span>
+        <TooltipTokenId
+          onOpen={handleTooltipOpen}
+          onClose={handleTooltipClose}
+          onClick={handleClick}
+          open={open}
+          arrow
+          title={tooltipText}
+        >
+          <span className='max-w-[40px] cursor-pointer truncate text-[8px] font-light hover:underline'>
+            {asset.tokenId}
+          </span>
+        </TooltipTokenId>
 
         {/* external link */}
         <a href={url} className='relative h-full w-5'>
