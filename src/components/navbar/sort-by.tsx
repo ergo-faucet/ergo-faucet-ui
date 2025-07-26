@@ -1,29 +1,66 @@
-import React from 'react';
+'use client';
+
+import React, { useState } from 'react';
 import { LuArrowUpNarrowWide } from 'react-icons/lu';
 
+import {
+  DropdownMenu,
+  DropdownMenuContent,
+  DropdownMenuItem,
+  DropdownMenuLabel,
+  DropdownMenuTrigger,
+} from '@/components/ui/dropdown-menu';
 import { viga } from '@/fonts';
 
+const sortOptions = ['Name', 'Release Date'];
+
 const SortBy = () => {
+  const [selected, setSelected] = useState('Release Date');
+
   return (
-    // cotainer
+    // Container
     <div
       className={`${viga.className} dark:from-gray-1100 flex h-[57px] w-[185px] items-center justify-between rounded-2xl
         border border-gray-400 bg-gradient-to-r from-gray-100 to-gray-300 dark:border-gray-700 dark:to-gray-800
-        [&_*]:transition-colors [&_*]:duration-700`}
+        [&_*]:transition-colors`}
     >
-      {/* texts */}
+      {/* Texts */}
       <div className='flex flex-col items-start justify-center space-y-0.5 pt-1 pl-[18px]'>
         <span className='text-[12px] text-gray-700 dark:text-gray-500'>Sort by</span>
-        <span className='text-[15px] tracking-wider text-black dark:text-white'>Release Date</span>
+        <span className='text-[15px] tracking-wider text-black dark:text-white'>{selected}</span>
       </div>
 
-      {/* button and vertical line */}
-      <button
-        className='relative mr-2 h-full w-auto bg-transparent pl-4 text-gray-600 before:absolute before:top-1/2
-          before:left-3 before:h-9 before:w-px before:-translate-y-1/2 before:bg-gray-600'
-      >
-        <LuArrowUpNarrowWide size={30} />
-      </button>
+      {/* Dropdown Menu */}
+      <DropdownMenu>
+        <DropdownMenuTrigger
+          className='outline-none focus:outline-none focus-visible:ring-0 focus-visible:outline-none'
+          asChild
+        >
+          {/* Icon button with vertical separator */}
+          <button
+            className='relative mr-2 h-full w-auto cursor-pointer bg-transparent pl-4 text-gray-600 before:absolute
+              before:top-1/2 before:left-3 before:h-9 before:w-px before:-translate-y-1/2 before:bg-gray-600'
+          >
+            <LuArrowUpNarrowWide size={30} />
+          </button>
+        </DropdownMenuTrigger>
+        <DropdownMenuContent className='dark:bg-gray-1100 w-[183px] bg-gray-100' align='start'>
+          <DropdownMenuLabel className='text-[13px] text-gray-800 dark:text-gray-500'>Sort by</DropdownMenuLabel>
+          {sortOptions.map((option) => (
+            <DropdownMenuItem
+              key={option}
+              onSelect={() => setSelected(option)}
+              className={`h-[39px] cursor-pointer text-[15px] font-bold ${
+                selected === option
+                  ? 'dark:bg-gray-1000 bg-gray-200 text-black dark:text-white'
+                  : 'hover:bg-gray-300 dark:hover:bg-gray-800'
+              } `}
+            >
+              {option}
+            </DropdownMenuItem>
+          ))}
+        </DropdownMenuContent>
+      </DropdownMenu>
     </div>
   );
 };
