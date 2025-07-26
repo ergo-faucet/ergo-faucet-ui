@@ -8,19 +8,23 @@ const ModalHeader = ({ packageName }: ModalHeaderProps) => {
   return (
     // container
     <div
-      className={`${inter.className} mt-7 flex h-full w-full flex-col items-center justify-center gap-y-4 text-center
-        text-[16px] text-black dark:text-white`}
+      className={`${inter.className} mt-6 flex h-full w-full flex-col items-start justify-start gap-y-9 text-[16px]
+        text-black dark:text-white`}
     >
       {/* title */}
-      <span className='h-auto w-71 font-extrabold'>Claiming {packageName} Package</span>
+      <div>
+        <span className='text-start text-[18px] font-extrabold text-gray-800 dark:text-[#AAA]'>Claiming </span>
+        <span className='text-start text-[20px] font-extrabold'>{packageName} Package</span>
+      </div>
 
       {/* description */}
       <div>
-        <span className='h-auto w-[310px] text-[12px] font-light'>
+        <p className='h-auto w-[310px] text-start text-[14px] font-light'>
           you are about to claim the package &quot;{packageName}&quot;
+        </p>
+        <span className='h-auto w-[310px] text-start text-[14px] font-light'>
+          this package includes following packages:
         </span>
-        <br />
-        <span className='h-auto w-[310px] text-[12px] font-light'>this package includes following packages:</span>
       </div>
     </div>
   );
