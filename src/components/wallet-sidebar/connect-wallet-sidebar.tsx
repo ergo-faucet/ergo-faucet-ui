@@ -38,7 +38,7 @@ const ConnectWalletSidebar = () => {
       {/* connect button */}
       <button
         className='h-11 w-25 cursor-pointer rounded-xl border border-green-400 bg-green-700 text-[17px] tracking-wider
-          text-white shadow-md/15 shadow-black hover:bg-green-900 dark:shadow-white'
+          text-white shadow-[-2px_2px_6px_0_rgba(0,0,0)]/20 shadow-black hover:bg-green-900 dark:shadow-white'
       >
         Connect
       </button>
