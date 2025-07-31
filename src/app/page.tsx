@@ -1,12 +1,12 @@
-import LeftNavbar from '@/components/navbar/left-navbar';
 import ToggleThemeButton from '@/components/navbar/toggle-theme-button';
+import PackagePagination from '@/components/pagination/package-pagination';
 
 export default function Home() {
   // temp div for testing purposes
   return (
-    <div className='flex h-screen items-center justify-center gap-x-10 bg-amber-400'>
+    <div className='flex h-screen items-center justify-center gap-x-10 bg-gray-300 dark:bg-gray-900'>
       <ToggleThemeButton />
-      <LeftNavbar />
+      <PackagePagination />
     </div>
   );
 }
