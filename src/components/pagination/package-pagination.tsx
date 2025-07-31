@@ -14,6 +14,8 @@ import {
 } from '@/components/ui/pagination';
 import { cn } from '@/lib/utils';
 
+import { ItemsPerPageSelector } from './items-per-page-selector';
+
 const pavanam = Pavanam({
   subsets: ['latin'],
   weight: ['400'],
@@ -24,7 +26,7 @@ const PackagePagination = () => {
   const [currentFirstIndex, setCurrentFirstIndex] = useState(1);
   const [entriesPerPage] = useState(9);
   // TODO: determine these by fetching and calculating
-  const totalPages = 21;
+  const totalPages = 26;
   const totalEntries = 233;
 
   const goToPage = (page: number) => {
@@ -127,7 +129,8 @@ const PackagePagination = () => {
     >
       {/* showing entries details */}
       <span className='hidden w-1/3 lg:block'>
-        Showing {currentFirstIndex} to {currentFirstIndex + entriesPerPage - 1} of {totalEntries} Entries
+        Showing {currentFirstIndex} to {Math.min(currentFirstIndex + entriesPerPage - 1, totalEntries)} of{' '}
+        {totalEntries} Entries
       </span>
 
       {/* pages */}
@@ -171,7 +174,10 @@ const PackagePagination = () => {
       </Pagination>
 
       {/* showing entries details */}
-      <span className='hidden w-1/3 text-end lg:block'>Items per page {entriesPerPage}</span>
+      <div className='mr-2 hidden w-1/3 items-center justify-end text-end lg:flex'>
+        <span>Items per page </span>
+        <ItemsPerPageSelector itemsPerPage={entriesPerPage} />
+      </div>
     </div>
   );
 };
