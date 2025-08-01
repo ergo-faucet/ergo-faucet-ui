@@ -23,7 +23,7 @@ const Package = ({ title, assets, authTypes, startDate, endDate }: PackageProps)
     // container
     <div
       className={`${volkhov.className} dark:bg-gray-1000 flex h-[195px] w-[300px] flex-col rounded-[18px] border
-        border-gray-500 bg-gray-100 dark:border-gray-700`}
+        border-gray-500 bg-gray-100 shadow-[-1px_3px_10px_rgba(0,0,0,0.5)] dark:border-gray-700`}
     >
       {/* title */}
       <div className='mt-4 ml-6 max-w-[250px] text-[20px] tracking-wider text-gray-900 dark:text-gray-200'>{title}</div>
