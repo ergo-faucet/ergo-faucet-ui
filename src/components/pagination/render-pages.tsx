@@ -16,7 +16,8 @@ export const RenderPages = () => {
       <PaginationLink
         onClick={() => setCurrentPage(1)}
         className={cn(
-          'size-[25px] rounded-full',
+          'size-[25px] rounded-full hover:text-white',
+          // check if it is selected
           hasPreviousPage
             ? 'text-black hover:bg-gray-900 dark:text-white'
             : 'bg-gray-700 text-white dark:bg-gray-500 dark:text-black',
@@ -46,8 +47,9 @@ export const RenderPages = () => {
             onClick={() => setCurrentPage(i)}
             className={cn(
               'size-[25px] rounded-full hover:bg-gray-900 hover:text-white',
+              // check if it is selected
               currentPage === i
-                ? 'bg-gray-700 text-white dark:bg-gray-400 dark:text-black'
+                ? 'bg-gray-700 text-white dark:bg-gray-400 dark:text-black hover:dark:text-white'
                 : 'text-black dark:text-white',
             )}
             href={''}
@@ -75,7 +77,8 @@ export const RenderPages = () => {
         <PaginationLink
           onClick={() => setCurrentPage(totalPages)}
           className={cn(
-            'size-[25px] rounded-full hover:bg-gray-900',
+            'size-[25px] rounded-full hover:bg-gray-900 hover:text-white',
+            // check if it is selected
             hasNextPage ? 'text-black dark:text-white' : 'bg-gray-700 text-white dark:bg-gray-400 dark:text-black',
           )}
           href={''}
