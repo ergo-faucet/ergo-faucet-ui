@@ -11,7 +11,7 @@ import { copyToClipboard } from '@/lib/copy-to-clipboard';
 import { getFractionalPart, getWholePart } from '@/lib/format-amount';
 import { Asset } from '@/types';
 
-import { getAssetColors } from './select-color';
+import { getAssetColors } from '../../lib/select-color';
 import { TooltipTokenId } from './tooltip-tokenid';
 
 const inter = Inter({
