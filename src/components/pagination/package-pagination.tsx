@@ -1,20 +1,15 @@
 'use client';
 
 import { Pavanam } from 'next/font/google';
-import { useState } from 'react';
 
 import { ChevronLeftIcon, ChevronRightIcon } from 'lucide-react';
 
-import {
-  Pagination,
-  PaginationContent,
-  PaginationEllipsis,
-  PaginationItem,
-  PaginationLink,
-} from '@/components/ui/pagination';
+import { Pagination, PaginationContent, PaginationItem } from '@/components/ui/pagination';
 import { cn } from '@/lib/utils';
 
 import { ItemsPerPageSelector } from './items-per-page-selector';
+import { RenderPages } from './render-pages';
+import { useCurrentLastIndex, useHasNextPage, useHasPreviousPage, usePaginationStore } from './useStore';
 
 const pavanam = Pavanam({
   subsets: ['latin'],
@@ -22,103 +17,11 @@ const pavanam = Pavanam({
 });
 
 const PackagePagination = () => {
-  const [currentPage, setCurrentPage] = useState(1);
-  const [currentFirstIndex, setCurrentFirstIndex] = useState(1);
-  const [entriesPerPage] = useState(9);
-  // TODO: determine these by fetching and calculating
-  const totalPages = 26;
-  const totalEntries = 233;
-
-  const goToPage = (page: number) => {
-    if (page >= 1 && page <= totalPages) {
-      setCurrentPage(page);
-      setCurrentFirstIndex((page - 1) * entriesPerPage + 1);
-    }
-  };
-
-  const renderPages = () => {
-    const pages = [];
-
-    // Always show page 1
-    pages.push(
-      <PaginationItem key='1'>
-        <PaginationLink
-          onClick={() => goToPage(1)}
-          className={cn(
-            'size-[25px] rounded-full',
-            currentPage === 1
-              ? 'bg-gray-700 text-white dark:bg-gray-500 dark:text-black'
-              : 'text-black hover:bg-gray-900 dark:text-white',
-          )}
-          href={''}
-        >
-          1
-        </PaginationLink>
-      </PaginationItem>,
-    );
-
-    // Start ellipsis
-    if (currentPage > 3) {
-      pages.push(
-        <PaginationItem key='start-ellipsis'>
-          <PaginationEllipsis />
-        </PaginationItem>,
-      );
-    }
-
-    // Middle pages (excluding 1 and totalPages)
-    for (let i = currentPage - 1; i <= currentPage + 1; i++) {
-      if (i > 1 && i < totalPages) {
-        pages.push(
-          <PaginationItem key={i}>
-            <PaginationLink
-              onClick={() => goToPage(i)}
-              className={cn(
-                'size-[25px] rounded-full hover:bg-gray-900 hover:text-white',
-                currentPage === i
-                  ? 'bg-gray-700 text-white dark:bg-gray-400 dark:text-black'
-                  : 'text-black dark:text-white',
-              )}
-              href={''}
-            >
-              {i}
-            </PaginationLink>
-          </PaginationItem>,
-        );
-      }
-    }
-
-    // End ellipsis
-    if (currentPage < totalPages - 2) {
-      pages.push(
-        <PaginationItem key='end-ellipsis'>
-          <PaginationEllipsis />
-        </PaginationItem>,
-      );
-    }
-
-    // Always show last page if it's not page 1
-    if (totalPages > 1) {
-      pages.push(
-        <PaginationItem key={totalPages}>
-          <PaginationLink
-            onClick={() => goToPage(totalPages)}
-            className={cn(
-              'size-[25px] rounded-full hover:bg-gray-900',
-              currentPage === totalPages
-                ? 'bg-gray-700 text-white dark:bg-gray-400 dark:text-black'
-                : 'text-black dark:text-white',
-            )}
-            href={''}
-          >
-            {totalPages}
-          </PaginationLink>
-        </PaginationItem>,
-      );
-    }
-
-    return pages;
-  };
+  // TODO: set totalEntries by fetching and calculating
+  const { currentFirstIndex, totalEntries, increaseCurrentPage, decreaseCurrentPage } = usePaginationStore();
+  const hasPreviousPage = useHasPreviousPage();
+  const hasNextPage = useHasNextPage();
+  const currentLastIndex = useCurrentLastIndex();
 
   return (
     // container
@@ -129,8 +32,7 @@ const PackagePagination = () => {
     >
       {/* showing entries details */}
       <span className='hidden w-1/3 lg:block'>
-        Showing {currentFirstIndex} to {Math.min(currentFirstIndex + entriesPerPage - 1, totalEntries)} of{' '}
-        {totalEntries} Entries
+        Showing {currentFirstIndex} to {currentLastIndex} of {totalEntries} Entries
       </span>
 
       {/* pages */}
@@ -140,12 +42,12 @@ const PackagePagination = () => {
           <PaginationItem>
             <button
               aria-label='Previous page'
-              onClick={() => goToPage(currentPage - 1)}
+              onClick={() => decreaseCurrentPage()}
               className={cn(
                 'flex items-center justify-center rounded-full px-2.5 sm:pl-2.5',
-                currentPage === 1
-                  ? 'pointer-events-none text-gray-700 dark:text-gray-500'
-                  : 'text-black hover:text-gray-900 dark:text-white',
+                hasPreviousPage
+                  ? 'text-black hover:text-gray-900 dark:text-white'
+                  : 'pointer-events-none text-gray-700 dark:text-gray-500',
               )}
             >
               <ChevronLeftIcon />
@@ -153,18 +55,18 @@ const PackagePagination = () => {
           </PaginationItem>
 
           {/* Dynamic Page Links */}
-          {renderPages()}
+          {RenderPages()}
 
           {/* Next Button */}
           <PaginationItem>
             <button
               aria-label='Next page'
-              onClick={() => goToPage(currentPage + 1)}
+              onClick={() => increaseCurrentPage()}
               className={cn(
                 'flex items-center justify-center rounded-full px-2.5 sm:pl-2.5',
-                currentPage === totalPages
-                  ? 'pointer-events-none text-gray-700 dark:text-gray-500'
-                  : 'text-black hover:text-gray-900 dark:text-white',
+                hasNextPage
+                  ? 'text-black hover:text-gray-900 dark:text-white'
+                  : 'pointer-events-none text-gray-700 dark:text-gray-500',
               )}
             >
               <ChevronRightIcon />
@@ -176,7 +78,7 @@ const PackagePagination = () => {
       {/* showing entries details */}
       <div className='mr-2 hidden w-1/3 items-center justify-end text-end lg:flex'>
         <span>Items per page </span>
-        <ItemsPerPageSelector itemsPerPage={entriesPerPage} />
+        <ItemsPerPageSelector />
       </div>
     </div>
   );
