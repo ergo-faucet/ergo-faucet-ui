@@ -1,4 +1,4 @@
-import Searchbar from '@/components/navbar/searchbar';
+import Searchbar from '@/components/navbar/searchbar/searchbar';
 import ToggleThemeButton from '@/components/navbar/toggle-theme-button';
 
 export default function Home() {
