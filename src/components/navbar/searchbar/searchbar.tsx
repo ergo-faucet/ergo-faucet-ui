@@ -1,37 +1,43 @@
-import { IoSearch } from 'react-icons/io5';
-import { VscSettings } from 'react-icons/vsc';
+'use client';
 
+import { Viga } from 'next/font/google';
+import { IoSearch } from 'react-icons/io5';
+
+import History from './history';
 import SearchbarInput from './searchbar-input';
+import { useSearchbar } from './useStore';
+
+const viga = Viga({
+  subsets: ['latin'],
+  weight: ['400'],
+});
 
 const Searchbar = () => {
+  const { addHistory, searchQuery } = useSearchbar();
   return (
     <div
-      className={`dark:bg-green-ergo-navbar flex h-[56px] w-[672px] items-center justify-between rounded-3xl bg-white
-        p-3 shadow-md transition-all duration-300 ease-linear dark:shadow-black`}
+      className={`${viga.className} dark:from-gray-1100 flex h-[57px] w-[906px] items-center justify-between
+        rounded-[15px] border border-gray-700 bg-linear-to-r from-gray-100 to-gray-300 transition-all duration-300
+        ease-linear dark:border-gray-400 dark:to-gray-800`}
     >
-      {/* Search input area */}
-      <div className='flex flex-1 items-center'>
-        <button className='group'>
-          <IoSearch
-            size={27}
-            className='text-gray-text-ergo-navbar dark:text-yellow-ergo-navbar transition-transform duration-300
-              ease-in-out group-hover:scale-125'
-          />
-        </button>
-
+      {/* history and input area */}
+      <div className='ml-3 flex flex-1 items-center'>
+        <History />
+        <div className='ml-1 h-6 w-px bg-gray-500'></div>
+        {/* input area */}
         <SearchbarInput />
       </div>
 
-      {/* Settings section */}
-      <div className='flex items-center'>
-        <div className='dark:bg-yellow-ergo-navbar mx-3 h-8 w-px bg-neutral-400'></div>
-        <button
-          className='dark:hover:bg-dark-green-ergo-navbar rounded-full p-1 transition-colors hover:bg-gray-100'
-          aria-label='Search settings'
-        >
-          <VscSettings
-            size={28}
-            className='text-beige-ergo-navbar dark:text-yellow-ergo-navbar scale-x-[-1] stroke-[0.5px]'
+      {/* Search icon */}
+      <div className='mr-3 flex items-center'>
+        <button className='group'>
+          <IoSearch
+            onClick={() => {
+              addHistory(searchQuery);
+            }}
+            size={27}
+            className='text-gray-900 transition-transform duration-300 ease-in-out group-hover:scale-125
+              dark:text-gray-200'
           />
         </button>
       </div>

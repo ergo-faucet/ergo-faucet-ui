@@ -1,49 +1,20 @@
 'use client';
 
-import { useState } from 'react';
+import React from 'react';
 
-import { DropdownMenu, DropdownMenuContent, DropdownMenuItem, DropdownMenuTrigger } from '../../ui/dropdown-menu';
-import { SearchbarFilterType } from './types';
-import { useSearchbarFilters } from './useStore';
+import { DropdownMenu, DropdownMenuContent, DropdownMenuTrigger } from '@/components/ui/dropdown-menu';
+
+import { Step1, Step2, Step3 } from './steps';
+import { useSearchbar } from './useStore';
 
 const SearchbarInput = () => {
-  const [searchQuery, setSearchQuery] = useState('');
-  const [filterComponents, setFilterComponents] = useState<SearchbarFilterType[]>([]);
-  const {
-    isAuthActivated,
-    isAssetActivated,
-    isCreatorActivated,
-    setIsAuthActivated,
-    setIsAssetActivated,
-    setIsCreatorActivated,
-  } = useSearchbarFilters();
-
-  const handleFilters = (filterType: SearchbarFilterType) => {
-    switch (filterType) {
-      case 'asset':
-        setFilterComponents((prev) => [...prev, 'asset']);
-        break;
-      case 'creator':
-        setFilterComponents((prev) => [...prev, 'creator']);
-        break;
-      case 'authMethod':
-        setFilterComponents((prev) => [...prev, 'authMethod']);
-        break;
-    }
-  };
+  const { filterComponents, searchQuery, setSearchQuery } = useSearchbar();
 
   return (
     <DropdownMenu>
       {/* filter components */}
-      {filterComponents.map((filterComponent) => {
-        switch (filterComponent) {
-          case 'asset':
-            return <span className='w-30'>asset</span>;
-          case 'creator':
-            return <span className='w-30'>creator</span>;
-          case 'authMethod':
-            return <span className='w-30'>auth method</span>;
-        }
+      {filterComponents.map((FilterComponent, id) => {
+        return <React.Fragment key={id}>{FilterComponent}</React.Fragment>;
       })}
 
       <DropdownMenuTrigger className='flex items-center' asChild>
@@ -52,41 +23,15 @@ const SearchbarInput = () => {
           placeholder='Search'
           value={searchQuery}
           onChange={(e) => setSearchQuery(e.target.value)}
-          className='placeholder-gray-text-ergo-navbar w-fill ml-3 text-xl font-medium tracking-widest text-gray-800
-            focus:outline-none dark:text-white dark:placeholder-neutral-300'
+          className='w-fill ml-3 text-[18px] font-medium tracking-wide text-gray-700 placeholder-gray-700
+            focus:outline-none dark:text-gray-500 dark:placeholder-gray-500'
         />
       </DropdownMenuTrigger>
       <DropdownMenuContent className='mt-3 w-56' align='start'>
-        {!isAssetActivated && (
-          <DropdownMenuItem
-            onSelect={() => {
-              handleFilters('asset');
-              setIsAssetActivated(true);
-            }}
-          >
-            Assets
-          </DropdownMenuItem>
-        )}
-        {!isCreatorActivated && (
-          <DropdownMenuItem
-            onSelect={() => {
-              handleFilters('creator');
-              setIsCreatorActivated(true);
-            }}
-          >
-            Creator
-          </DropdownMenuItem>
-        )}
-        {!isAuthActivated && (
-          <DropdownMenuItem
-            onSelect={() => {
-              handleFilters('authMethod');
-              setIsAuthActivated(true);
-            }}
-          >
-            Auth Method
-          </DropdownMenuItem>
-        )}
+        {/* steps */}
+        <Step1 />
+        <Step2 />
+        <Step3 />
       </DropdownMenuContent>
     </DropdownMenu>
   );
