@@ -96,12 +96,13 @@ export const useSearchbar = create<SearchbarFiltersStore>((set, get) => ({
     // each 3 badges are a search filter
     for (let i = 0; i < 3; i++) {
       state.filterComponents.splice(index, 1);
-      state._filterMetadata.splice(index, 1);
+      if (state.filterComponents[index].meta !== null)
+        state._filterMetadata.splice(state._filterMetadata.length - 1, 1);
       index--;
     }
 
     set({
-      lastFilterComponent: state._filterMetadata.length > 0 ? state._filterMetadata.at(-1) : null,
+      lastFilterComponent: state._filterMetadata.length > 0 ? state.lastFilterComponent : null,
       isAuthActivated: state.filterComponents.some((f) => f.meta === 'authMethod'),
       isAssetActivated: state.filterComponents.some((f) => f.meta === 'asset'),
       isCreatorActivated: state.filterComponents.some((f) => f.meta === 'creator'),
