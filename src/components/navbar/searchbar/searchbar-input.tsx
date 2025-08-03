@@ -23,11 +23,15 @@ const SearchbarInput = () => {
           placeholder='Search'
           value={searchQuery}
           onChange={(e) => setSearchQuery(e.target.value)}
-          className='w-fill ml-3 text-[18px] font-medium tracking-wide text-gray-700 placeholder-gray-700
+          className='mx-3 w-full text-[18px] font-medium tracking-wide text-gray-700 placeholder-gray-700
             focus:outline-none dark:text-gray-500 dark:placeholder-gray-500'
         />
       </DropdownMenuTrigger>
-      <DropdownMenuContent className='mt-3 w-56' align='start'>
+      <DropdownMenuContent
+        className='dark:bg-gray-1000 mt-3 w-56 rounded-[8px] border border-gray-800 bg-gray-100 dark:border-gray-600
+          [&_*]:text-black [&_*]:dark:text-white [&>*]:hover:bg-gray-300 [&>*]:hover:dark:bg-gray-800'
+        align='start'
+      >
         {/* steps */}
         <Step1 />
         <Step2 />

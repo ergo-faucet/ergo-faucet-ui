@@ -1,6 +1,6 @@
 'use client';
 
-import { X } from 'lucide-react';
+import { Coins, KeyRound, SquaresExclude, SquaresIntersect, UserRoundPlus, X } from 'lucide-react';
 import { nanoid } from 'nanoid';
 
 import { Badge } from '@/components/ui/badge';
@@ -53,7 +53,7 @@ export const Step1 = () => {
             handleFilters('asset');
           }}
         >
-          Assets
+          <Coins /> Assets
         </DropdownMenuItem>
       )}
       {!isCreatorActivated && (
@@ -62,7 +62,7 @@ export const Step1 = () => {
             handleFilters('creator');
           }}
         >
-          Creator
+          <UserRoundPlus /> Creator
         </DropdownMenuItem>
       )}
       {!isAuthActivated && (
@@ -71,7 +71,7 @@ export const Step1 = () => {
             handleFilters('authMethod');
           }}
         >
-          Auth Method
+          <KeyRound /> Auth Method
         </DropdownMenuItem>
       )}
     </>
@@ -95,7 +95,7 @@ export const Step2 = () => {
               nextStep();
             }}
           >
-            include
+            <SquaresIntersect /> include
           </DropdownMenuItem>
           <DropdownMenuItem
             onSelect={() => {
@@ -103,7 +103,7 @@ export const Step2 = () => {
               nextStep();
             }}
           >
-            not include
+            <SquaresExclude /> not include
           </DropdownMenuItem>
         </>
       );
@@ -116,7 +116,7 @@ export const Step2 = () => {
               nextStep();
             }}
           >
-            =
+            = is
           </DropdownMenuItem>
           <DropdownMenuItem
             onSelect={() => {
@@ -124,15 +124,7 @@ export const Step2 = () => {
               nextStep();
             }}
           >
-            ≠
-          </DropdownMenuItem>
-          <DropdownMenuItem
-            onSelect={() => {
-              addFilterComponent(id, <Badge className='m-1 block rotate-90'>≠</Badge>);
-              nextStep();
-            }}
-          >
-            <span className='block rotate-90 text-center'>≠</span>
+            ≠ is not
           </DropdownMenuItem>
           <DropdownMenuItem
             onSelect={() => {
@@ -142,6 +134,16 @@ export const Step2 = () => {
           >
             {/* for consistent sizes */}
             <span className='block rotate-90'>=</span>
+            <span>is one of</span>
+          </DropdownMenuItem>
+          <DropdownMenuItem
+            onSelect={() => {
+              addFilterComponent(id, <Badge className='m-1 block rotate-90'>≠</Badge>);
+              nextStep();
+            }}
+          >
+            <span className='block rotate-90 text-center'>≠</span>
+            <span>is not one of</span>
           </DropdownMenuItem>
         </>
       );
@@ -155,7 +157,7 @@ export const Step2 = () => {
               nextStep();
             }}
           >
-            include
+            <SquaresIntersect /> include
           </DropdownMenuItem>
           <DropdownMenuItem
             onSelect={() => {
@@ -163,7 +165,7 @@ export const Step2 = () => {
               nextStep();
             }}
           >
-            not include
+            <SquaresExclude /> not include
           </DropdownMenuItem>
         </>
       );
