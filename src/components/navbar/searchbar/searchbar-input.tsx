@@ -14,7 +14,7 @@ const SearchbarInput = () => {
     <DropdownMenu>
       {/* filter components */}
       {filterComponents.map((FilterComponent, id) => {
-        return <React.Fragment key={id}>{FilterComponent}</React.Fragment>;
+        return <React.Fragment key={id}>{FilterComponent.element}</React.Fragment>;
       })}
 
       <DropdownMenuTrigger className='flex items-center' asChild>

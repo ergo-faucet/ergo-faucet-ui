@@ -10,12 +10,18 @@ export enum Step {
   third,
 }
 
+type FilterComponentItem = {
+  id: string; // stable unique ID, nanoid
+  element: JSX.Element;
+  meta: SearchbarFilterType | null;
+};
+
 type SearchbarFiltersStore = {
   isAuthActivated: boolean;
   isAssetActivated: boolean;
   isCreatorActivated: boolean;
   step: Step;
-  filterComponents: JSX.Element[];
+  filterComponents: FilterComponentItem[];
   lastFilterComponent: SearchbarFilterType | null;
   history: string[];
   searchQuery: string;
@@ -23,9 +29,9 @@ type SearchbarFiltersStore = {
   setIsAuthActivated: (state: boolean) => void;
   setIsAssetActivated: (state: boolean) => void;
   setIsCreatorActivated: (state: boolean) => void;
-  setFilterComponents: (components: JSX.Element[], last: SearchbarFilterType | null) => void;
-  addFilterComponent: (component: JSX.Element, meta?: SearchbarFilterType) => void;
-  removeFilterComponent: () => void;
+  setFilterComponents: (components: FilterComponentItem[], last: SearchbarFilterType | null) => void;
+  addFilterComponent: (id: string, component: JSX.Element, meta?: SearchbarFilterType) => void;
+  removeFilterComponent: (id: string) => void;
   nextStep: () => void;
   addHistory: (his: string) => void;
   clearHistory: () => void;
@@ -49,34 +55,50 @@ export const useSearchbar = create<SearchbarFiltersStore>((set, get) => ({
   setIsAssetActivated: (state) => set({ isAssetActivated: state }),
   setIsCreatorActivated: (state) => set({ isCreatorActivated: state }),
 
-  setFilterComponents: (components, last) => {
+  setFilterComponents: (components: FilterComponentItem[], last: SearchbarFilterType | null) => {
     set({
       filterComponents: components,
       lastFilterComponent: last,
+      isAuthActivated: components.some((f) => f.meta === 'authMethod'),
+      isAssetActivated: components.some((f) => f.meta === 'asset'),
+      isCreatorActivated: components.some((f) => f.meta === 'creator'),
     });
   },
 
-  addFilterComponent: (component, meta?) => {
+  addFilterComponent: (id: string, component: JSX.Element, meta?: SearchbarFilterType) => {
     const state = get();
 
-    const newComponents = [...state.filterComponents, component];
-    const newMetas = meta ? [...state._filterMetadata, meta] : [...state._filterMetadata];
+    const newItem: FilterComponentItem = {
+      id: id,
+      element: component,
+      meta: meta || null,
+    };
+
+    const filters = [...get().filterComponents, newItem];
 
     set({
-      filterComponents: newComponents,
-      _filterMetadata: newMetas,
-      lastFilterComponent: meta ?? state.lastFilterComponent,
-      isAuthActivated: meta === 'authMethod' ? true : state.isAuthActivated,
-      isAssetActivated: meta === 'asset' ? true : state.isAssetActivated,
-      isCreatorActivated: meta === 'creator' ? true : state.isCreatorActivated,
+      filterComponents: filters,
+      lastFilterComponent: meta ? meta : state.lastFilterComponent,
+      isAuthActivated: filters.some((f) => f.meta === 'authMethod'),
+      isAssetActivated: filters.some((f) => f.meta === 'asset'),
+      isCreatorActivated: filters.some((f) => f.meta === 'creator'),
     });
   },
 
-  removeFilterComponent: () => {
+  removeFilterComponent: (id: string) => {
     const state = get();
 
-    state.filterComponents.splice(state.filterComponents.length - 1, 1);
-    state._filterMetadata.splice(state._filterMetadata.length - 1, 1);
+    let index = state.filterComponents.findIndex((filterComponent) => {
+      return filterComponent.id === id;
+    });
+    if (index === -1) return; // if for any reason it does not exist !
+
+    // each 3 badges are a search filter
+    for (let i = 0; i < 3; i++) {
+      state.filterComponents.splice(index, 1);
+      state._filterMetadata.splice(index, 1);
+      index--;
+    }
 
     const stillHas = (name: SearchbarFilterType) => state._filterMetadata.some((m) => m === name);
 

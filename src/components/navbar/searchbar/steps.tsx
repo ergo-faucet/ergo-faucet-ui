@@ -1,6 +1,7 @@
 'use client';
 
 import { X } from 'lucide-react';
+import { nanoid } from 'nanoid';
 
 import { Badge } from '@/components/ui/badge';
 import { DropdownMenuItem } from '@/components/ui/dropdown-menu';
@@ -24,17 +25,18 @@ export const Step1 = () => {
   if (step !== Step.first) return null;
 
   const handleFilters = (filterType: SearchbarFilterType) => {
+    const id = nanoid();
     switch (filterType) {
       case 'asset':
-        addFilterComponent(<Badge className='m-1 ml-2'>Asset</Badge>, 'asset');
+        addFilterComponent(id, <Badge className='m-1 ml-2'>Asset</Badge>, 'asset');
         setIsAssetActivated(true);
         break;
       case 'creator':
-        addFilterComponent(<Badge className='m-1 ml-2'>Creator</Badge>, 'creator');
+        addFilterComponent(id, <Badge className='m-1 ml-2'>Creator</Badge>, 'creator');
         setIsCreatorActivated(true);
         break;
       case 'authMethod':
-        addFilterComponent(<Badge className='m-1 ml-2'>Auth Method</Badge>, 'authMethod');
+        addFilterComponent(id, <Badge className='m-1 ml-2'>Auth Method</Badge>, 'authMethod');
         setIsAuthActivated(true);
         break;
     }
@@ -81,13 +83,15 @@ export const Step2 = () => {
 
   if (step !== Step.second) return null;
 
+  const id = nanoid();
+
   switch (lastFilterComponent) {
     case 'asset':
       return (
         <>
           <DropdownMenuItem
             onSelect={() => {
-              addFilterComponent(<Badge className='m-1'>=</Badge>);
+              addFilterComponent(id, <Badge className='m-1'>=</Badge>);
               nextStep();
             }}
           >
@@ -95,7 +99,7 @@ export const Step2 = () => {
           </DropdownMenuItem>
           <DropdownMenuItem
             onSelect={() => {
-              addFilterComponent(<Badge className='m-1'>≠</Badge>);
+              addFilterComponent(id, <Badge className='m-1'>≠</Badge>);
               nextStep();
             }}
           >
@@ -108,7 +112,7 @@ export const Step2 = () => {
         <>
           <DropdownMenuItem
             onSelect={() => {
-              addFilterComponent(<Badge className='m-1'>=</Badge>);
+              addFilterComponent(id, <Badge className='m-1'>=</Badge>);
               nextStep();
             }}
           >
@@ -116,7 +120,7 @@ export const Step2 = () => {
           </DropdownMenuItem>
           <DropdownMenuItem
             onSelect={() => {
-              addFilterComponent(<Badge className='m-1'>≠</Badge>);
+              addFilterComponent(id, <Badge className='m-1'>≠</Badge>);
               nextStep();
             }}
           >
@@ -124,7 +128,7 @@ export const Step2 = () => {
           </DropdownMenuItem>
           <DropdownMenuItem
             onSelect={() => {
-              addFilterComponent(<Badge className='m-1 block rotate-90'>≠</Badge>);
+              addFilterComponent(id, <Badge className='m-1 block rotate-90'>≠</Badge>);
               nextStep();
             }}
           >
@@ -132,7 +136,7 @@ export const Step2 = () => {
           </DropdownMenuItem>
           <DropdownMenuItem
             onSelect={() => {
-              addFilterComponent(<Badge className='m-1 block rotate-90 text-center'>=</Badge>);
+              addFilterComponent(id, <Badge className='m-1 block rotate-90 text-center'>=</Badge>);
               nextStep();
             }}
           >
@@ -147,7 +151,7 @@ export const Step2 = () => {
         <>
           <DropdownMenuItem
             onSelect={() => {
-              addFilterComponent(<Badge className='m-1'>=</Badge>);
+              addFilterComponent(id, <Badge className='m-1'>=</Badge>);
               nextStep();
             }}
           >
@@ -155,7 +159,7 @@ export const Step2 = () => {
           </DropdownMenuItem>
           <DropdownMenuItem
             onSelect={() => {
-              addFilterComponent(<Badge className='m-1'>≠</Badge>);
+              addFilterComponent(id, <Badge className='m-1'>≠</Badge>);
               nextStep();
             }}
           >
@@ -170,8 +174,10 @@ export const Step3 = () => {
   const { step, nextStep, lastFilterComponent, addFilterComponent, removeFilterComponent } = useSearchbar();
   if (step !== Step.third) return;
 
-  const handleRemoveFilter = () => {
-    for (let i = 0; i < 3; i++) removeFilterComponent();
+  const id = nanoid();
+
+  const handleRemoveFilter = (id: string) => {
+    removeFilterComponent(id);
   };
 
   switch (lastFilterComponent) {
@@ -181,7 +187,8 @@ export const Step3 = () => {
           <DropdownMenuItem
             onSelect={() => {
               addFilterComponent(
-                <Badge onClick={handleRemoveFilter} className='m-1'>
+                id,
+                <Badge onClick={() => handleRemoveFilter(id)} className='m-1'>
                   BTC
                   <X />
                 </Badge>,
@@ -194,7 +201,8 @@ export const Step3 = () => {
           <DropdownMenuItem
             onSelect={() => {
               addFilterComponent(
-                <Badge onClick={handleRemoveFilter} className='m-1'>
+                id,
+                <Badge onClick={() => handleRemoveFilter(id)} className='m-1'>
                   ERG
                   <X />
                 </Badge>,
@@ -206,8 +214,10 @@ export const Step3 = () => {
           </DropdownMenuItem>
           <DropdownMenuItem
             onSelect={() => {
+              const id = nanoid();
               addFilterComponent(
-                <Badge onClick={handleRemoveFilter} className='m-1'>
+                id,
+                <Badge onClick={() => handleRemoveFilter(id)} className='m-1'>
                   ETH
                   <X />
                 </Badge>,
@@ -225,7 +235,8 @@ export const Step3 = () => {
           <DropdownMenuItem
             onSelect={() => {
               addFilterComponent(
-                <Badge onClick={handleRemoveFilter} className='m-1'>
+                id,
+                <Badge onClick={() => handleRemoveFilter(id)} className='m-1'>
                   NAME 1<X />
                 </Badge>,
               );
@@ -237,7 +248,8 @@ export const Step3 = () => {
           <DropdownMenuItem
             onSelect={() => {
               addFilterComponent(
-                <Badge onClick={handleRemoveFilter} className='m-1'>
+                id,
+                <Badge onClick={() => handleRemoveFilter(id)} className='m-1'>
                   NAME 2<X />
                 </Badge>,
               );
@@ -249,7 +261,8 @@ export const Step3 = () => {
           <DropdownMenuItem
             onSelect={() => {
               addFilterComponent(
-                <Badge onClick={handleRemoveFilter} className='m-1'>
+                id,
+                <Badge onClick={() => handleRemoveFilter(id)} className='m-1'>
                   NAME 3<X />
                 </Badge>,
               );
@@ -266,7 +279,8 @@ export const Step3 = () => {
           <DropdownMenuItem
             onSelect={() => {
               addFilterComponent(
-                <Badge onClick={handleRemoveFilter} className='m-1'>
+                id,
+                <Badge onClick={() => handleRemoveFilter(id)} className='m-1'>
                   discord
                   <X />
                 </Badge>,
@@ -279,7 +293,8 @@ export const Step3 = () => {
           <DropdownMenuItem
             onSelect={() => {
               addFilterComponent(
-                <Badge onClick={handleRemoveFilter} className='m-1'>
+                id,
+                <Badge onClick={() => handleRemoveFilter(id)} className='m-1'>
                   google
                   <X />
                 </Badge>,
