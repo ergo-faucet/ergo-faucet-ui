@@ -100,13 +100,11 @@ export const useSearchbar = create<SearchbarFiltersStore>((set, get) => ({
       index--;
     }
 
-    const stillHas = (name: SearchbarFilterType) => state._filterMetadata.some((m) => m === name);
-
     set({
       lastFilterComponent: state._filterMetadata.length > 0 ? state._filterMetadata.at(-1) : null,
-      isAuthActivated: stillHas('authMethod'),
-      isAssetActivated: stillHas('asset'),
-      isCreatorActivated: stillHas('creator'),
+      isAuthActivated: state.filterComponents.some((f) => f.meta === 'authMethod'),
+      isAssetActivated: state.filterComponents.some((f) => f.meta === 'asset'),
+      isCreatorActivated: state.filterComponents.some((f) => f.meta === 'creator'),
     });
   },
 
