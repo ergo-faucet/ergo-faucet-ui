@@ -167,12 +167,11 @@ export const Step2 = () => {
 };
 
 export const Step3 = () => {
-  const { step, nextStep, lastFilterComponent, addFilterComponent, removeFilterComponent, filterComponents } =
-    useSearchbar();
+  const { step, nextStep, lastFilterComponent, addFilterComponent, removeFilterComponent } = useSearchbar();
   if (step !== Step.third) return;
 
   const handleRemoveFilter = () => {
-    for (let i = 0; i < 3; i++) removeFilterComponent(filterComponents.length - 1);
+    for (let i = 0; i < 3; i++) removeFilterComponent();
   };
 
   switch (lastFilterComponent) {

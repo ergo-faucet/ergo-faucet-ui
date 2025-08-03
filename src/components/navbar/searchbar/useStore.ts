@@ -25,7 +25,7 @@ type SearchbarFiltersStore = {
   setIsCreatorActivated: (state: boolean) => void;
   setFilterComponents: (components: JSX.Element[], last: SearchbarFilterType | null) => void;
   addFilterComponent: (component: JSX.Element, meta?: SearchbarFilterType) => void;
-  removeFilterComponent: (index: number) => void;
+  removeFilterComponent: () => void;
   nextStep: () => void;
   addHistory: (his: string) => void;
   clearHistory: () => void;
@@ -72,21 +72,17 @@ export const useSearchbar = create<SearchbarFiltersStore>((set, get) => ({
     });
   },
 
-  removeFilterComponent: (index) => {
+  removeFilterComponent: () => {
     const state = get();
 
-    const updatedComponents = [...state.filterComponents];
-    const updatedMetas = [...state._filterMetadata];
+    state.filterComponents.splice(state.filterComponents.length - 1, 1);
+    state._filterMetadata.splice(state._filterMetadata.length - 1, 1);
 
-    updatedComponents.splice(index, 1);
-
-    const stillHas = (name: string) => updatedMetas.some((m) => m === name);
+    const stillHas = (name: SearchbarFilterType) => state._filterMetadata.some((m) => m === name);
 
     set({
-      filterComponents: updatedComponents,
-      _filterMetadata: updatedMetas,
-      lastFilterComponent: updatedMetas.length > 0 ? updatedMetas.at(-1)! : null,
-      isAuthActivated: stillHas('auth'),
+      lastFilterComponent: state._filterMetadata.length > 0 ? state._filterMetadata.at(-1) : null,
+      isAuthActivated: stillHas('authMethod'),
       isAssetActivated: stillHas('asset'),
       isCreatorActivated: stillHas('creator'),
     });
