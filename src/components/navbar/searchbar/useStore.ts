@@ -93,6 +93,7 @@ export const useSearchbar = create<SearchbarFiltersStore>((set, get) => ({
       step: state.step === Step.third ? Step.first : state.step + 1,
     })),
   addHistory: (his) => {
+    if (!his) return;
     const { history } = get();
     set({ history: [...history, his] });
   },
