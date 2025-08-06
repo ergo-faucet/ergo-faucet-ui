@@ -1,29 +1,73 @@
-import { useTheme } from 'next-themes';
+'use client';
 
-import { Tooltip, TooltipProps } from '@mui/material';
+import React from 'react';
 
-export function TooltipTokenId(props: TooltipProps) {
-  const { theme } = useTheme();
-  const isLight = theme === 'light';
+import { Tooltip, TooltipContent, TooltipProvider, TooltipTrigger } from '@/components/ui/tooltip';
+
+type TooltipTokenIdProps = {
+  children: React.ReactNode;
+  content: React.ReactNode;
+  clickedContent?: React.ReactNode;
+  defaultOpen?: boolean;
+  delayDuration?: number;
+  clickDuration?: number;
+} & React.ComponentProps<typeof Tooltip>;
+
+export function TooltipTokenId({
+  children,
+  content,
+  clickedContent = 'Copied!',
+  defaultOpen = false,
+  delayDuration = 300,
+  clickDuration = 5000,
+  ...props
+}: TooltipTokenIdProps) {
+  const [isOpen, setIsOpen] = React.useState(defaultOpen);
+  const [isClicked, setIsClicked] = React.useState(false);
+  const timeoutRef = React.useRef<NodeJS.Timeout>(null);
+
+  const handleTriggerClick = (e: React.MouseEvent) => {
+    e.preventDefault();
+    setIsClicked(true);
+    setIsOpen(true);
+
+    if (timeoutRef.current) {
+      clearTimeout(timeoutRef.current);
+    }
+
+    timeoutRef.current = setTimeout(() => {
+      setIsOpen(false);
+      setIsClicked(false);
+    }, clickDuration);
+  };
+
+  const handleOpenChange = (open: boolean) => {
+    // Only allow closing if not in clicked state
+    if (!open && !isClicked) {
+      setIsOpen(false);
+    }
+    // If trying to close while clicked, keep it open
+    else if (open) {
+      setIsOpen(true);
+    }
+  };
+
+  React.useEffect(() => {
+    return () => {
+      if (timeoutRef.current) clearTimeout(timeoutRef.current);
+    };
+  }, []);
 
   return (
-    <Tooltip
-      {...props}
-      key={theme} // force re-render when theme changes
-      arrow
-      componentsProps={{
-        tooltip: {
-          sx: {
-            backgroundColor: isLight ? '#003B00' : '#99D395',
-            maxWidth: 194,
-          },
-        },
-        arrow: {
-          sx: {
-            color: isLight ? '#003B00' : '#99D395',
-          },
-        },
-      }}
-    />
+    <TooltipProvider>
+      <Tooltip open={isOpen} onOpenChange={handleOpenChange} delayDuration={delayDuration} {...props}>
+        <TooltipTrigger asChild onClick={handleTriggerClick}>
+          {children}
+        </TooltipTrigger>
+        <TooltipContent side='bottom' onClick={(e) => e.stopPropagation()} className='cursor-pointer'>
+          {isClicked ? clickedContent : content}
+        </TooltipContent>
+      </Tooltip>
+    </TooltipProvider>
   );
 }
