@@ -7,6 +7,7 @@ import { FaExternalLinkAlt } from 'react-icons/fa';
 
 import Avatar from '@mui/material/Avatar';
 
+import { ExplorerURL } from '@/configs';
 import { copyToClipboard } from '@/lib/copy-to-clipboard';
 import { getFractionalPart, getWholePart } from '@/lib/format-amount';
 import { Asset } from '@/types';
@@ -24,7 +25,7 @@ interface TokenDetailsProps {
 }
 
 const TokenDetails = ({ asset }: TokenDetailsProps) => {
-  const url = process.env.EXPLORER_URL + '/tokens/' + asset.tokenId;
+  const url = ExplorerURL + '/tokens/' + asset.tokenId;
   const { theme } = useTheme();
   const avatarBackgroundColor = theme === 'light' ? getAssetColors(asset.name)[0] : getAssetColors(asset.name)[1];
   const [open, setOpen] = useState(false);
