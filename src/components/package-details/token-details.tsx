@@ -54,7 +54,8 @@ const TokenDetails = ({ asset }: TokenDetailsProps) => {
           content='Click to Copy'
           clickedContent={
             <>
-              {asset.tokenId} <br></br> Copied to Clipboard
+              <span className='text-green-300 dark:text-green-900'>{asset.tokenId}</span> <br></br>{' '}
+              <span className='dark:text-green-1000 text-green-50'>Copied to Clipboard!</span>
             </>
           }
         >

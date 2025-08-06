@@ -66,8 +66,8 @@ export function TooltipTokenId({
         </TooltipTrigger>
         <TooltipContent
           side='bottom'
-          onClick={(e) => e.stopPropagation()}
-          className='cursor-pointer bg-green-900 dark:bg-green-200'
+          onClick={(e: { stopPropagation: () => void }) => e.stopPropagation()}
+          className='cursor-pointer bg-green-900 before:bg-red-500 dark:bg-green-200'
         >
           {isClicked ? clickedContent : content}
         </TooltipContent>
