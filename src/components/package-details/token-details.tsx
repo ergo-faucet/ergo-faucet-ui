@@ -50,9 +50,16 @@ const TokenDetails = ({ asset }: TokenDetailsProps) => {
       {/* token ID & link */}
       <div className='flex h-full items-center justify-end'>
         {/* token ID */}
-        <TooltipTokenId clickedContent={'test'} content={'test content'}>
+        <TooltipTokenId
+          content='Click to Copy'
+          clickedContent={
+            <>
+              {asset.tokenId} <br></br> Copied to Clipboard
+            </>
+          }
+        >
           <span className='max-w-[40px] cursor-pointer truncate text-[8px] font-light hover:underline'>
-            {asset.tokenId} test
+            {asset.tokenId}
           </span>
         </TooltipTokenId>
 
