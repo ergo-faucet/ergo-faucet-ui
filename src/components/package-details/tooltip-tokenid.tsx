@@ -2,6 +2,8 @@
 
 import React from 'react';
 
+import * as TooltipPrimitive from '@radix-ui/react-tooltip';
+
 import { Tooltip, TooltipContent, TooltipProvider, TooltipTrigger } from '@/components/ui/tooltip';
 
 type TooltipTokenIdProps = {
@@ -67,8 +69,12 @@ export function TooltipTokenId({
         <TooltipContent
           side='bottom'
           onClick={(e: { stopPropagation: () => void }) => e.stopPropagation()}
-          className='cursor-pointer bg-green-900 before:bg-red-500 dark:bg-green-200'
+          className='cursor-pointer bg-green-900 dark:bg-green-200'
         >
+          <TooltipPrimitive.Arrow
+            className='size-2.5 translate-y-[calc(-50%_-_2px)] rotate-45 rounded-[2px] border-none bg-green-900
+              fill-green-900 dark:bg-green-200 dark:fill-green-200'
+          />
           {isClicked ? clickedContent : content}
         </TooltipContent>
       </Tooltip>
