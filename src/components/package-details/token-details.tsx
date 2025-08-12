@@ -3,14 +3,13 @@
 import { Inter } from 'next/font/google';
 import { FaExternalLinkAlt } from 'react-icons/fa';
 
+import { TooltipTokenId } from '@/components/package-details/tooltip-tokenid';
 import { Avatar } from '@/components/ui/avatar';
 import { ExplorerURL } from '@/configs';
 import { cn } from '@/lib';
 import { getFractionalPart, getWholePart } from '@/lib/format-amount';
 import { getAssetColors } from '@/lib/select-color';
 import { Asset } from '@/types';
-
-import { TooltipTokenId } from './tooltip-tokenid';
 
 const inter = Inter({
   subsets: ['latin'],
