@@ -5,7 +5,9 @@ import { FaExternalLinkAlt } from 'react-icons/fa';
 
 import { Avatar } from '@/components/ui/avatar';
 import { ExplorerURL } from '@/configs';
+import { cn } from '@/lib';
 import { getFractionalPart, getWholePart } from '@/lib/format-amount';
+import { getAssetColors } from '@/lib/select-color';
 import { Asset } from '@/types';
 
 import { TooltipTokenId } from './tooltip-tokenid';
@@ -21,6 +23,7 @@ interface TokenDetailsProps {
 
 const TokenDetails = ({ asset }: TokenDetailsProps) => {
   const url = ExplorerURL + '/tokens/' + asset.tokenId;
+  const colors = getAssetColors(asset.name);
 
   return (
     // container
@@ -30,10 +33,7 @@ const TokenDetails = ({ asset }: TokenDetailsProps) => {
     >
       {/* token name & logo */}
       <div className='flex items-center justify-center gap-2'>
-        <Avatar
-          className='flex h-[21px] w-[21px] items-center justify-center bg-green-200 text-[15px] text-white
-            dark:bg-green-900'
-        >
+        <Avatar className={cn('flex h-[21px] w-[21px] items-center justify-center text-[15px] text-white', colors)}>
           {asset.name.charAt(0).toUpperCase()}
         </Avatar>
         <span className='text-[14px] font-medium'>{asset.name}</span>

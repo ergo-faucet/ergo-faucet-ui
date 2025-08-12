@@ -1,9 +1,6 @@
-const avatarColors = [
-  ['#002700', '#4B9448'],
-  ['#006501', '#99D395'],
-];
+const avatarColors = ['bg-green-1000 dark:bg-green-500', 'bg-green-700 dark:bg-green-200'];
 
-export const getAssetColors = (assetName: string): string[] => {
+export const getAssetColors = (assetName: string): string => {
   const length = assetName.length;
   const paletteSize = avatarColors.length;
 
