@@ -2,7 +2,12 @@ import DiscordIcon from '@/components/icons/discord';
 import GoogleIcon from '@/components/icons/google';
 import { AuthType } from '@/types';
 
-const GenerateIcon = ({ authType }: { authType: AuthType }) => {
+/**
+ * Renders the appropriate authentication provider icon and label based on the given auth type.
+ * @param props.authType - The authentication provider type.
+ * @returns A JSX element containing the provider's icon and label, or null if the auth type is unsupported.
+ */
+const GenerateAuthTypeIcon = ({ authType }: { authType: AuthType }) => {
   switch (authType) {
     case 'google':
       return (
@@ -11,7 +16,6 @@ const GenerateIcon = ({ authType }: { authType: AuthType }) => {
           <span className='pl-2.5 text-sm font-semibold tracking-wider text-black'>Google</span>
         </>
       );
-      break;
     case 'discord':
       return (
         <>
@@ -19,10 +23,9 @@ const GenerateIcon = ({ authType }: { authType: AuthType }) => {
           <span className='pl-2.5 text-sm font-semibold tracking-wider text-black'>Discord</span>
         </>
       );
-      break;
     default:
       return null;
   }
 };
 
-export default GenerateIcon;
+export { GenerateAuthTypeIcon };
