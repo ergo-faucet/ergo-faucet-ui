@@ -21,9 +21,9 @@ const Searchbar = () => {
         bg-bottom-left transition-all duration-300 ease-linear dark:border-gray-400 dark:via-gray-900 dark:to-gray-800`}
     >
       {/* history and input area */}
-      <div className='ml-3 flex flex-1 items-center'>
+      <div className='m-3 flex flex-1 items-center'>
         <History />
-        <div className='ml-1 h-6 w-px bg-gray-500'></div>
+        <div className='m-3 h-6 w-px bg-gray-500'></div>
         {/* input area */}
         <SearchbarInput />
       </div>

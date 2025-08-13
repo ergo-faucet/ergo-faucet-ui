@@ -11,7 +11,7 @@ interface SearchbarBadgeProps extends React.HTMLAttributes<HTMLSpanElement> {
 
 const SearchbarBadge = ({ className, children, ...props }: SearchbarBadgeProps) => {
   return (
-    <Badge className={clsx('m-1 h-[30px] cursor-pointer dark:bg-gray-800 dark:text-white', className)} {...props}>
+    <Badge className={clsx('mr-0.5 h-[30px] cursor-pointer dark:bg-gray-800 dark:text-white', className)} {...props}>
       {children}
     </Badge>
   );

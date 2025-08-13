@@ -28,15 +28,15 @@ export const Step1 = () => {
     const id = nanoid();
     switch (filterType) {
       case 'asset':
-        addFilterComponent(id, <SearchbarBadge className='m-1 ml-2'>Asset</SearchbarBadge>, 'asset');
+        addFilterComponent(id, <SearchbarBadge>Asset</SearchbarBadge>, 'asset');
         setIsAssetActivated(true);
         break;
       case 'creator':
-        addFilterComponent(id, <SearchbarBadge className='m-1 ml-2'>Creator</SearchbarBadge>, 'creator');
+        addFilterComponent(id, <SearchbarBadge>Creator</SearchbarBadge>, 'creator');
         setIsCreatorActivated(true);
         break;
       case 'authMethod':
-        addFilterComponent(id, <SearchbarBadge className='m-1 ml-2'>Auth Method</SearchbarBadge>, 'authMethod');
+        addFilterComponent(id, <SearchbarBadge>Auth Method</SearchbarBadge>, 'authMethod');
         setIsAuthActivated(true);
         break;
     }
@@ -91,7 +91,7 @@ export const Step2 = () => {
         <>
           <DropdownMenuItem
             onSelect={() => {
-              addFilterComponent(id, <SearchbarBadge className='m-1'>=</SearchbarBadge>);
+              addFilterComponent(id, <SearchbarBadge>=</SearchbarBadge>);
               nextStep();
             }}
           >
@@ -99,7 +99,7 @@ export const Step2 = () => {
           </DropdownMenuItem>
           <DropdownMenuItem
             onSelect={() => {
-              addFilterComponent(id, <SearchbarBadge className='m-1'>≠</SearchbarBadge>);
+              addFilterComponent(id, <SearchbarBadge>≠</SearchbarBadge>);
               nextStep();
             }}
           >
@@ -112,7 +112,7 @@ export const Step2 = () => {
         <>
           <DropdownMenuItem
             onSelect={() => {
-              addFilterComponent(id, <SearchbarBadge className='m-1'>=</SearchbarBadge>);
+              addFilterComponent(id, <SearchbarBadge>=</SearchbarBadge>);
               nextStep();
             }}
           >
@@ -120,7 +120,7 @@ export const Step2 = () => {
           </DropdownMenuItem>
           <DropdownMenuItem
             onSelect={() => {
-              addFilterComponent(id, <SearchbarBadge className='m-1'>≠</SearchbarBadge>);
+              addFilterComponent(id, <SearchbarBadge>≠</SearchbarBadge>);
               nextStep();
             }}
           >
@@ -128,7 +128,12 @@ export const Step2 = () => {
           </DropdownMenuItem>
           <DropdownMenuItem
             onSelect={() => {
-              addFilterComponent(id, <SearchbarBadge className='m-1 block rotate-90 text-center'>=</SearchbarBadge>);
+              addFilterComponent(
+                id,
+                <SearchbarBadge className='flex items-center justify-center'>
+                  <span className='rotate-90'>=</span>
+                </SearchbarBadge>,
+              );
               nextStep();
             }}
           >
@@ -138,7 +143,12 @@ export const Step2 = () => {
           </DropdownMenuItem>
           <DropdownMenuItem
             onSelect={() => {
-              addFilterComponent(id, <SearchbarBadge className='m-1 block rotate-90'>≠</SearchbarBadge>);
+              addFilterComponent(
+                id,
+                <SearchbarBadge className='flex items-center justify-center'>
+                  <span className='rotate-90'>≠</span>
+                </SearchbarBadge>,
+              );
               nextStep();
             }}
           >
@@ -153,7 +163,7 @@ export const Step2 = () => {
         <>
           <DropdownMenuItem
             onSelect={() => {
-              addFilterComponent(id, <SearchbarBadge className='m-1'>=</SearchbarBadge>);
+              addFilterComponent(id, <SearchbarBadge>=</SearchbarBadge>);
               nextStep();
             }}
           >
@@ -161,7 +171,7 @@ export const Step2 = () => {
           </DropdownMenuItem>
           <DropdownMenuItem
             onSelect={() => {
-              addFilterComponent(id, <SearchbarBadge className='m-1'>≠</SearchbarBadge>);
+              addFilterComponent(id, <SearchbarBadge>≠</SearchbarBadge>);
               nextStep();
             }}
           >
@@ -190,7 +200,7 @@ export const Step3 = () => {
             onSelect={() => {
               addFilterComponent(
                 id,
-                <SearchbarBadge onClick={() => handleRemoveFilter(id)} className='m-1'>
+                <SearchbarBadge onClick={() => handleRemoveFilter(id)}>
                   BTC
                   <X />
                 </SearchbarBadge>,
@@ -204,7 +214,7 @@ export const Step3 = () => {
             onSelect={() => {
               addFilterComponent(
                 id,
-                <SearchbarBadge onClick={() => handleRemoveFilter(id)} className='m-1'>
+                <SearchbarBadge onClick={() => handleRemoveFilter(id)}>
                   ERG
                   <X />
                 </SearchbarBadge>,
@@ -219,7 +229,7 @@ export const Step3 = () => {
               const id = nanoid();
               addFilterComponent(
                 id,
-                <SearchbarBadge onClick={() => handleRemoveFilter(id)} className='m-1'>
+                <SearchbarBadge onClick={() => handleRemoveFilter(id)}>
                   ETH
                   <X />
                 </SearchbarBadge>,
@@ -238,7 +248,7 @@ export const Step3 = () => {
             onSelect={() => {
               addFilterComponent(
                 id,
-                <SearchbarBadge onClick={() => handleRemoveFilter(id)} className='m-1'>
+                <SearchbarBadge onClick={() => handleRemoveFilter(id)}>
                   NAME 1<X />
                 </SearchbarBadge>,
               );
@@ -251,7 +261,7 @@ export const Step3 = () => {
             onSelect={() => {
               addFilterComponent(
                 id,
-                <SearchbarBadge onClick={() => handleRemoveFilter(id)} className='m-1'>
+                <SearchbarBadge onClick={() => handleRemoveFilter(id)}>
                   NAME 2<X />
                 </SearchbarBadge>,
               );
@@ -264,7 +274,7 @@ export const Step3 = () => {
             onSelect={() => {
               addFilterComponent(
                 id,
-                <SearchbarBadge onClick={() => handleRemoveFilter(id)} className='m-1'>
+                <SearchbarBadge onClick={() => handleRemoveFilter(id)}>
                   NAME 3<X />
                 </SearchbarBadge>,
               );
@@ -282,7 +292,7 @@ export const Step3 = () => {
             onSelect={() => {
               addFilterComponent(
                 id,
-                <SearchbarBadge onClick={() => handleRemoveFilter(id)} className='m-1'>
+                <SearchbarBadge onClick={() => handleRemoveFilter(id)}>
                   discord
                   <X />
                 </SearchbarBadge>,
@@ -296,7 +306,7 @@ export const Step3 = () => {
             onSelect={() => {
               addFilterComponent(
                 id,
-                <SearchbarBadge onClick={() => handleRemoveFilter(id)} className='m-1'>
+                <SearchbarBadge onClick={() => handleRemoveFilter(id)}>
                   google
                   <X />
                 </SearchbarBadge>,
