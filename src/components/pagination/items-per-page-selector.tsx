@@ -19,7 +19,7 @@ export function ItemsPerPageSelector() {
   return (
     <Select value={entriesPerPage.toString()} onValueChange={(value) => setEntriesPerPage(parseInt(value))}>
       <SelectTrigger
-        className='ml-px w-[60px] cursor-pointer border-transparent bg-transparent shadow-transparent
+        className='ml-px w-[65px] cursor-pointer border-transparent bg-transparent shadow-transparent
           focus-visible:border-transparent focus-visible:ring-transparent dark:border-transparent dark:bg-transparent
           dark:shadow-transparent dark:hover:bg-transparent'
       >
@@ -31,8 +31,9 @@ export function ItemsPerPageSelector() {
       >
         <SelectGroup>
           <SelectLabel>Items per page</SelectLabel>
-          <SelectItem value='4'>4</SelectItem>
-          <SelectItem value='9'>9</SelectItem>
+          <SelectItem value='10'>10</SelectItem>
+          <SelectItem value='20'>20</SelectItem>
+          <SelectItem value='50'>50</SelectItem>
         </SelectGroup>
       </SelectContent>
     </Select>
