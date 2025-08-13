@@ -38,13 +38,16 @@ const SortBy = () => {
             <span className='text-[15px] tracking-wider text-black dark:text-white'>{selected}</span>
           </div>
         </DropdownMenuTrigger>
-        <DropdownMenuContent className='dark:bg-gray-1100 w-[183px] bg-gray-100' align='start'>
+        <DropdownMenuContent
+          className='dark:bg-gray-1100 -mt-3 w-[183px] border border-gray-800 bg-gray-100 p-0'
+          align='start'
+        >
           <DropdownMenuLabel className='text-[13px] text-gray-800 dark:text-gray-500'>Sort by</DropdownMenuLabel>
           {sortOptions.map((option) => (
             <DropdownMenuItem
               key={option}
               onSelect={() => setSelected(option)}
-              className={`h-[39px] cursor-pointer text-[15px] font-bold ${
+              className={`h-[39px] cursor-pointer rounded-none text-[15px] font-bold ${
                 selected === option
                   ? 'dark:bg-gray-1000 bg-gray-200 text-black dark:text-white'
                   : 'hover:bg-gray-300 dark:hover:bg-gray-800'
