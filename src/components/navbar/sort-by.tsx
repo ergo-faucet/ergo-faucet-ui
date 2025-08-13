@@ -39,7 +39,7 @@ const SortBy = () => {
           </div>
         </DropdownMenuTrigger>
         <DropdownMenuContent
-          className='dark:bg-gray-1100 -mt-3 w-[183px] border border-gray-800 bg-gray-100 p-0'
+          className='dark:bg-gray-1100 -mt-2 w-[183px] border border-gray-800 bg-gray-100 p-0'
           align='start'
         >
           <DropdownMenuLabel className='text-[13px] text-gray-800 dark:text-gray-500'>Sort by</DropdownMenuLabel>
