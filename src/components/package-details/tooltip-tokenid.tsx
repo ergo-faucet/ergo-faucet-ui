@@ -20,7 +20,7 @@ export function TooltipTokenId({
   content,
   clickedContent = 'Copied!',
   defaultOpen = false,
-  delayDuration = 600,
+  delayDuration = 200,
   clickDuration = 0,
   ...props
 }: TooltipTokenIdProps) {

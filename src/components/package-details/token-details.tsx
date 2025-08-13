@@ -1,6 +1,7 @@
 'use client';
 
 import { Inter } from 'next/font/google';
+import { useState } from 'react';
 import { FaExternalLinkAlt } from 'react-icons/fa';
 
 import { TooltipTokenId } from '@/components/package-details/tooltip-tokenid';
@@ -23,6 +24,9 @@ interface TokenDetailsProps {
 const TokenDetails = ({ asset }: TokenDetailsProps) => {
   const url = ExplorerURL + '/tokens/' + asset.tokenId;
   const colors = getAssetColors(asset.name);
+  const defaultTooltip = <span className='text-green-300 dark:text-green-900'>{asset.tokenId}</span>;
+  const [tooltip, setTooltip] = useState(defaultTooltip);
+  const [open, setOpen] = useState(false);
 
   return (
     // container
@@ -53,12 +57,26 @@ const TokenDetails = ({ asset }: TokenDetailsProps) => {
         <a href={url} target='_blank' className='relative flex h-full w-full items-center gap-1'>
           {/* token ID */}
           <TooltipTokenId
-            content='Click to Copy'
-            clickedContent={
-              <>
-                <span className='text-green-300 dark:text-green-900'>{asset.tokenId}</span> <br></br>{' '}
-                <span className='dark:text-green-1000 text-green-50'>Copied to Clipboard!</span>
-              </>
+            open={open}
+            onOpenChange={(state) => {
+              if (open && !state) {
+                setTooltip(defaultTooltip);
+              }
+              setOpen(state);
+            }}
+            content={
+              <button
+                onClick={() =>
+                  setTooltip(
+                    <>
+                      <span className='text-green-300 dark:text-green-900'>{asset.tokenId}</span> <br></br>{' '}
+                      <span className='dark:text-green-1000 text-green-50'>Copied to Clipboard!</span>
+                    </>,
+                  )
+                }
+              >
+                {tooltip}
+              </button>
             }
           >
             <span className='max-w-[40px] cursor-pointer truncate text-[8px] font-light hover:underline'>
