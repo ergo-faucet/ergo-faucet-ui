@@ -1,7 +1,7 @@
 'use client';
 
 import React, { useState } from 'react';
-import { LuArrowUpNarrowWide } from 'react-icons/lu';
+import { LuArrowDownWideNarrow, LuArrowUpNarrowWide } from 'react-icons/lu';
 
 import {
   DropdownMenu,
@@ -15,6 +15,7 @@ import { viga } from '@/fonts';
 const sortOptions = ['Name', 'Release Date'];
 
 const SortBy = () => {
+  const [isAscending, setIsAscending] = useState(true);
   const [selected, setSelected] = useState('Release Date');
 
   return (
@@ -24,25 +25,18 @@ const SortBy = () => {
         border border-gray-400 bg-gradient-to-r from-gray-100 to-gray-300 dark:border-gray-700 dark:to-gray-800
         [&_*]:transition-colors`}
     >
-      {/* Texts */}
-      <div className='flex flex-col items-start justify-center space-y-0.5 pt-1 pl-[18px]'>
-        <span className='text-[12px] text-gray-700 dark:text-gray-500'>Sort by</span>
-        <span className='text-[15px] tracking-wider text-black dark:text-white'>{selected}</span>
-      </div>
-
       {/* Dropdown Menu */}
       <DropdownMenu>
         <DropdownMenuTrigger
-          className='outline-none focus:outline-none focus-visible:ring-0 focus-visible:outline-none'
+          /* full height and width, so more area for the user to click on and trigger the menu*/
+          className='h-full w-full outline-none focus:outline-none focus-visible:ring-0 focus-visible:outline-none'
           asChild
         >
-          {/* Icon button with vertical separator */}
-          <button
-            className='relative mr-2 h-full w-auto cursor-pointer bg-transparent pl-4 text-gray-600 before:absolute
-              before:top-1/2 before:left-3 before:h-9 before:w-px before:-translate-y-1/2 before:bg-gray-600'
-          >
-            <LuArrowUpNarrowWide size={30} />
-          </button>
+          {/* Texts */}
+          <div className='flex flex-col items-start justify-center space-y-0.5 pt-1 pl-[18px]'>
+            <span className='text-[12px] text-gray-700 dark:text-gray-500'>Sort by</span>
+            <span className='text-[15px] tracking-wider text-black dark:text-white'>{selected}</span>
+          </div>
         </DropdownMenuTrigger>
         <DropdownMenuContent className='dark:bg-gray-1100 w-[183px] bg-gray-100' align='start'>
           <DropdownMenuLabel className='text-[13px] text-gray-800 dark:text-gray-500'>Sort by</DropdownMenuLabel>
@@ -61,6 +55,14 @@ const SortBy = () => {
           ))}
         </DropdownMenuContent>
       </DropdownMenu>
+      {/* Icon button with vertical separator */}
+      <button
+        onClick={() => setIsAscending(!isAscending)}
+        className='relative mr-2 h-full w-auto cursor-pointer bg-transparent pl-4 text-gray-600 before:absolute
+          before:top-1/2 before:left-3 before:h-9 before:w-px before:-translate-y-1/2 before:bg-gray-600'
+      >
+        {isAscending ? <LuArrowUpNarrowWide size={30} /> : <LuArrowDownWideNarrow size={30} />}
+      </button>
     </div>
   );
 };
