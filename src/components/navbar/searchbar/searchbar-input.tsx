@@ -8,7 +8,7 @@ import { Step1, Step2, Step3 } from './steps';
 import { useSearchbar } from './useStore';
 
 const SearchbarInput = () => {
-  const { filterComponents, searchQuery, setSearchQuery } = useSearchbar();
+  const { filterComponents, searchQuery, setSearchQuery, addHistory } = useSearchbar();
 
   return (
     <DropdownMenu>
@@ -23,6 +23,13 @@ const SearchbarInput = () => {
           placeholder='Search'
           value={searchQuery}
           onChange={(e) => setSearchQuery(e.target.value)}
+          onKeyDown={(e) => {
+            if (e.key === 'Enter') {
+              e.preventDefault(); // stop form submit
+              e.stopPropagation(); // stop Radix from toggling menu
+              addHistory(searchQuery);
+            }
+          }}
           className='mx-3 w-full text-[18px] font-medium tracking-wide text-gray-700 placeholder-gray-700
             focus:outline-none dark:text-gray-500 dark:placeholder-gray-500'
         />
