@@ -22,7 +22,7 @@ const ConnectWalletSidebar = () => {
       </button>
 
       {/* wallet icon and connect text */}
-      <div className='absolute top-36 flex flex-col items-center justify-start gap-5'>
+      <div className='top-36 flex flex-col items-center justify-start gap-5'>
         <IoWalletSharp className='text-black dark:text-white' size={80} />
         <span className='text-[22px]'>Connect your wallet</span>
       </div>
