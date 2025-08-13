@@ -32,11 +32,6 @@ export default function AssetDetails({ assets }: AssetDetailsProps) {
                   {/* logo and name */}
                   <div className='flex items-center gap-2 text-gray-700 dark:text-white'>
                     {/* TODO : doable after the merge of token details component */}
-                    {/* <Avatar
-                      sx={{ bgcolor: avatarBackgroundColor, color: 'white', height: '21px', width: '21px', fontSize: '15px' }}
-                    >
-                      {asset.name.charAt(0).toUpperCase()}
-                    </Avatar> */}
                   </div>
                   {/* amount */}
                   <div className='pr-5 text-[10px] text-black dark:text-white'>{asset.amount}</div>
