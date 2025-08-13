@@ -21,9 +21,9 @@ const SortBy = () => {
   return (
     // Container
     <div
-      className={`${viga.className} dark:from-gray-1100 flex h-[57px] w-[185px] items-center justify-between rounded-2xl
-        border border-gray-400 bg-gradient-to-r from-gray-100 to-gray-300 bg-[length:200%_200%] bg-bottom-left
-        dark:border-gray-700 dark:to-gray-800 [&_*]:transition-colors`}
+      className={`${viga.className} dark:from-gray-1100 mt-4 flex h-[57px] w-[185px] items-center justify-between
+        rounded-2xl border border-gray-400 bg-gradient-to-r from-gray-100 to-gray-300 bg-[length:200%_200%]
+        bg-bottom-left dark:border-gray-700 dark:to-gray-800 [&_*]:transition-colors`}
     >
       {/* Dropdown Menu */}
       <DropdownMenu>
@@ -38,7 +38,7 @@ const SortBy = () => {
             <span className='text-[15px] tracking-wider text-black dark:text-white'>{selected}</span>
           </div>
         </DropdownMenuTrigger>
-        <DropdownMenuContent className='dark:bg-gray-1100 w-[183px] bg-gray-100' align='start'>
+        <DropdownMenuContent className='dark:bg-gray-1100 w-[183px] border border-gray-800 bg-gray-100' align='start'>
           <DropdownMenuLabel className='text-[13px] text-gray-800 dark:text-gray-500'>Sort by</DropdownMenuLabel>
           {sortOptions.map((option) => (
             <DropdownMenuItem
