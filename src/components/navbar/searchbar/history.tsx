@@ -28,7 +28,9 @@ const History = () => {
         className='dark:bg-gray-1000 mt-2 w-56 border border-gray-800 bg-gray-100 dark:border-gray-600'
         align='start'
       >
-        <DropdownMenuGroup>Recent searches</DropdownMenuGroup>
+        <DropdownMenuGroup>
+          <span className='ml-1'>Recent searches</span>
+        </DropdownMenuGroup>
         <DropdownMenuSeparator />
         {/* when there is not history just show a gap to be more appealing*/}
         {!history.length && (
@@ -42,7 +44,9 @@ const History = () => {
         })}
 
         <DropdownMenuSeparator />
-        <DropdownMenuItem onClick={clearHistory}>Cleaer recent searches</DropdownMenuItem>
+        <DropdownMenuItem onClick={clearHistory}>
+          <span className='text-[11px] text-gray-800 dark:text-gray-300'>Cleaer recent searches</span>
+        </DropdownMenuItem>
       </DropdownMenuContent>
     </DropdownMenu>
   );
