@@ -19,9 +19,9 @@ export function ItemsPerPageSelector() {
   return (
     <Select value={entriesPerPage.toString()} onValueChange={(value) => setEntriesPerPage(parseInt(value))}>
       <SelectTrigger
-        className='ml-px w-[60px] border-transparent bg-transparent shadow-transparent focus-visible:border-transparent
-          focus-visible:ring-transparent dark:border-transparent dark:bg-transparent dark:shadow-transparent
-          dark:hover:bg-transparent'
+        className='ml-px w-[60px] cursor-pointer border-transparent bg-transparent shadow-transparent
+          focus-visible:border-transparent focus-visible:ring-transparent dark:border-transparent dark:bg-transparent
+          dark:shadow-transparent dark:hover:bg-transparent'
       >
         <SelectValue placeholder={entriesPerPage.toString()} />
       </SelectTrigger>
