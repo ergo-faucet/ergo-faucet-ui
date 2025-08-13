@@ -20,16 +20,15 @@ export function TooltipTokenId({
   content,
   clickedContent = 'Copied!',
   defaultOpen = false,
-  delayDuration = 300,
-  clickDuration = 5000,
+  delayDuration = 600,
+  clickDuration = 0,
   ...props
 }: TooltipTokenIdProps) {
   const [isOpen, setIsOpen] = React.useState(defaultOpen);
   const [isClicked, setIsClicked] = React.useState(false);
   const timeoutRef = React.useRef<NodeJS.Timeout>(null);
 
-  const handleTriggerClick = (e: React.MouseEvent) => {
-    e.preventDefault();
+  const handleTriggerClick = () => {
     setIsClicked(true);
     setIsOpen(true);
 

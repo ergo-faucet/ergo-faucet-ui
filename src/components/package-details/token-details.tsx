@@ -47,25 +47,25 @@ const TokenDetails = ({ asset }: TokenDetailsProps) => {
       </div>
 
       {/* token ID & link */}
-      <div className='flex h-full items-center justify-end'>
-        {/* token ID */}
-        <TooltipTokenId
-          content='Click to Copy'
-          clickedContent={
-            <>
-              <span className='text-green-300 dark:text-green-900'>{asset.tokenId}</span> <br></br>{' '}
-              <span className='dark:text-green-1000 text-green-50'>Copied to Clipboard!</span>
-            </>
-          }
-        >
-          <span className='max-w-[40px] cursor-pointer truncate text-[8px] font-light hover:underline'>
-            {asset.tokenId}
-          </span>
-        </TooltipTokenId>
 
+      <div className='relative flex h-full items-center justify-end'>
         {/* external link */}
-        <a href={url} className='relative h-full w-5'>
-          <FaExternalLinkAlt className='absolute top-2 right-2' size={10} />
+        <a href={url} target='_blank' className='relative flex h-full w-full items-center gap-1'>
+          {/* token ID */}
+          <TooltipTokenId
+            content='Click to Copy'
+            clickedContent={
+              <>
+                <span className='text-green-300 dark:text-green-900'>{asset.tokenId}</span> <br></br>{' '}
+                <span className='dark:text-green-1000 text-green-50'>Copied to Clipboard!</span>
+              </>
+            }
+          >
+            <span className='max-w-[40px] cursor-pointer truncate text-[8px] font-light hover:underline'>
+              {asset.tokenId}
+            </span>
+          </TooltipTokenId>
+          <FaExternalLinkAlt className='top-2 right-2' size={10} />
         </a>
       </div>
     </div>
