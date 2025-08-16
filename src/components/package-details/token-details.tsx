@@ -25,7 +25,9 @@ const TokenDetails = ({ asset }: TokenDetailsProps) => {
   const url = ExplorerURL + '/tokens/' + asset.tokenId;
   const colors = getAssetColors(asset.name);
   const defaultTooltip = (
-    <span className='cursor-pointer text-green-300 hover:underline dark:text-green-900'>{asset.tokenId}</span>
+    <div className='max-w-[194px] text-left wrap-break-word'>
+      <span className='cursor-pointer text-green-300 hover:underline dark:text-green-900'>{asset.tokenId}</span>
+    </div>
   );
   const [tooltip, setTooltip] = useState(defaultTooltip);
   const [open, setOpen] = useState(false);
@@ -38,7 +40,12 @@ const TokenDetails = ({ asset }: TokenDetailsProps) => {
     >
       {/* token name & logo */}
       <div className='flex items-center justify-center gap-2'>
-        <Avatar className={cn('flex h-[21px] w-[21px] items-center justify-center text-[15px] text-white', colors)}>
+        <Avatar
+          className={cn(
+            'flex h-[21px] w-[21px] items-center justify-center text-[15px] font-bold text-white dark:text-black',
+            colors,
+          )}
+        >
           {asset.name.charAt(0).toUpperCase()}
         </Avatar>
         <span className='text-[14px] font-medium'>{asset.name}</span>
@@ -71,10 +78,10 @@ const TokenDetails = ({ asset }: TokenDetailsProps) => {
                 onClick={() => {
                   copyToClipboard(asset.tokenId);
                   setTooltip(
-                    <>
+                    <div className='max-w-[194px] text-left wrap-break-word'>
                       <span className='text-green-300 dark:text-green-900'>{asset.tokenId}</span> <br></br>{' '}
-                      <span className='dark:text-green-1000 text-green-50'>Copied to Clipboard!</span>
-                    </>,
+                      <span className='dark:text-green-1000 font-semibold text-green-50'>Copied to Clipboard!</span>
+                    </div>,
                   );
                 }}
               >
@@ -82,7 +89,7 @@ const TokenDetails = ({ asset }: TokenDetailsProps) => {
               </button>
             }
           >
-            <span className='max-w-[40px] cursor-pointer truncate text-[11px] font-light hover:underline'>
+            <span className='max-w-[48px] cursor-pointer truncate text-[11px] font-light hover:underline'>
               {asset.tokenId}
             </span>
           </TooltipTokenId>
