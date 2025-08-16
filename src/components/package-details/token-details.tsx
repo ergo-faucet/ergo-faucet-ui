@@ -82,7 +82,7 @@ const TokenDetails = ({ asset }: TokenDetailsProps) => {
               </button>
             }
           >
-            <span className='max-w-[40px] cursor-pointer truncate text-[8px] font-light hover:underline'>
+            <span className='max-w-[40px] cursor-pointer truncate text-[11px] font-light hover:underline'>
               {asset.tokenId}
             </span>
           </TooltipTokenId>
