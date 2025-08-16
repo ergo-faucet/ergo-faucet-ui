@@ -68,7 +68,7 @@ export function TooltipTokenId({
         <TooltipContent
           side='bottom'
           onClick={(e: { stopPropagation: () => void }) => e.stopPropagation()}
-          className='cursor-pointer bg-green-900 dark:bg-green-200'
+          className='bg-green-900 dark:bg-green-200'
         >
           <TooltipPrimitive.Arrow
             className='size-2.5 translate-y-[calc(-50%_-_2px)] rotate-45 rounded-[2px] border-none bg-green-900

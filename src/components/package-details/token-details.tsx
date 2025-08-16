@@ -7,7 +7,7 @@ import { FaExternalLinkAlt } from 'react-icons/fa';
 import { TooltipTokenId } from '@/components/package-details/tooltip-tokenid';
 import { Avatar } from '@/components/ui/avatar';
 import { ExplorerURL } from '@/configs';
-import { cn } from '@/lib';
+import { cn, copyToClipboard } from '@/lib';
 import { getFractionalPart, getWholePart } from '@/lib/format-amount';
 import { getAssetColors } from '@/lib/select-color';
 import { Asset } from '@/types';
@@ -24,7 +24,9 @@ interface TokenDetailsProps {
 const TokenDetails = ({ asset }: TokenDetailsProps) => {
   const url = ExplorerURL + '/tokens/' + asset.tokenId;
   const colors = getAssetColors(asset.name);
-  const defaultTooltip = <span className='text-green-300 dark:text-green-900'>{asset.tokenId}</span>;
+  const defaultTooltip = (
+    <span className='cursor-pointer text-green-300 hover:underline dark:text-green-900'>{asset.tokenId}</span>
+  );
   const [tooltip, setTooltip] = useState(defaultTooltip);
   const [open, setOpen] = useState(false);
 
@@ -66,14 +68,15 @@ const TokenDetails = ({ asset }: TokenDetailsProps) => {
             }}
             content={
               <button
-                onClick={() =>
+                onClick={() => {
+                  copyToClipboard(asset.tokenId);
                   setTooltip(
                     <>
                       <span className='text-green-300 dark:text-green-900'>{asset.tokenId}</span> <br></br>{' '}
                       <span className='dark:text-green-1000 text-green-50'>Copied to Clipboard!</span>
                     </>,
-                  )
-                }
+                  );
+                }}
               >
                 {tooltip}
               </button>
