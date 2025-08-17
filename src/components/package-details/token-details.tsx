@@ -1,21 +1,14 @@
 'use client';
 
-import { Inter } from 'next/font/google';
 import { useState } from 'react';
 import { FaExternalLinkAlt } from 'react-icons/fa';
 
 import { TooltipTokenId } from '@/components/package-details/tooltip-tokenid';
 import TokenAvatar from '@/components/token-avatar';
 import { ExplorerURL } from '@/configs';
-import { copyToClipboard } from '@/lib';
-import { getFractionalPart, getWholePart } from '@/lib/format-amount';
-import { getAssetColors } from '@/lib/select-color';
+import { inter } from '@/fonts';
+import { copyToClipboard, getAssetColors, getWholePart, getFractionalPart } from '@/lib';
 import { Asset } from '@/types';
-
-const inter = Inter({
-  subsets: ['latin'],
-  weight: ['300', '500', '600', '700'],
-});
 
 interface TokenDetailsProps {
   asset: Asset;
@@ -53,7 +46,6 @@ const TokenDetails = ({ asset }: TokenDetailsProps) => {
       </div>
 
       {/* token ID & link */}
-
       <div className='relative flex h-full items-center justify-end'>
         {/* external link */}
         <a href={url} target='_blank' className='relative flex h-full w-full items-center gap-1'>

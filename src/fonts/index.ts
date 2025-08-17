@@ -7,5 +7,5 @@ export const robotoCondensed = Roboto_Condensed({
 
 export const inter = Inter({
   subsets: ['latin'],
-  weight: ['300', '800'],
+  weight: ['300', '500', '600', '700'],
 });
