@@ -13,7 +13,7 @@ const ModalHeader = ({ packageName }: ModalHeaderProps) => {
     >
       {/* title */}
       <div>
-        <span className='text-start text-[18px] font-extrabold text-gray-800 dark:text-[#AAA]'>Claiming </span>
+        <span className='text-start text-[18px] font-extrabold text-gray-800 dark:text-[#AAA]'>Claiming</span>
         <span className='text-start text-[20px] font-extrabold'>{packageName} Package</span>
       </div>
 
