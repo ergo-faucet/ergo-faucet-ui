@@ -164,3 +164,11 @@
   --color-gray-1200: #040404;
   --color-gray-1300: #000;
 }
+
+/* text utility classes */
+
+@utility truncate {
+  white-space: nowrap;
+  overflow: hidden;
+  text-overflow: ellipsis;
+}
