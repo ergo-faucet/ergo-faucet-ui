@@ -4,6 +4,7 @@ import { Asset } from '@/types';
 
 import { FormattedAmount } from '../formatted-amount';
 import TokenAvatar from '../token-avatar';
+import { TooltipTokenId } from '../tooltip-tokenid';
 
 interface AssetDetailsProps {
   assets: Asset[];
@@ -14,7 +15,7 @@ export default function AssetDetails({ assets }: AssetDetailsProps) {
     // container
     <div className={`${inter.className} mx-auto h-auto w-[311px] bg-transparent p-4`}>
       {/* the table */}
-      <table className='w-full border-separate text-left text-sm text-white'>
+      <table className='w-full border-separate border-spacing-1 text-left text-sm text-white'>
         {/* headers */}
         <thead>
           <tr className='text-[10px] font-bold text-gray-800 dark:text-gray-300'>
@@ -36,9 +37,11 @@ export default function AssetDetails({ assets }: AssetDetailsProps) {
                   {/* logo and name */}
                   <div className='flex items-center gap-2 text-center text-gray-700 dark:text-white'>
                     <TokenAvatar colors={getAssetColors(asset.name)} assetName={asset.name} />
-                    <span className='text-[14px] font-medium tracking-wide text-gray-700 dark:text-white'>
-                      {asset.name}
-                    </span>
+                    <TooltipTokenId tokenId={asset.tokenId}>
+                      <span className='text-[14px] font-medium tracking-wide text-gray-700 dark:text-white'>
+                        {asset.name}
+                      </span>
+                    </TooltipTokenId>
                   </div>
 
                   {/* amount */}

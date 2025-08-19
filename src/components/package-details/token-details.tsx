@@ -1,13 +1,10 @@
-'use client';
-
-import { useState } from 'react';
 import { FaExternalLinkAlt } from 'react-icons/fa';
 
-import { TooltipTokenId } from '@/components/package-details/tooltip-tokenid';
 import TokenAvatar from '@/components/token-avatar';
+import { TooltipTokenId } from '@/components/tooltip-tokenid';
 import { ExplorerURL } from '@/configs';
 import { inter } from '@/fonts';
-import { copyToClipboard, getAssetColors } from '@/lib';
+import { getAssetColors } from '@/lib';
 import { Asset } from '@/types';
 
 import { FormattedAmount } from '../formatted-amount';
@@ -19,13 +16,6 @@ interface TokenDetailsProps {
 const TokenDetails = ({ asset }: TokenDetailsProps) => {
   const url = ExplorerURL + '/tokens/' + asset.tokenId;
   const colors = getAssetColors(asset.name);
-  const defaultTooltip = (
-    <div className='max-w-[194px] text-left wrap-break-word'>
-      <span className='cursor-pointer text-green-300 hover:underline dark:text-green-900'>{asset.tokenId}</span>
-    </div>
-  );
-  const [tooltip, setTooltip] = useState(defaultTooltip);
-  const [open, setOpen] = useState(false);
 
   return (
     // container
@@ -47,30 +37,7 @@ const TokenDetails = ({ asset }: TokenDetailsProps) => {
         {/* external link */}
         <a href={url} target='_blank' className='relative flex h-full w-full items-center gap-1'>
           {/* token ID */}
-          <TooltipTokenId
-            open={open}
-            onOpenChange={(state: boolean | ((prevState: boolean) => boolean)) => {
-              if (open && !state) {
-                setTooltip(defaultTooltip);
-              }
-              setOpen(state);
-            }}
-            content={
-              <button
-                onClick={() => {
-                  copyToClipboard(asset.tokenId);
-                  setTooltip(
-                    <div className='max-w-[194px] text-left wrap-break-word'>
-                      <span className='text-green-300 dark:text-green-900'>{asset.tokenId}</span> <br></br>{' '}
-                      <span className='dark:text-green-1000 font-semibold text-green-50'>Copied to Clipboard!</span>
-                    </div>,
-                  );
-                }}
-              >
-                {tooltip}
-              </button>
-            }
-          >
+          <TooltipTokenId tokenId={asset.tokenId}>
             <span className='max-w-[48px] cursor-pointer truncate text-[11px] font-light hover:underline'>
               {asset.tokenId}
             </span>
