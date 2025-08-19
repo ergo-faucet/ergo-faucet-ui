@@ -1,4 +1,4 @@
-import { openSans } from '@/fonts';
+import { inter } from '@/fonts';
 import { getAssetColors } from '@/lib';
 import { Asset } from '@/types';
 
@@ -12,7 +12,7 @@ interface AssetDetailsProps {
 export default function AssetDetails({ assets }: AssetDetailsProps) {
   return (
     // container
-    <div className={`${openSans.className} mx-auto h-auto w-[311px] bg-transparent p-4`}>
+    <div className={`${inter.className} mx-auto h-auto w-[311px] bg-transparent p-4`}>
       {/* the table */}
       <table className='w-full border-separate text-left text-sm text-white'>
         {/* headers */}
@@ -36,7 +36,11 @@ export default function AssetDetails({ assets }: AssetDetailsProps) {
                   {/* logo and name */}
                   <div className='flex items-center gap-2 text-gray-700 dark:text-white'>
                     <TokenAvatar colors={getAssetColors(asset.name)} assetName={asset.name} />
+                    <span className='text-[14px] font-medium tracking-wide text-gray-700 dark:text-white'>
+                      {asset.name}
+                    </span>
                   </div>
+
                   {/* amount */}
                   <FormattedAmount amount={asset.amount} decimal={asset.decimal} />
                 </div>
