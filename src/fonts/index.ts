@@ -12,5 +12,5 @@ export const openSans = Open_Sans({
 
 export const inter = Inter({
   subsets: ['latin'],
-  weight: ['500', '600', '700'],
+  weight: ['300', '500', '600', '700'],
 });
