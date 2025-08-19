@@ -7,8 +7,10 @@ import { TooltipTokenId } from '@/components/package-details/tooltip-tokenid';
 import TokenAvatar from '@/components/token-avatar';
 import { ExplorerURL } from '@/configs';
 import { inter } from '@/fonts';
-import { copyToClipboard, getAssetColors, getWholePart, getFractionalPart } from '@/lib';
+import { copyToClipboard, getAssetColors } from '@/lib';
 import { Asset } from '@/types';
+
+import { FormattedAmount } from '../formatted-amount';
 
 interface TokenDetailsProps {
   asset: Asset;
@@ -38,12 +40,7 @@ const TokenDetails = ({ asset }: TokenDetailsProps) => {
       </div>
 
       {/* formatted amount */}
-      <div>
-        <span className='text-[13px] font-bold'>{getWholePart(asset.amount, asset.decimal)}.</span>
-        <span className='text-[11px] font-semibold text-gray-900 dark:text-gray-200'>
-          {getFractionalPart(asset.amount, asset.decimal)}
-        </span>
-      </div>
+      <FormattedAmount amount={asset.amount} decimal={asset.decimal} />
 
       {/* token ID & link */}
       <div className='relative flex h-full items-center justify-end'>

@@ -1,5 +1,9 @@
 import { openSans } from '@/fonts';
+import { getAssetColors } from '@/lib';
 import { Asset } from '@/types';
+
+import { FormattedAmount } from '../formatted-amount';
+import TokenAvatar from '../token-avatar';
 
 interface AssetDetailsProps {
   assets: Asset[];
@@ -14,8 +18,8 @@ export default function AssetDetails({ assets }: AssetDetailsProps) {
         {/* headers */}
         <thead>
           <tr className='text-[10px] font-bold text-gray-800 dark:text-gray-300'>
-            <th className='pl-3'>Asset Name</th>
-            <th className='pr-7 text-right'>Amount</th>
+            <th className='pl-10'>Asset Name</th>
+            <th className='pr-3 text-right'>Amount</th>
           </tr>
         </thead>
 
@@ -26,13 +30,15 @@ export default function AssetDetails({ assets }: AssetDetailsProps) {
               <td colSpan={2}>
                 {/* aseet row */}
                 <div
-                  className='flex h-4 w-full items-center justify-between rounded-[5px] border border-gray-700
-                    bg-transparent px-3 py-2 text-[10px] text-black dark:border-gray-500'
+                  className='flex h-7 w-full items-center justify-between rounded-[5px] border border-gray-700
+                    bg-transparent px-3 py-2 pr-4 text-[10px] text-black dark:border-gray-500'
                 >
                   {/* logo and name */}
-                  <div className='flex items-center gap-2 text-gray-700 dark:text-white'></div>
+                  <div className='flex items-center gap-2 text-gray-700 dark:text-white'>
+                    <TokenAvatar colors={getAssetColors(asset.name)} assetName={asset.name} />
+                  </div>
                   {/* amount */}
-                  <div className='pr-5 text-[10px] text-black dark:text-white'>{asset.amount}</div>
+                  <FormattedAmount amount={asset.amount} decimal={asset.decimal} />
                 </div>
               </td>
             </tr>
