@@ -1,3 +1,6 @@
+import { FaExternalLinkAlt } from 'react-icons/fa';
+
+import { ExplorerURL } from '@/configs';
 import { inter } from '@/fonts';
 import { getAssetColors } from '@/lib';
 import { Asset } from '@/types';
@@ -32,15 +35,21 @@ export default function AssetDetails({ assets }: AssetDetailsProps) {
                 {/* aseet row */}
                 <div
                   className='flex h-7 w-full items-center justify-between rounded-[5px] border border-gray-700
-                    bg-transparent px-3 py-2 pr-4 text-[10px] text-black dark:border-gray-500'
+                    bg-transparent px-3 py-2 pr-4 text-[10px] text-black hover:bg-[#B5B2B2] dark:border-gray-500
+                    dark:hover:bg-[#473F3F]'
                 >
                   {/* logo and name */}
                   <div className='flex items-center gap-2 text-center text-gray-700 dark:text-white'>
                     <TokenAvatar colors={getAssetColors(asset.name)} assetName={asset.name} />
                     <TooltipTokenId tokenId={asset.tokenId}>
-                      <span className='text-[14px] font-medium tracking-wide text-gray-700 dark:text-white'>
-                        {asset.name}
-                      </span>
+                      <a
+                        href={`${ExplorerURL}/tokens/${asset.tokenId}`}
+                        target='_blank'
+                        className='flex cursor-pointer items-center gap-1 text-gray-700 dark:text-white'
+                      >
+                        <span className='text-[14px] font-medium tracking-wide'>{asset.name}</span>
+                        <FaExternalLinkAlt className='top-2 right-2' size={10} />
+                      </a>
                     </TooltipTokenId>
                   </div>
 
