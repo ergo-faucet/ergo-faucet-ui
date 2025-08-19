@@ -1,7 +1,7 @@
 import { IoCheckmarkCircleSharp } from 'react-icons/io5';
 
 import { ClickToCompleteButton } from '@/components/package-details/buttons';
-import { GenerateAuthTypeIcon } from '@/lib/generate-icon';
+import { GenerateAuthTypeIcon } from '@/lib';
 import { AuthType } from '@/types';
 
 interface AuthTaskProps {
