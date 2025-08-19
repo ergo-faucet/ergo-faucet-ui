@@ -11,6 +11,7 @@ import {
   DropdownMenuTrigger,
 } from '@/components/ui/dropdown-menu';
 import { viga } from '@/fonts';
+import { cn } from '@/lib/utils';
 
 const sortOptions = ['Name', 'Release Date'];
 
@@ -38,20 +39,16 @@ const SortBy = () => {
             <span className='text-[15px] tracking-wider text-black dark:text-white'>{selected}</span>
           </div>
         </DropdownMenuTrigger>
-        <DropdownMenuContent
-          className='dark:bg-gray-1100 -mt-2 w-[183px] border border-gray-800 bg-gray-100 p-0'
-          align='start'
-        >
+        <DropdownMenuContent className='dark:bg-gray-1100 w-[183px] border border-gray-800 bg-gray-100' align='start'>
           <DropdownMenuLabel className='text-[13px] text-gray-800 dark:text-gray-500'>Sort by</DropdownMenuLabel>
           {sortOptions.map((option) => (
             <DropdownMenuItem
               key={option}
               onSelect={() => setSelected(option)}
-              className={`h-[39px] cursor-pointer rounded-none text-[15px] font-bold ${
-                selected === option
-                  ? 'dark:bg-gray-1000 bg-gray-200 text-black dark:text-white'
-                  : 'hover:bg-gray-300 dark:hover:bg-gray-800'
-              } `}
+              className={cn(
+                'h-[39px] cursor-pointer text-[15px] font-bold',
+                selected === option ? 'dark:bg-gray-1000 bg-gray-300 text-black dark:text-white' : '',
+              )}
             >
               {option}
             </DropdownMenuItem>
