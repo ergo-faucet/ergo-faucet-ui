@@ -30,9 +30,7 @@ export default function AssetDetails({ assets }: AssetDetailsProps) {
                     bg-transparent px-3 py-2 text-[10px] text-black dark:border-gray-500'
                 >
                   {/* logo and name */}
-                  <div className='flex items-center gap-2 text-gray-700 dark:text-white'>
-                    {/* TODO : doable after the merge of token details component */}
-                  </div>
+                  <div className='flex items-center gap-2 text-gray-700 dark:text-white'></div>
                   {/* amount */}
                   <div className='pr-5 text-[10px] text-black dark:text-white'>{asset.amount}</div>
                 </div>
