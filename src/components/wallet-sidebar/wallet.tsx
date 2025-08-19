@@ -16,7 +16,7 @@ const Wallet = ({ name, src, alt, size, selected }: WalletProps) => {
   return (
     <div
       className={cn(
-        'flex h-14 w-70 items-center justify-between rounded-[19px] border bg-transparent p-2 pr-3',
+        'flex h-14 w-70 cursor-pointer items-center justify-between rounded-[19px] border bg-transparent p-2 pr-3',
         selected ? 'border-green-400' : 'border-gray-600',
       )}
     >
