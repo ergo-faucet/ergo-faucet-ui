@@ -20,10 +20,10 @@ interface PaginationState {
 }
 
 export const usePaginationStore = create<PaginationState>((set, get) => ({
-  // Initial state
+  // Initial state (fetch later)
   currentPage: 1,
   currentFirstIndex: 1,
-  entriesPerPage: 9,
+  entriesPerPage: 10,
   totalPages: 26,
   totalEntries: 233,
 
