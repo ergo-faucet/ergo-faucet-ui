@@ -1,11 +1,16 @@
-import { Volkhov, Roboto_Condensed } from 'next/font/google';
+import { Volkhov, Roboto_Condensed, Inter } from 'next/font/google';
 
 export const volkhov = Volkhov({
   subsets: ['latin'],
   weight: ['400'],
 });
 
-export const roboto_Condensed = Roboto_Condensed({
+export const robotoCondensed = Roboto_Condensed({
   subsets: ['latin'],
-  weight: ['400', '500'],
+  weight: ['400', '500', '700'],
+});
+
+export const inter = Inter({
+  subsets: ['latin'],
+  weight: ['300', '500', '600', '700'],
 });

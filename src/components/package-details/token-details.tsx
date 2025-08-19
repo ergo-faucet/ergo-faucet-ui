@@ -1,26 +1,29 @@
-import { Inter } from 'next/font/google';
+'use client';
+
+import { useState } from 'react';
 import { FaExternalLinkAlt } from 'react-icons/fa';
 
-import { ErgoTooltip } from '@/components/ergo-tooltip';
-import { cn } from '@/lib';
-import { getFractionalPart, getWholePart } from '@/lib/format-amount';
-import { getAssetColors } from '@/lib/select-color';
+import { TooltipTokenId } from '@/components/package-details/tooltip-tokenid';
+import TokenAvatar from '@/components/token-avatar';
+import { ExplorerURL } from '@/configs';
+import { inter } from '@/fonts';
+import { copyToClipboard, getAssetColors, getWholePart, getFractionalPart } from '@/lib';
 import { Asset } from '@/types';
-
-import { Avatar } from '../ui/avatar';
-
-const inter = Inter({
-  subsets: ['latin'],
-  weight: ['300', '500', '600', '700'],
-});
 
 interface TokenDetailsProps {
   asset: Asset;
 }
 
 const TokenDetails = ({ asset }: TokenDetailsProps) => {
-  const url = process.env.EXPLORER_URL + '/tokens/' + asset.tokenId;
+  const url = ExplorerURL + '/tokens/' + asset.tokenId;
   const colors = getAssetColors(asset.name);
+  const defaultTooltip = (
+    <div className='max-w-[194px] text-left wrap-break-word'>
+      <span className='cursor-pointer text-green-300 hover:underline dark:text-green-900'>{asset.tokenId}</span>
+    </div>
+  );
+  const [tooltip, setTooltip] = useState(defaultTooltip);
+  const [open, setOpen] = useState(false);
 
   return (
     // container
@@ -30,9 +33,7 @@ const TokenDetails = ({ asset }: TokenDetailsProps) => {
     >
       {/* token name & logo */}
       <div className='flex items-center justify-center gap-2'>
-        <Avatar className={cn('flex h-[21px] w-[21px] items-center justify-center text-[15px] text-white', colors)}>
-          {asset.name.charAt(0).toUpperCase()}
-        </Avatar>
+        <TokenAvatar assetName={asset.name} colors={colors} />
         <span className='text-[14px] font-medium'>{asset.name}</span>
       </div>
 
@@ -45,25 +46,39 @@ const TokenDetails = ({ asset }: TokenDetailsProps) => {
       </div>
 
       {/* token ID & link */}
-      <div className='flex h-full items-center justify-end'>
-        {/* token ID */}
-        <ErgoTooltip
-          content='Click to Copy'
-          clickedContent={
-            <>
-              <span className='text-green-300 dark:text-green-900'>{asset.tokenId}</span> <br></br>{' '}
-              <span className='dark:text-green-1000 text-green-50'>Copied to Clipboard!</span>
-            </>
-          }
-        >
-          <span className='max-w-[40px] cursor-pointer truncate text-[8px] font-light hover:underline'>
-            {asset.tokenId}
-          </span>
-        </ErgoTooltip>
-
+      <div className='relative flex h-full items-center justify-end'>
         {/* external link */}
-        <a href={url} className='relative h-full w-5'>
-          <FaExternalLinkAlt className='absolute top-2 right-2' size={10} />
+        <a href={url} target='_blank' className='relative flex h-full w-full items-center gap-1'>
+          {/* token ID */}
+          <TooltipTokenId
+            open={open}
+            onOpenChange={(state) => {
+              if (open && !state) {
+                setTooltip(defaultTooltip);
+              }
+              setOpen(state);
+            }}
+            content={
+              <button
+                onClick={() => {
+                  copyToClipboard(asset.tokenId);
+                  setTooltip(
+                    <div className='max-w-[194px] text-left wrap-break-word'>
+                      <span className='text-green-300 dark:text-green-900'>{asset.tokenId}</span> <br></br>{' '}
+                      <span className='dark:text-green-1000 font-semibold text-green-50'>Copied to Clipboard!</span>
+                    </div>,
+                  );
+                }}
+              >
+                {tooltip}
+              </button>
+            }
+          >
+            <span className='max-w-[48px] cursor-pointer truncate text-[11px] font-light hover:underline'>
+              {asset.tokenId}
+            </span>
+          </TooltipTokenId>
+          <FaExternalLinkAlt className='top-2 right-2' size={10} />
         </a>
       </div>
     </div>
