@@ -1,4 +1,4 @@
-import { Roboto_Condensed, Inter } from 'next/font/google';
+import { Inter, Roboto_Condensed } from 'next/font/google';
 
 export const robotoCondensed = Roboto_Condensed({
   subsets: ['latin'],
@@ -7,5 +7,5 @@ export const robotoCondensed = Roboto_Condensed({
 
 export const inter = Inter({
   subsets: ['latin'],
-  weight: ['300', '500', '600', '700'],
+  weight: ['300', '400', '500', '600', '700'],
 });

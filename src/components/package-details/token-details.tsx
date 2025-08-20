@@ -1,14 +1,13 @@
-'use client';
-
-import { useState } from 'react';
 import { FaExternalLinkAlt } from 'react-icons/fa';
 
-import { TooltipTokenId } from '@/components/package-details/tooltip-tokenid';
 import TokenAvatar from '@/components/token-avatar';
+import { TooltipTokenId } from '@/components/tooltip-tokenid';
 import { ExplorerURL } from '@/configs';
 import { inter } from '@/fonts';
-import { copyToClipboard, getAssetColors, getWholePart, getFractionalPart } from '@/lib';
+import { getAssetColors } from '@/lib';
 import { Asset } from '@/types';
+
+import { FormattedAmount } from '../formatted-amount';
 
 interface TokenDetailsProps {
   asset: Asset;
@@ -17,13 +16,6 @@ interface TokenDetailsProps {
 const TokenDetails = ({ asset }: TokenDetailsProps) => {
   const url = ExplorerURL + '/tokens/' + asset.tokenId;
   const colors = getAssetColors(asset.name);
-  const defaultTooltip = (
-    <div className='max-w-[194px] text-left wrap-break-word'>
-      <span className='cursor-pointer text-green-300 hover:underline dark:text-green-900'>{asset.tokenId}</span>
-    </div>
-  );
-  const [tooltip, setTooltip] = useState(defaultTooltip);
-  const [open, setOpen] = useState(false);
 
   return (
     // container
@@ -38,42 +30,14 @@ const TokenDetails = ({ asset }: TokenDetailsProps) => {
       </div>
 
       {/* formatted amount */}
-      <div>
-        <span className='text-[13px] font-bold'>{getWholePart(asset.amount, asset.decimal)}.</span>
-        <span className='text-[11px] font-semibold text-gray-900 dark:text-gray-200'>
-          {getFractionalPart(asset.amount, asset.decimal)}
-        </span>
-      </div>
+      <FormattedAmount amount={asset.amount} decimal={asset.decimal} />
 
       {/* token ID & link */}
       <div className='relative flex h-full items-center justify-end'>
         {/* external link */}
         <a href={url} target='_blank' className='relative flex h-full w-full items-center gap-1'>
           {/* token ID */}
-          <TooltipTokenId
-            open={open}
-            onOpenChange={(state) => {
-              if (open && !state) {
-                setTooltip(defaultTooltip);
-              }
-              setOpen(state);
-            }}
-            content={
-              <button
-                onClick={() => {
-                  copyToClipboard(asset.tokenId);
-                  setTooltip(
-                    <div className='max-w-[194px] text-left wrap-break-word'>
-                      <span className='text-green-300 dark:text-green-900'>{asset.tokenId}</span> <br></br>{' '}
-                      <span className='dark:text-green-1000 font-semibold text-green-50'>Copied to Clipboard!</span>
-                    </div>,
-                  );
-                }}
-              >
-                {tooltip}
-              </button>
-            }
-          >
+          <TooltipTokenId tokenId={asset.tokenId}>
             <span className='max-w-[48px] cursor-pointer truncate text-[11px] font-light hover:underline'>
               {asset.tokenId}
             </span>
