@@ -41,15 +41,9 @@ const SearchbarInput = () => {
         align='start'
       >
         {/* steps */}
-        {[Step1, Step2, Step3].every((Step) => Step === null) ? (
-          <span>No steps available</span>
-        ) : (
-          <>
-            <Step1 />
-            <Step2 />
-            <Step3 />
-          </>
-        )}
+        <Step1 />
+        <Step2 />
+        <Step3 />
       </DropdownMenuContent>
     </DropdownMenu>
   );
