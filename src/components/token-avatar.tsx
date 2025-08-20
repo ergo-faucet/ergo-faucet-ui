@@ -10,7 +10,8 @@ const TokenAvatar = ({ colors, assetName }: TokenAvatarProps) => {
   return (
     <Avatar
       className={cn(
-        'flex h-[21px] w-[21px] items-center justify-center text-[15px] font-bold text-white dark:text-black',
+        `flex h-[21px] w-[21px] items-center justify-center rounded-full text-[13px] leading-none font-bold text-white
+        dark:text-black`,
         colors,
       )}
     >
