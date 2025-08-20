@@ -32,7 +32,7 @@ const History = () => {
           <span className='ml-1'>Recent searches</span>
         </DropdownMenuGroup>
         <DropdownMenuSeparator />
-        {/* when there is not history just show a gap to be more appealing*/}
+        {/* when there is no history*/}
         {!history.length && (
           // make it a group, so it is not hoverable
           <DropdownMenuGroup>
