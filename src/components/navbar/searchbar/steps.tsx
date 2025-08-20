@@ -74,6 +74,9 @@ export const Step1 = () => {
           <KeyRound /> Auth Method
         </DropdownMenuItem>
       )}
+      {isAuthActivated && isCreatorActivated && isAssetActivated && (
+        <DropdownMenuItem>No more filters !</DropdownMenuItem>
+      )}
     </>
   );
 };
