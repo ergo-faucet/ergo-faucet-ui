@@ -66,7 +66,7 @@ export const useSearchbar = create<SearchbarFiltersStore>((set, get) => ({
   filterComponents: [],
   lastFilterComponent: null,
   mainFilters: [],
-  history: getInitialHistory(), // load initial history from localStorage
+  history: getInitialHistory(),
   searchQuery: '',
 
   // Activate/deactivate main filters

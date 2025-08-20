@@ -1,16 +1,12 @@
 'use client';
 
-import { Viga } from 'next/font/google';
 import { IoSearch } from 'react-icons/io5';
+
+import { viga } from '@/fonts';
 
 import History from './history';
 import SearchbarInput from './searchbar-input';
 import { useSearchbar } from './useStore';
-
-const viga = Viga({
-  subsets: ['latin'],
-  weight: ['400'],
-});
 
 const Searchbar = () => {
   const { addHistory, searchQuery } = useSearchbar();
