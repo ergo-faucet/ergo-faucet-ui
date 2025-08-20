@@ -116,7 +116,7 @@ export const useSearchbar = create<SearchbarFiltersStore>((set, get) => ({
   addHistory: (his) => {
     if (!his) return;
     const { history } = get();
-    set({ history: [...history, his] });
+    set({ history: [his, ...history] });
   },
 
   clearHistory: () => {

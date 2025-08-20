@@ -28,6 +28,7 @@ const SearchbarInput = () => {
               e.preventDefault(); // stop form submit
               e.stopPropagation(); // stop Radix from toggling menu
               addHistory(searchQuery);
+              setSearchQuery('');
             }
           }}
           className='mx-3 w-full text-[18px] font-medium tracking-wide text-gray-700 placeholder-gray-700
