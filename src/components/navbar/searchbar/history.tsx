@@ -34,9 +34,10 @@ const History = () => {
         <DropdownMenuSeparator />
         {/* when there is not history just show a gap to be more appealing*/}
         {!history.length && (
-          <DropdownMenuItem>
-            <div className='h-5'></div>
-          </DropdownMenuItem>
+          // make it a group, so it is not hoverable
+          <DropdownMenuGroup>
+            <span className='pl-4 text-[11px] text-gray-800 dark:text-gray-300'>No history available</span>
+          </DropdownMenuGroup>
         )}
 
         {history.map((his, id) => {
