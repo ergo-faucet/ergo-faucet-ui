@@ -4,6 +4,7 @@ import { create } from 'zustand';
 
 import { SearchbarFilterType } from './types';
 
+// Enum to represent which step of a filter we are on
 export enum Step {
   first,
   second,
@@ -11,34 +12,36 @@ export enum Step {
 }
 
 type FilterComponentItem = {
-  id: string; // can be a stable unique ID, nanoid
+  id: string; // stable unique ID (e.g., nanoid)
   element: JSX.Element;
-  meta: SearchbarFilterType | null; // some badges are the filter type itself, they are the main step of each filter
+  meta: SearchbarFilterType | null;
 };
 
+// Zustand store type definition
 type SearchbarFiltersStore = {
-  // activated filters
+  // Flags for which main filters are activated
   isAuthActivated: boolean;
   isAssetActivated: boolean;
   isCreatorActivated: boolean;
-  // which state of each filter we are in
-  step: Step;
-  // all filter components to render them correctly and in order
-  filterComponents: FilterComponentItem[];
-  // tracking last filter component to show the corresponding components in each step
-  lastFilterComponent: SearchbarFilterType | null;
-  // history of searches
-  history: string[];
-  // input string of searchbar
-  searchQuery: string;
-  // keep track of main filters in order
-  mainFilters: SearchbarFilterType[];
 
-  // functions to manipulate states
+  // current step in the filter sequence
+  step: Step;
+  // all rendered filter components
+  filterComponents: FilterComponentItem[];
+  // last main filter added
+  lastFilterComponent: SearchbarFilterType | null;
+  // main filters in order
+  mainFilters: SearchbarFilterType[];
+  // search history
+  history: string[];
+  // current search input
+  searchQuery: string;
+
+  // State update functions
   setIsAuthActivated: (state: boolean) => void;
   setIsAssetActivated: (state: boolean) => void;
   setIsCreatorActivated: (state: boolean) => void;
-  setFilterComponents: (components: FilterComponentItem[], last: SearchbarFilterType | null) => void;
+  setFilterComponents: (components: FilterComponentItem[]) => void;
   addFilterComponent: (id: string, component: JSX.Element, meta?: SearchbarFilterType) => void;
   removeFilterComponent: (id: string) => void;
   nextStep: () => void;
@@ -47,6 +50,14 @@ type SearchbarFiltersStore = {
   setSearchQuery: (query: string) => void;
 };
 
+// Helper to load search history from localStorage on initialization
+const getInitialHistory = () => {
+  if (typeof window === 'undefined') return [];
+  const stored = localStorage.getItem('searchHistory');
+  return stored ? JSON.parse(stored) : [];
+};
+
+// Zustand store implementation
 export const useSearchbar = create<SearchbarFiltersStore>((set, get) => ({
   isAuthActivated: false,
   isAssetActivated: false,
@@ -55,15 +66,17 @@ export const useSearchbar = create<SearchbarFiltersStore>((set, get) => ({
   filterComponents: [],
   lastFilterComponent: null,
   mainFilters: [],
-  history: [],
+  history: getInitialHistory(), // load initial history from localStorage
   searchQuery: '',
 
+  // Activate/deactivate main filters
   setIsAuthActivated: (state) => set({ isAuthActivated: state }),
   setIsAssetActivated: (state) => set({ isAssetActivated: state }),
   setIsCreatorActivated: (state) => set({ isCreatorActivated: state }),
 
+  // Replace all filter components at once
   setFilterComponents: (components: FilterComponentItem[]) => {
-    const lastMeta = [...components].reverse().find((f) => f.meta !== null)?.meta;
+    const lastMeta = [...components].reverse().find((f) => f.meta !== null)?.meta ?? null;
     set({
       filterComponents: components,
       lastFilterComponent: lastMeta,
@@ -73,18 +86,13 @@ export const useSearchbar = create<SearchbarFiltersStore>((set, get) => ({
     });
   },
 
-  addFilterComponent: (id: string, component: JSX.Element, meta?: SearchbarFilterType) => {
+  // Add a single filter component
+  addFilterComponent: (id, component, meta) => {
     const state = get();
-
-    const newItem: FilterComponentItem = {
-      id,
-      element: component,
-      meta: meta ?? null,
-    };
-
+    const newItem: FilterComponentItem = { id, element: component, meta: meta ?? null };
     const nextFilterComponents = [...state.filterComponents, newItem];
 
-    // Rebuild main filters and last meta from components to avoid drift
+    // Rebuild main filters array and last main filter
     const nextMainFilters = nextFilterComponents
       .filter((f) => f.meta !== null)
       .map((f) => f.meta!) as SearchbarFilterType[];
@@ -101,26 +109,27 @@ export const useSearchbar = create<SearchbarFiltersStore>((set, get) => ({
     });
   },
 
-  removeFilterComponent: (id: string) => {
+  // Remove a filter component and its group of related steps
+  removeFilterComponent: (id) => {
     const state = get();
     const { filterComponents } = state;
 
     const index = filterComponents.findIndex((f) => f.id === id);
     if (index === -1) return;
 
-    // Find group start: nearest item with meta !== null within [-2, +2]
     const len = filterComponents.length;
 
+    // Determine the start of the group of 3 steps related to the main filter
     const findMetaIndex = (): number => {
-      // search left up to 2
+      // Search left up to 2 positions
       for (let i = index; i >= Math.max(0, index - 2); i--) {
         if (filterComponents[i]?.meta !== null) return i;
       }
-      // fallback: search right up to 2 (handles unexpected ordering)
+      // Search right up to 2 positions if not found on the left
       for (let i = index + 1; i <= Math.min(len - 1, index + 2); i++) {
         if (filterComponents[i]?.meta !== null) return i;
       }
-      // ultimate fallback: assume group aligned to multiples of 3
+      // Fallback: assume group aligned every 3  (# of steps)
       return Math.max(0, index - (index % 3));
     };
 
@@ -129,7 +138,7 @@ export const useSearchbar = create<SearchbarFiltersStore>((set, get) => ({
 
     const nextFilterComponents = filterComponents.filter((_item, i) => i < groupStart || i > groupEnd);
 
-    // Rebuild main filters & last meta from remaining components
+    // Rebuild main filters and last main filter
     const nextMainFilters = nextFilterComponents
       .filter((f) => f.meta !== null)
       .map((f) => f.meta!) as SearchbarFilterType[];
@@ -146,19 +155,35 @@ export const useSearchbar = create<SearchbarFiltersStore>((set, get) => ({
     });
   },
 
+  // Move to the next step (cycles from third back to first)
   nextStep: () =>
     set((state) => ({
       step: state.step === Step.third ? Step.first : state.step + 1,
     })),
+
+  // Add a search term to history
   addHistory: (his) => {
     if (!his) return;
     const { history } = get();
-    set({ history: [his, ...history] });
+    const nextHistory = [his, ...history].slice(0, 6);
+
+    set({ history: nextHistory });
+
+    // Persist history in localStorage
+    if (typeof window !== 'undefined') {
+      localStorage.setItem('searchHistory', JSON.stringify(nextHistory));
+    }
   },
 
+  // Clear history both in state and localStorage
   clearHistory: () => {
     set({ history: [] });
+    if (typeof window !== 'undefined') {
+      localStorage.removeItem('searchHistory');
+    }
   },
+
+  // Update the current search input
   setSearchQuery: (query) => {
     set({ searchQuery: query });
   },
