@@ -14,8 +14,8 @@ const AuthTask = ({ authType, isCompleted }: AuthTaskProps) => {
   return (
     // container
     <div
-      className='dark:bg-light-green-ergo flex h-11 w-72 items-center justify-between rounded-[5px] border
-        border-[#27548A]/35 bg-white px-2 transition-colors duration-300'
+      className='flex h-11 w-72 items-center justify-between rounded-[5px] border border-[#27548A]/35 bg-gray-50 px-2
+        transition-colors duration-300 dark:bg-gray-700'
     >
       {/* icon and title */}
       <div className='flex h-9 w-25 flex-row items-center'>
