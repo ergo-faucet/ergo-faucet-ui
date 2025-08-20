@@ -14,7 +14,7 @@ export enum Step {
 type FilterComponentItem = {
   id: string; // stable unique ID (e.g., nanoid)
   element: JSX.Element;
-  meta: SearchbarFilterType | null;
+  meta: SearchbarFilterType | null; // null for regular components
 };
 
 // Zustand store type definition
@@ -26,11 +26,11 @@ type SearchbarFiltersStore = {
 
   // current step in the filter sequence
   step: Step;
-  // all rendered filter components
+  // all filter components to render
   filterComponents: FilterComponentItem[];
-  // last main filter added
+  // last main filter added (to show next steps)
   lastFilterComponent: SearchbarFilterType | null;
-  // main filters in order
+  // main filters in order (to not include them anymore)
   mainFilters: SearchbarFilterType[];
   // search history
   history: string[];
@@ -121,15 +121,10 @@ export const useSearchbar = create<SearchbarFiltersStore>((set, get) => ({
 
     // Determine the start of the group of 3 steps related to the main filter
     const findMetaIndex = (): number => {
-      // Search left up to 2 positions
+      // Search left up to 2 positions (assuming that remove button is on the rightmost component)
       for (let i = index; i >= Math.max(0, index - 2); i--) {
         if (filterComponents[i]?.meta !== null) return i;
       }
-      // Search right up to 2 positions if not found on the left
-      for (let i = index + 1; i <= Math.min(len - 1, index + 2); i++) {
-        if (filterComponents[i]?.meta !== null) return i;
-      }
-      // Fallback: assume group aligned every 3  (# of steps)
       return Math.max(0, index - (index % 3));
     };
 
