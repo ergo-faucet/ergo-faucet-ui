@@ -13,10 +13,12 @@ const SearchbarInput = () => {
   return (
     <DropdownMenu>
       <div className='flex items-center'>
-        {/* filter components */}
-        {filterComponents.map((FilterComponent, id) => {
-          return <React.Fragment key={id}>{FilterComponent.element}</React.Fragment>;
-        })}
+        <div className='flex items-center justify-start gap-0.5'>
+          {/* filter components */}
+          {filterComponents.map((FilterComponent, id) => {
+            return <React.Fragment key={id}>{FilterComponent.element}</React.Fragment>;
+          })}
+        </div>
 
         <DropdownMenuTrigger className='flex items-center' asChild>
           <input
