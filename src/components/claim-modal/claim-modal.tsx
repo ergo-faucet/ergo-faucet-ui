@@ -1,3 +1,8 @@
+'use client';
+
+import ReCAPTCHA from 'react-google-recaptcha';
+
+import { RecaptchaSiteKey } from '@/configs';
 import { inter } from '@/fonts';
 import { Asset } from '@/types';
 
@@ -22,6 +27,7 @@ export const ClaimModal = ({ packageName, destinationAddress, assets }: ClaimMod
       <ModalHeader packageName={packageName} />
       <AssetDetails assets={assets} />
       <DestinationAddress destAddress={destinationAddress} />
+      <ReCAPTCHA sitekey={RecaptchaSiteKey} />
       <ClaimModalButtons />
     </div>
   );
