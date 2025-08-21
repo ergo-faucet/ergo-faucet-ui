@@ -1,46 +1,50 @@
-import { Inter } from 'next/font/google';
-import { FaBitcoin, FaExternalLinkAlt } from 'react-icons/fa';
-import { SiTether } from 'react-icons/si';
+import { FaExternalLinkAlt } from 'react-icons/fa';
 
-import { TokenDetailsTypes } from '@/types';
+import TokenAvatar from '@/components/token-avatar';
+import { TooltipTokenId } from '@/components/tooltip-tokenid';
+import { ExplorerURL } from '@/configs';
+import { inter } from '@/fonts';
+import { getAssetColors } from '@/lib';
+import { Asset } from '@/types';
 
-const inter = Inter({
-  subsets: ['latin'],
-  weight: ['300'],
-});
+import { FormattedAmount } from '../formatted-amount';
 
-const TokenDetails = ({ type, amount, contractAddress, href }: TokenDetailsTypes) => {
+interface TokenDetailsProps {
+  asset: Asset;
+}
+
+const TokenDetails = ({ asset }: TokenDetailsProps) => {
+  const url = ExplorerURL + '/tokens/' + asset.tokenId;
+  const colors = getAssetColors(asset.name);
+
   return (
     // container
     <div
-      className={`h-8 w-90 bg-transparent text-sm font-light text-black dark:text-white ${inter.className} flex
+      className={`h-8 w-71.5 bg-transparent text-sm font-light text-black dark:text-white ${inter.className} flex
         items-center justify-between`}
     >
-      {/* name and logo */}
-      <div className='ml-2 flex items-center justify-center gap-x-2'>
-        {/* logo */}
-        {type === 'bitcoin' ? (
-          <FaBitcoin className='rounded-full bg-white text-amber-500' size={20} />
-        ) : type === 'tether' ? (
-          <SiTether className='rounded-full bg-transparent text-[#009393]' size={20} />
-        ) : null}
-
-        {/* name */}
-        {type === 'bitcoin' ? <span>Bitcoin token</span> : type === 'tether' ? <span>Tether token</span> : null}
+      {/* token name & logo */}
+      <div className='flex items-center justify-center gap-2'>
+        <TokenAvatar assetName={asset.name} colors={colors} />
+        <span className='text-[14px] font-medium'>{asset.name}</span>
       </div>
 
-      {/* amount */}
-      <span className='font-bold'>{amount}</span>
+      {/* formatted amount */}
+      <FormattedAmount amount={asset.amount} decimal={asset.decimal} />
 
-      <a href={href} className='flex h-full items-center justify-end'>
-        {/* contract address */}
-        <span className='max-w-[120px] truncate'>{contractAddress}</span>
-
+      {/* token ID & link */}
+      <div className='relative flex h-full items-center justify-end'>
         {/* external link */}
-        <div className='relative h-full w-5'>
-          <FaExternalLinkAlt className='absolute top-1.5 right-0' size={12} />
-        </div>
-      </a>
+        <a href={url} target='_blank' className='relative flex h-full w-full items-center gap-1'>
+          {/* token ID */}
+          <TooltipTokenId tokenId={asset.tokenId}>
+            <span className='max-w-[48px] cursor-pointer truncate text-[11px] font-light hover:underline'>
+              {asset.tokenId}
+            </span>
+          </TooltipTokenId>
+          <FaExternalLinkAlt className='top-2 right-2' size={10} />
+        </a>
+      </div>
     </div>
   );
 };
