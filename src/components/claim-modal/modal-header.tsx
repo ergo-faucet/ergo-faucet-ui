@@ -19,12 +19,7 @@ const ModalHeader = ({ packageName }: ModalHeaderProps) => {
 
       {/* description */}
       <div>
-        <p className='h-auto w-[310px] text-start text-[14px] font-light'>
-          you are about to claim the package &quot;{packageName}&quot;
-        </p>
-        <span className='h-auto w-[310px] text-start text-[14px] font-light'>
-          this package includes following packages:
-        </span>
+        <span className='h-auto w-[310px] text-start text-[18px] font-bold'>Assets:</span>
       </div>
     </div>
   );
