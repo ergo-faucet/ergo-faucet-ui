@@ -8,7 +8,7 @@ const ModalHeader = ({ packageName }: ModalHeaderProps) => {
   return (
     // container
     <div
-      className={`${inter.className} mt-6 flex h-4 w-full flex-col items-center justify-start gap-y-2 text-[16px]
+      className={`${inter.className} mt-6 flex h-15 w-full flex-col items-center justify-start gap-y-2 text-[16px]
         text-black dark:text-white`}
     >
       {/* title */}

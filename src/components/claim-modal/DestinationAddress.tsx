@@ -1,17 +1,28 @@
+import { useState } from 'react';
+
+import { cn } from '@/lib';
+
 interface DestinationAddressProps {
-  destAddress: string;
+  className?: string;
 }
 
-export const DestinationAddress = ({ destAddress }: DestinationAddressProps) => {
+export const DestinationAddress = ({ className }: DestinationAddressProps) => {
+  const [destAddress, setDestAddress] = useState('');
+
   return (
-    <div className='relative w-full max-w-lg gap-9.5 bg-inherit'>
-      <span className='absolute -top-3 left-0 z-1 bg-inherit px-2 text-gray-700'>Destination Address</span>
+    <div className={cn('relative h-[51px] w-full max-w-lg bg-inherit', className)}>
+      <span className='absolute -top-2 left-8 z-1 bg-inherit px-4 text-[10px] text-black dark:text-white'>
+        Destination Address
+      </span>
 
-      <div className='relative rounded-md border border-gray-500 bg-transparent pt-6 pb-3 pl-3'>
+      {/* borders (underneath) */}
+      <div className='relative rounded-md border border-black bg-transparent pt-6 pb-3 pl-3 dark:border-white'>
         {/* destination address */}
-        <div className='w-full resize-none border-none bg-transparent outline-none'>{destAddress}</div>
-
-        <span className='absolute top-0 left-0 h-3 w-px bg-gray-200'></span>
+        <input
+          className='w-full resize-none border-none bg-transparent outline-none'
+          value={destAddress}
+          onChange={(e) => setDestAddress(e.target.value)}
+        />
       </div>
     </div>
   );

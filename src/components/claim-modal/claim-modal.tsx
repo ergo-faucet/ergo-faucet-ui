@@ -13,20 +13,19 @@ import ModalHeader from './modal-header';
 
 interface ClaimModalProps {
   packageName: string;
-  destinationAddress: string;
   assets: Asset[];
 }
 
-export const ClaimModal = ({ packageName, destinationAddress, assets }: ClaimModalProps) => {
+export const ClaimModal = ({ packageName, assets }: ClaimModalProps) => {
   return (
     // Modal container
     <div
-      className={`${inter.className} gap flex min-h-[466px] w-[387px] flex-col items-center justify-between
-        rounded-[27px] border border-gray-300 bg-gray-100 px-9.5 dark:bg-gray-900`}
+      className={`${inter.className} flex min-h-[466px] w-[387px] flex-col items-center justify-between gap-y-5
+        rounded-[27px] border border-gray-300 bg-gray-100 dark:bg-gray-900`}
     >
       <ModalHeader packageName={packageName} />
       <AssetDetails assets={assets} />
-      <DestinationAddress destAddress={destinationAddress} />
+      <DestinationAddress className='px-9.5' />
       <ReCAPTCHA sitekey={RecaptchaSiteKey} />
       <ClaimModalButtons />
     </div>
