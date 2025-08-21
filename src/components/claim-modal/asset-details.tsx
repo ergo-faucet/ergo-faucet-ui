@@ -16,7 +16,7 @@ interface AssetDetailsProps {
 export default function AssetDetails({ assets }: AssetDetailsProps) {
   return (
     // container
-    <div className={`${inter.className} mx-auto h-auto w-[311px] bg-transparent p-4`}>
+    <div className={`${inter.className} mx-auto h-auto w-[311px] p-4`}>
       {/* the table */}
       <table className='w-full border-separate border-spacing-1 text-left text-sm text-white'>
         {/* headers */}
