@@ -1,1 +1,1 @@
-export type LastRequestStatus = 'completed' | 'rejected' | 'pending';
+export type LastRequestStatus = 'success' | 'rejected' | 'pending';

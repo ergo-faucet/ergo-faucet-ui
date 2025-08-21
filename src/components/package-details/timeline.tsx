@@ -1,3 +1,8 @@
+import { inter } from '@/fonts';
+
+import { formatDate } from './format-date';
+import { LineAfterText } from './line-after-text';
+import { StatusBadge } from './status-badge';
 import { LastRequestStatus } from './types';
 
 interface TimelineProps {
@@ -12,6 +17,21 @@ export const Timeline = ({ lastRequestStatus, lastRequestDate, cooldownTime }: T
 
   return (
     // container
-    <div className=''>{lastRequestDate?.toString()}</div>
+    <div className='flex h-32 w-72.5 flex-col gap-3'>
+      {/* last request */}
+      <div className='flex h-15 w-full flex-col items-center justify-center'>
+        <LineAfterText text='Last Request' />
+        <div className='flex w-full justify-between'>
+          <span className={`${inter.className} ml-2 text-xs`}>{lastRequestDate && formatDate(lastRequestDate)}</span>
+          <StatusBadge status={lastRequestStatus} />
+        </div>
+      </div>
+
+      {/* cooldown time */}
+      <div className='flex h-15 w-full flex-col gap-0'>
+        <LineAfterText text='Cooldoown Time' />
+        {/* TODO: add a flip cooldown timer */}
+      </div>
+    </div>
   );
 };
