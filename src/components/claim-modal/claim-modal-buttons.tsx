@@ -1,6 +1,6 @@
 export const ClaimModalButtons = () => {
   return (
-    <div className='flex h-full w-full items-center justify-end gap-4 p-[31px]'>
+    <div className='flex h-full w-full items-center justify-end gap-4 p-[31px] pt-0'>
       <button
         className='cursor-pointer text-[16px] font-semibold text-black hover:text-gray-900 dark:text-white
           dark:hover:text-gray-100'

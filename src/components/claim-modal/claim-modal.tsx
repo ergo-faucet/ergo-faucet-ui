@@ -25,7 +25,7 @@ export const ClaimModal = ({ packageName, assets }: ClaimModalProps) => {
     >
       <ModalHeader packageName={packageName} />
       <AssetDetails assets={assets} />
-      <DestinationAddress className='px-9.5' />
+      <DestinationAddress className='mb-6 px-9.5' />
       <ReCAPTCHA sitekey={RecaptchaSiteKey} />
       <ClaimModalButtons />
     </div>
