@@ -1,5 +1,6 @@
 import { inter } from '@/fonts';
 
+import { CountdownTimer } from './countdown';
 import { formatDate } from './format-date';
 import { LineAfterText } from './line-after-text';
 import { StatusBadge } from './status-badge';
@@ -30,7 +31,7 @@ export const Timeline = ({ lastRequestStatus, lastRequestDate, cooldownTime }: T
       {/* cooldown time */}
       <div className='flex h-15 w-full flex-col gap-0'>
         <LineAfterText text='Cooldoown Time' />
-        {/* TODO: add a flip cooldown timer */}
+        <CountdownTimer date={cooldownTime} />
       </div>
     </div>
   );
