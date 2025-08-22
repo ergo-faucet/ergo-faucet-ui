@@ -23,7 +23,7 @@ export const Timeline = ({ lastRequestStatus, lastRequestDate, cooldownTime }: T
       {lastRequestDate && (
         <div className='flex h-15 w-full flex-col items-center justify-center'>
           <LineAfterText text='Last Request' />
-          <div className='flex w-full justify-between'>
+          <div className='flex h-full w-full justify-between'>
             <span className={`${inter.className} ml-2 text-xs`}>{lastRequestDate && formatDate(lastRequestDate)}</span>
             <StatusBadge status={lastRequestStatus} />
           </div>
@@ -32,7 +32,7 @@ export const Timeline = ({ lastRequestStatus, lastRequestDate, cooldownTime }: T
 
       {/* cooldown time */}
       {cooldownTime && (
-        <div className='flex h-15 w-full flex-col gap-0'>
+        <div className='flex h-15 w-full flex-col items-start justify-start gap-0'>
           <LineAfterText text='Cooldoown Time' />
           <CountdownTimer date={cooldownTime} />
         </div>

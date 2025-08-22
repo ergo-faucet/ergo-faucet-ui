@@ -50,9 +50,5 @@ interface CountdownTimerProps {
 
 export const CountdownTimer = ({ date }: CountdownTimerProps) => {
   if (!date) return null;
-  return (
-    <div className='flex w-full items-center justify-center py-10'>
-      <Countdown date={date} renderer={renderer} />
-    </div>
-  );
+  return <Countdown date={date} renderer={renderer} />;
 };
