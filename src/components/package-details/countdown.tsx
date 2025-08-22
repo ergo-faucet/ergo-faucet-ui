@@ -17,12 +17,15 @@ const Card = ({ label, value }: { label: string; value: number }) => {
   const digits = zeroPad(value).toString().split('');
 
   return (
+    // Card
     <div className='mx-2 flex flex-col items-center'>
+      {/* digit box */}
       <div className='flex'>
         {digits.map((d, i) => (
           <DigitBox key={i} digit={d} />
         ))}
       </div>
+      {/* label */}
       <span className='mt-1 text-[12px] tracking-wide text-gray-600 uppercase dark:text-gray-400'>{label}</span>
     </div>
   );
