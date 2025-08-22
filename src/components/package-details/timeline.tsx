@@ -9,30 +9,34 @@ import { LastRequestStatus } from './types';
 interface TimelineProps {
   lastRequestStatus?: LastRequestStatus;
   lastRequestDate?: Date;
-  cooldownTime?: Date;
+  cooldownTime?: Date | number | string;
 }
 
 export const Timeline = ({ lastRequestStatus, lastRequestDate, cooldownTime }: TimelineProps) => {
   // this component is optional
-  if (lastRequestStatus === undefined && cooldownTime === undefined) return null;
+  if (!lastRequestStatus && !cooldownTime) return null;
 
   return (
     // container
     <div className='flex h-32 w-72.5 flex-col gap-3'>
       {/* last request */}
-      <div className='flex h-15 w-full flex-col items-center justify-center'>
-        <LineAfterText text='Last Request' />
-        <div className='flex w-full justify-between'>
-          <span className={`${inter.className} ml-2 text-xs`}>{lastRequestDate && formatDate(lastRequestDate)}</span>
-          <StatusBadge status={lastRequestStatus} />
+      {lastRequestDate && (
+        <div className='flex h-15 w-full flex-col items-center justify-center'>
+          <LineAfterText text='Last Request' />
+          <div className='flex w-full justify-between'>
+            <span className={`${inter.className} ml-2 text-xs`}>{lastRequestDate && formatDate(lastRequestDate)}</span>
+            <StatusBadge status={lastRequestStatus} />
+          </div>
         </div>
-      </div>
+      )}
 
       {/* cooldown time */}
-      <div className='flex h-15 w-full flex-col gap-0'>
-        <LineAfterText text='Cooldoown Time' />
-        <CountdownTimer date={cooldownTime} />
-      </div>
+      {cooldownTime && (
+        <div className='flex h-15 w-full flex-col gap-0'>
+          <LineAfterText text='Cooldoown Time' />
+          <CountdownTimer date={cooldownTime} />
+        </div>
+      )}
     </div>
   );
 };

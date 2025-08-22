@@ -45,7 +45,7 @@ const renderer = ({ days, hours, minutes, seconds, completed }: CountdownRenderP
 };
 
 interface CountdownTimerProps {
-  date?: Date;
+  date?: Date | number | string;
 }
 
 export const CountdownTimer = ({ date }: CountdownTimerProps) => {
