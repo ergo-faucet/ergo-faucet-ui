@@ -6,7 +6,7 @@ import { LineAfterText } from './line-after-text';
 import { StatusBadge } from './status-badge';
 import { LastRequestStatus } from './types';
 
-interface TimelineProps {
+export interface TimelineProps {
   lastRequestStatus?: LastRequestStatus;
   lastRequestDate?: Date;
   cooldownTime?: Date | number | string;
