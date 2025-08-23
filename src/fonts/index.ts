@@ -2,7 +2,7 @@ import { Volkhov, Roboto_Condensed, Viga, Inter } from 'next/font/google';
 
 export const volkhov = Volkhov({
   subsets: ['latin'],
-  weight: ['400'],
+  weight: ['400', '700'],
 });
 
 export const robotoCondensed = Roboto_Condensed({
