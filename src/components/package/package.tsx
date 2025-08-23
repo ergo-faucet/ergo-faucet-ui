@@ -10,12 +10,14 @@ interface PackageProps {
   authTypes: AuthType[];
   startDate: Date;
   endDate: Date;
+  onClick?: React.MouseEventHandler<HTMLDivElement>;
 }
 
-const Package = ({ title, assets, authTypes, startDate, endDate }: PackageProps) => {
+const Package = ({ title, assets, authTypes, startDate, endDate, onClick }: PackageProps) => {
   return (
     // container
     <div
+      onClick={onClick}
       className={`${robotoCondensed.className} dark:bg-gray-1000 flex h-[195px] w-[300px] flex-col rounded-[18px] border
         border-gray-500 bg-gray-100 shadow-[-1px_3px_10px_rgba(0,0,0,0.5)] dark:border-gray-700`}
     >
