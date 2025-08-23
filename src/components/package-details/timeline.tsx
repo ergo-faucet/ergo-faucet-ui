@@ -18,7 +18,7 @@ export const Timeline = ({ lastRequestStatus, lastRequestDate, cooldownTime }: T
 
   return (
     // container
-    <div className='flex h-32 w-72.5 flex-col gap-3'>
+    <div className='flex max-h-32 w-72.5 flex-col gap-3'>
       {/* last request */}
       {lastRequestDate && (
         <div className='flex h-15 w-full flex-col items-center justify-center'>

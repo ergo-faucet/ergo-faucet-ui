@@ -2,6 +2,7 @@ import { volkhov } from '@/fonts';
 import { cn } from '@/lib';
 import { Asset } from '@/types';
 
+import { ClaimButton } from './buttons';
 import PackageAssets from './package-assets';
 import { PackageAuth } from './package-auth';
 import PackageDescription from './package-description';
@@ -27,7 +28,7 @@ export const PackageDetails = ({
   return (
     // container
     <div
-      className='dark:bg-gray-1000 flex w-83 flex-col items-start justify-center gap-y-10 rounded-[22px] border
+      className='dark:bg-gray-1000 flex w-83 flex-col items-start justify-center gap-y-6 rounded-[22px] border
         border-gray-400 bg-gray-100 pb-8 pl-5 dark:border-gray-700'
     >
       {/* header */}
@@ -43,7 +44,10 @@ export const PackageDetails = ({
       <PackageAssets assets={assets} />
 
       {/* description */}
-      <PackageDescription info={description} />
+      <PackageDescription className='-mt-5' info={description} />
+
+      {/* click to claim button */}
+      <ClaimButton className='mt-6 self-center' />
     </div>
   );
 };
