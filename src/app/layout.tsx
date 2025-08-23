@@ -19,8 +19,12 @@ export default function RootLayout({
   return (
     <html lang='en' suppressHydrationWarning>
       <body className={`antialiased transition-colors ${robotoCondensed.className}`}>
-        <LeftNavbar className='sticky top-0 h-screen' />
-        <Providers>{children}</Providers>
+        <Providers>
+          <div className='flex h-full w-full items-start justify-start bg-gray-300 dark:bg-gray-900'>
+            <LeftNavbar className='sticky top-0 h-screen' />
+            {children}
+          </div>
+        </Providers>
       </body>
     </html>
   );

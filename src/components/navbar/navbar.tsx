@@ -21,7 +21,7 @@ const Navbar = ({ walletAddress, walletType }: NavbarProps) => {
       </div>
 
       {/* searchbar & sortby */}
-      <div className='flex w-full gap-x-6.5 self-start px-11'>
+      <div className='flex w-full gap-x-6.5 self-center'>
         <Searchbar />
         <SortBy />
       </div>

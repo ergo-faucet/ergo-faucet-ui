@@ -1,3 +1,11 @@
+import { MainGrid } from '@/components/main-grid';
+import Navbar from '@/components/navbar/navbar';
+
 export default function Home() {
-  return <div className='h-full w-full bg-gray-300 dark:bg-gray-900'></div>;
+  return (
+    <div className='ml-40 flex w-full flex-col'>
+      <Navbar walletAddress={''} walletType={'nautilus'} />
+      <MainGrid />
+    </div>
+  );
 }
