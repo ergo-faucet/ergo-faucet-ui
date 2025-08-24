@@ -1,5 +1,7 @@
 import { WalletType } from '@/types';
 
+import { Sheet, SheetContent, SheetTrigger } from '../ui/sheet';
+import ConnectWalletSidebar from '../wallet-sidebar/connect-wallet-sidebar';
 import Searchbar from './searchbar/searchbar';
 import SortBy from './sort-by';
 import ToggleThemeButton from './toggle-theme-button';
@@ -17,7 +19,16 @@ const Navbar = ({ walletAddress, walletType }: NavbarProps) => {
       {/* toggle theme button & wallet address */}
       <div className='flex w-full items-center justify-end gap-x-4 pt-7.5 pr-11'>
         <ToggleThemeButton />
-        <WalletAddress walletAddress={walletAddress} walletType={walletType} />
+
+        {/* wallet address & its sidebar */}
+        <Sheet>
+          <SheetTrigger asChild>
+            <WalletAddress walletAddress={walletAddress} walletType={walletType} />
+          </SheetTrigger>
+          <SheetContent>
+            <ConnectWalletSidebar />
+          </SheetContent>
+        </Sheet>
       </div>
 
       {/* searchbar & sortby */}
