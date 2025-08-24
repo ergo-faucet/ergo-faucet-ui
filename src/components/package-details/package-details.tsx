@@ -1,7 +1,9 @@
+import { Dialog, DialogContent, DialogTrigger } from '@/components/ui/dialog';
 import { volkhov } from '@/fonts';
 import { cn } from '@/lib';
 import { Asset } from '@/types';
 
+import { ClaimModal } from '../claim-modal/claim-modal';
 import { ClaimButton } from './buttons';
 import PackageAssets from './package-assets';
 import { PackageAuth } from './package-auth';
@@ -47,7 +49,14 @@ export const PackageDetails = ({
       <PackageDescription className='-mt-5' info={description} />
 
       {/* click to claim button */}
-      <ClaimButton className='mt-6 self-center' />
+      <Dialog>
+        <DialogTrigger className='self-center'>
+          <ClaimButton className='mt-6 self-center' />
+        </DialogTrigger>
+        <DialogContent>
+          <ClaimModal packageName={title} assets={assets} />
+        </DialogContent>
+      </Dialog>
     </div>
   );
 };
