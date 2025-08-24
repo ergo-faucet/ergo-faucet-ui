@@ -8,7 +8,8 @@ const Deadline = ({ startDate, endDate, className = '' }: DeadlineProps) => {
   return (
     // container
     <div
-      className={`flex h-3 w-65 items-center justify-between text-[13px] text-gray-700 dark:text-gray-400 ${className}`}
+      className={`flex h-3 w-full items-center justify-between text-[13px] text-gray-700 dark:text-gray-400
+        ${className}`}
     >
       {/* start date */}
       <div className='flex items-center gap-2'>
