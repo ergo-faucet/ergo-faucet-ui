@@ -51,11 +51,11 @@ export const PackageDetails = ({
       {/* click to claim button */}
       <Dialog>
         <DialogTrigger className='self-center'>
-          <ClaimButton className='mt-6 self-center' />
+          <ClaimButton className='mt-6 -ml-5 self-center' />
         </DialogTrigger>
-        {/* remove its dialog looks, so only the claim modal is shown */}
         <DialogContent
           showCloseButton={false}
+          // remove its dialog looks, so only the claim modal is shown
           className='flex items-center justify-center overflow-visible border-none bg-transparent p-0 shadow-none'
         >
           <ClaimModal packageName={title} assets={assets} />
