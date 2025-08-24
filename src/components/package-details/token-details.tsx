@@ -20,7 +20,7 @@ const TokenDetails = ({ asset }: TokenDetailsProps) => {
   return (
     // container
     <div
-      className={`h-8 w-90 bg-transparent text-sm font-light text-black dark:text-white ${inter.className} flex
+      className={`h-8 w-71.5 bg-transparent text-sm font-light text-black dark:text-white ${inter.className} flex
         items-center justify-between`}
     >
       {/* token name & logo */}
