@@ -35,11 +35,11 @@ export const MainGrid = () => {
   // TODO: fetch packages here and map them to render
   return (
     // container
-    <div className='flex w-full items-start justify-between gap-4 p-8'>
+    <div className='flex w-full items-start justify-between gap-4 p-4'>
       {/* packages & pagination */}
       <div className='flex w-full flex-col items-start justify-between gap-y-4'>
         {/* packages */}
-        <div className='justfiy-around grid w-full grid-cols-1 gap-4 lg:grid-cols-2 xl:grid-cols-3 2xl:grid-cols-4'>
+        <div className='justfiy-around grid w-full grid-cols-1 gap-4 xl:grid-cols-3 2xl:grid-cols-4'>
           <Package
             title={'Nice Name'}
             assets={assets}

@@ -30,7 +30,7 @@ const Package = ({ title, assets, authTypes, startDate, endDate, onClick }: Pack
       </div>
 
       {/* assets */}
-      <div className='mt-2 ml-4 flex h-8 w-full items-center justify-between pr-8'>
+      <div className='mt-2 ml-4 flex h-8 w-full items-center justify-between pr-7'>
         <span className='text-[14px] font-bold text-gray-700 dark:text-gray-600'>Assets in package</span>
         <Avatars className='ml-6 self-end' assets={assets} />
       </div>
