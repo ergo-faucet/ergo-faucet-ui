@@ -3,7 +3,7 @@ import Navbar from '@/components/navbar/navbar';
 
 export default function Home() {
   return (
-    <div className='ml-40 flex w-full flex-col'>
+    <div className='m-4 flex w-full flex-col'>
       <Navbar walletAddress={''} walletType={'nautilus'} />
       <MainGrid />
     </div>
