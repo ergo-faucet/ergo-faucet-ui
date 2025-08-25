@@ -1,34 +1,42 @@
 'use client';
 
 import { useTheme } from 'next-themes';
+import React, { useEffect, useState } from 'react';
 
-import { MoonIcon, SunMediumIcon } from 'lucide-react';
+import { MoonIcon, Sun } from 'lucide-react';
 
 const ToggleThemeButton = () => {
-  const { theme, setTheme } = useTheme();
+  const { resolvedTheme, setTheme } = useTheme();
+  const [mounted, setMounted] = useState(false);
+
+  useEffect(() => {
+    setMounted(true);
+  }, []);
+
+  if (!mounted) return null; // Prevent wrong icon on first SSR render
+
+  const isLight = resolvedTheme === 'light';
+
+  const handleClick = () => {
+    setTheme(isLight ? 'dark' : 'light');
+  };
 
   return (
-    <button
-      className='bg-beige-ergo-navbar dark:bg-dark-green-ergo-navbar relative flex h-[32px] w-[67px] items-center
-        rounded-2xl p-1 duration-600 ease-in-out dark:flex-row-reverse'
-      onClick={() => setTheme(theme === 'light' ? 'dark' : 'light')}
-    >
-      {/* the white soft shadow */}
+    <button onClick={handleClick} className='relative flex size-12 items-center justify-center'>
+      {/* Sun */}
       <div
-        className='absolute top-0 left-0 h-1/2 w-2/3 bg-white/30 blur-md dark:right-1 dark:left-auto dark:w-4/5
-          dark:bg-white/20'
-      ></div>
-
-      {/* the circle around the icon */}
-      <div
-        className='bg-green-ergo-navbar dark:bg-yellow-ergo-navbar flex size-6 items-center justify-center rounded-full'
+        className={`absolute transition-transform duration-500 ease-in-out
+          ${isLight ? 'rotate-90 opacity-0' : 'rotate-0 opacity-100'} `}
       >
-        {/* the icon */}
-        {theme === 'light' ? (
-          <SunMediumIcon className='text-beige-ergo-navbar' size={13} />
-        ) : (
-          <MoonIcon className='stroke-3 text-black' size={13} />
-        )}
+        <Sun className='text-gray-200' size={40} />
+      </div>
+
+      {/* Moon */}
+      <div
+        className={`absolute transition-transform duration-500 ease-in-out
+          ${isLight ? 'rotate-0 opacity-100' : '-rotate-90 opacity-0'} `}
+      >
+        <MoonIcon className='text-gray-800' size={40} />
       </div>
     </button>
   );

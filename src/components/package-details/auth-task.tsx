@@ -1,31 +1,25 @@
-import { IoCheckmarkCircleSharp } from 'react-icons/io5';
-
 import { ClickToCompleteButton } from '@/components/package-details/buttons';
 import { GenerateAuthTypeIcon } from '@/lib';
-import { AuthType } from '@/types';
+
+import { CheckIcon } from './check-icon';
+import { AuthTaskType } from './types';
 
 interface AuthTaskProps {
-  authType: AuthType;
-  title: string;
-  isCompleted: boolean;
+  authTask: AuthTaskType;
 }
 
-const AuthTask = ({ authType, isCompleted }: AuthTaskProps) => {
+const AuthTask = ({ authTask }: AuthTaskProps) => {
   return (
     // container
     <div
-      className='dark:bg-light-green-ergo flex h-11 w-72 items-center justify-between rounded-[5px] border
-        border-[#27548A]/35 bg-white px-2 transition-colors duration-300'
+      className='flex h-11 w-72 items-center justify-between rounded-[5px] border border-gray-300 bg-gray-50 px-2
+        transition-colors duration-300 dark:border-gray-600 dark:bg-gray-700'
     >
       {/* icon and title */}
-      <div className='flex h-9 w-25 flex-row items-center'>{<GenerateAuthTypeIcon authType={authType} />}</div>
+      <div className='h-8.5 w-30'>{<GenerateAuthTypeIcon authType={authTask.authType} />}</div>
 
       {/* status */}
-      {isCompleted ? (
-        <IoCheckmarkCircleSharp className='text-[#183B4E] dark:text-[#0E2B33]' size={18} />
-      ) : (
-        <ClickToCompleteButton />
-      )}
+      {authTask.isCompleted ? <CheckIcon /> : <ClickToCompleteButton />}
     </div>
   );
 };
