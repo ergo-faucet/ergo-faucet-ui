@@ -22,11 +22,13 @@ export const MainGrid = () => {
   // TODO: fetch packages here and map them to render
   return (
     // container
-    <div className='m-4 ml-0 flex w-full items-start justify-start gap-4'>
+    <div className='flex w-full items-start justify-between gap-4 py-4'>
       {/* packages & pagination */}
-      <div className='flex flex-col items-start justify-center gap-y-4'>
+      <div className='flex w-full flex-col items-start justify-between gap-y-4'>
         {/* packages */}
-        <div className='justfiy-around grid w-[972px] grid-cols-3 gap-y-4'>{/* TODO: map packages here */}</div>
+        <div className='justfiy-around grid w-full grid-cols-1 gap-4 xl:grid-cols-3 2xl:grid-cols-4'>
+          {/* map packages here */}
+        </div>
         {/* pagination */}
         <PackagePagination />
       </div>

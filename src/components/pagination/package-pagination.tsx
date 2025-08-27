@@ -26,7 +26,7 @@ const PackagePagination = () => {
   return (
     // container
     <div
-      className={`${pavanam.className} text-gray-1100 dark:bg-gray-1000 flex h-[50px] w-[932px] items-center
+      className={`${pavanam.className} text-gray-1100 dark:bg-gray-1000 flex h-[50px] w-full items-center
         justify-between rounded-xl border border-gray-700 bg-gray-100 p-4 text-[14px] dark:border-gray-500
         dark:text-gray-400 [&>*]:transition-colors [&>*]:duration-500`}
     >
