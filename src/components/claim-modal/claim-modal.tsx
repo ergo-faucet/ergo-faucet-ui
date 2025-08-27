@@ -1,5 +1,6 @@
 'use client';
 
+import { useState } from 'react';
 import ReCAPTCHA from 'react-google-recaptcha';
 
 import { RecaptchaSiteKey } from '@/configs';
@@ -17,17 +18,45 @@ interface ClaimModalProps {
 }
 
 export const ClaimModal = ({ packageName, assets }: ClaimModalProps) => {
+  const [recaptchaToken, setRecaptchaToken] = useState<string | null>(null);
+  const [recaptchaKey, setRecaptchaKey] = useState(0); // to reload recaptcha
+  const [isAddressValid, setIsAddressValid] = useState(false);
+
+  const isRecaptchaRequired = !!RecaptchaSiteKey;
+
+  const handleRecaptchaChange = (token: string | null) => {
+    setRecaptchaToken(token);
+  };
+
+  const handleRecaptchaExpired = () => {
+    setRecaptchaToken(null);
+    setRecaptchaKey((prev) => prev + 1); // re-render => mount again after it expires
+  };
+
+  const isConfirmDisabled = !isAddressValid || (isRecaptchaRequired && !recaptchaToken);
+
   return (
-    // Modal container
     <div
       className={`${inter.className} flex min-h-[466px] w-[387px] flex-col items-center justify-between gap-y-5
         rounded-[27px] border border-gray-300 bg-gray-100 dark:bg-gray-900`}
     >
       <ModalHeader packageName={packageName} />
       <AssetDetails assets={assets} />
-      <DestinationAddress className='mb-6 px-9.5' />
-      <ReCAPTCHA sitekey={RecaptchaSiteKey} />
-      <ClaimModalButtons />
+
+      {/* Destination Address */}
+      <DestinationAddress className='mb-6 px-9.5' onValidationChange={setIsAddressValid} />
+
+      {/* ReCAPTCHA */}
+      {isRecaptchaRequired && (
+        <ReCAPTCHA
+          key={recaptchaKey}
+          sitekey={RecaptchaSiteKey}
+          onChange={handleRecaptchaChange}
+          onExpired={handleRecaptchaExpired}
+        />
+      )}
+
+      <ClaimModalButtons disabled={isConfirmDisabled} recaptchaToken={recaptchaToken} />
     </div>
   );
 };
