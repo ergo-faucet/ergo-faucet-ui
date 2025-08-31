@@ -8,7 +8,7 @@ const ModalHeader = ({ packageName }: ModalHeaderProps) => {
   return (
     // container
     <div
-      className={`${inter.className} mt-6 flex h-full w-full flex-col items-start justify-start gap-y-9 text-[16px]
+      className={`${inter.className} mt-6 flex h-15 w-full flex-col items-center justify-start gap-y-2 text-[16px]
         text-black dark:text-white`}
     >
       {/* title */}
@@ -19,12 +19,7 @@ const ModalHeader = ({ packageName }: ModalHeaderProps) => {
 
       {/* description */}
       <div>
-        <p className='h-auto w-[310px] text-start text-[14px] font-light'>
-          you are about to claim the package &quot;{packageName}&quot;
-        </p>
-        <span className='h-auto w-[310px] text-start text-[14px] font-light'>
-          this package includes following packages:
-        </span>
+        <span className='h-auto w-[310px] text-start text-[13px] font-light'>This package includes:</span>
       </div>
     </div>
   );
