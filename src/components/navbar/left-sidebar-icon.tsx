@@ -2,17 +2,19 @@ import React, { ReactNode } from 'react';
 
 import { cn } from '@/lib';
 
-interface LeftSidebarIcon {
+interface LeftSidebarIconProps {
   children: ReactNode;
   title: string;
   selected: boolean;
+  onClick?: () => void;
 }
 
-const LeftSidebarIcon = ({ children, title, selected }: LeftSidebarIcon) => {
+const LeftSidebarIcon = ({ children, title, selected, onClick }: LeftSidebarIconProps) => {
   return (
     <div
+      onClick={onClick}
       className={cn(
-        'flex flex-col items-center justify-center text-green-500 dark:text-green-100',
+        'flex cursor-pointer flex-col items-center justify-center',
         selected ? 'text-green-500 dark:text-green-100' : 'text-black dark:text-gray-200',
       )}
     >

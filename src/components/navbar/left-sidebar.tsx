@@ -1,3 +1,6 @@
+'use client';
+
+import { useState } from 'react';
 import { HiUsers } from 'react-icons/hi2';
 import { MdOutlineExplore } from 'react-icons/md';
 import { RiHistoryLine } from 'react-icons/ri';
@@ -11,6 +14,8 @@ interface LeftSidebarProps {
 }
 
 const LeftSidebar = ({ className }: LeftSidebarProps) => {
+  const [selected, setSelected] = useState<string | null>('Explore');
+
   return (
     // container
     <div
@@ -21,17 +26,17 @@ const LeftSidebar = ({ className }: LeftSidebarProps) => {
       )}
     >
       {/* explore */}
-      <LeftSidebarIcon title={'Explore'} selected={false}>
+      <LeftSidebarIcon title='Explore' selected={selected === 'Explore'} onClick={() => setSelected('Explore')}>
         <MdOutlineExplore size={50} />
       </LeftSidebarIcon>
 
       {/* history */}
-      <LeftSidebarIcon title={'History'} selected={false}>
+      <LeftSidebarIcon title='History' selected={selected === 'History'} onClick={() => setSelected('History')}>
         <RiHistoryLine size={35} />
       </LeftSidebarIcon>
 
       {/* about us */}
-      <LeftSidebarIcon title={'About Us'} selected={false}>
+      <LeftSidebarIcon title='About Us' selected={selected === 'About Us'} onClick={() => setSelected('About Us')}>
         <HiUsers className='scale-x-[-1]' size={40} />
       </LeftSidebarIcon>
     </div>
