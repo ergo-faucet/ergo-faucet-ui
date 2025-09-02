@@ -8,11 +8,10 @@ import ToggleThemeButton from './toggle-theme-button';
 import WalletAddress from './wallet-address';
 
 interface NavbarProps {
-  walletAddress: string;
   walletType: WalletType;
 }
 
-const Navbar = ({ walletAddress, walletType }: NavbarProps) => {
+const Navbar = ({ walletType }: NavbarProps) => {
   return (
     // container
     <div className='relative flex h-50 w-full flex-col items-end justify-between'>
@@ -23,7 +22,7 @@ const Navbar = ({ walletAddress, walletType }: NavbarProps) => {
         {/* wallet address & its sidebar */}
         <Sheet>
           <SheetTrigger asChild>
-            <WalletAddress walletAddress={walletAddress} walletType={walletType} />
+            <WalletAddress walletAddress={'walletAddress'} walletType={walletType} />
           </SheetTrigger>
           <SheetContent>
             <ConnectWalletSidebar />

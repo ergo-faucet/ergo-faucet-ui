@@ -1,6 +1,10 @@
+'use client';
+
 import { Volkhov } from 'next/font/google';
 import { IoMdClose } from 'react-icons/io';
 import { IoWalletSharp } from 'react-icons/io5';
+
+import { BackendUrl } from '@/configs';
 
 import { SheetClose } from '../ui/sheet';
 import Wallet from './wallet';
@@ -10,7 +14,85 @@ const volkhov = Volkhov({
   weight: ['400'],
 });
 
+interface ErgoAuthRequest {
+  address: string;
+  challenge: string;
+  proof: string;
+  captchaToken: string;
+}
+
+interface ErgoAuthResponse {
+  accessToken: string;
+}
+
+declare global {
+  interface Window {
+    ergoConnector?: {
+      nautilus?: {
+        connect: () => Promise<boolean>;
+        getContext: () => Promise<{
+          sign_data(rootAddress: string, message: string): string;
+          get_change_address: () => Promise<string>;
+        }>;
+      };
+    };
+  }
+}
 const ConnectWalletSidebar = () => {
+  const handleNautilusOnClick = async () => {
+    if (!window.ergoConnector?.nautilus) {
+      throw new Error('❌ Nautilus not found');
+    }
+
+    const connected: boolean = await window.ergoConnector.nautilus.connect();
+    if (!connected) {
+      throw new Error('❌ Wallet connection rejected');
+    }
+
+    const ergo = await window.ergoConnector.nautilus.getContext();
+    const rootAddress: string = await ergo.get_change_address();
+
+    const res = await fetch(`${BackendUrl}/auth/ergo/challenge`, {
+      method: 'POST',
+      headers: {
+        'Content-Type': 'application/json',
+      },
+      body: JSON.stringify({
+        address: rootAddress,
+      }),
+    });
+
+    // Parse JSON and type it
+    interface ChallengeResponse {
+      challenge: string;
+    }
+
+    const challengeResponse: ChallengeResponse = await res.json();
+    const proof = await ergo.sign_data(rootAddress, challengeResponse.challenge);
+
+    const body: ErgoAuthRequest = {
+      address: rootAddress,
+      challenge: challengeResponse.challenge,
+      proof: proof,
+      captchaToken: 'test-token',
+    };
+
+    const res2 = await fetch(`${BackendUrl}/auth/ergo/auth`, {
+      method: 'POST',
+      headers: {
+        'Content-Type': 'application/json',
+      },
+      body: JSON.stringify(body),
+    });
+
+    if (!res.ok) {
+      throw new Error('❌ Ergo authentication failed');
+    }
+
+    const data2: ErgoAuthResponse = await res2.json();
+    console.log(data2.accessToken);
+  };
+
   return (
     // container
     <div
@@ -33,7 +115,14 @@ const ConnectWalletSidebar = () => {
       {/* wallets */}
       <div className='flex flex-col space-y-2'>
         {/* Natilus */}
-        <Wallet src='/icons/natilus-40x40.png' alt='Natilus icon' size={40} name='Natilus' selected={true} />
+        <Wallet
+          onClick={handleNautilusOnClick}
+          src='/icons/natilus-40x40.png'
+          alt='Natilus icon'
+          size={40}
+          name='Natilus'
+          selected={true}
+        />
         {/* Ergo Pay */}
         <Wallet alt='Ergo Pay icon' size={40} name='Ergo Pay' selected={false} />
       </div>
