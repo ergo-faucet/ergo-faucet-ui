@@ -4,37 +4,38 @@ import { RiHistoryLine } from 'react-icons/ri';
 
 import { cn } from '@/lib';
 
-interface LeftNavbarProps {
+import LeftSidebarIcon from './left-sidebar-icon';
+
+interface LeftSidebarProps {
   className?: string;
 }
 
-const LeftNavbar = ({ className }: LeftNavbarProps) => {
+const LeftSidebar = ({ className }: LeftSidebarProps) => {
   return (
     // container
     <div
       className={cn(
         `dark:bg-gray-1100 flex min-h-screen w-24 flex-col items-center justify-start gap-y-6 bg-gray-50 pt-30
-        [&>*]:transition-colors [&>*]:duration-300`,
+        dark:border dark:border-gray-700 [&>*]:transition-colors [&>*]:duration-300`,
         className,
       )}
     >
       {/* explore */}
-      <div className='flex flex-col items-center justify-center text-green-500 dark:text-green-100'>
+      <LeftSidebarIcon title={'Explore'} selected={false}>
         <MdOutlineExplore size={50} />
-        <span>Explore</span>
-      </div>
+      </LeftSidebarIcon>
+
       {/* history */}
-      <div className='flex flex-col items-center justify-center text-black dark:text-gray-200'>
+      <LeftSidebarIcon title={'History'} selected={false}>
         <RiHistoryLine size={35} />
-        <span>History</span>
-      </div>
+      </LeftSidebarIcon>
+
       {/* about us */}
-      <div className='flex flex-col items-center justify-center text-black dark:text-gray-200'>
+      <LeftSidebarIcon title={'About Us'} selected={false}>
         <HiUsers className='scale-x-[-1]' size={40} />
-        <span>About Us</span>
-      </div>
+      </LeftSidebarIcon>
     </div>
   );
 };
 
-export default LeftNavbar;
+export default LeftSidebar;
