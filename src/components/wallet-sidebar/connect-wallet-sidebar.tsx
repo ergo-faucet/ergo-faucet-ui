@@ -5,7 +5,7 @@ import { useState } from 'react';
 import { IoMdClose } from 'react-icons/io';
 import { IoWalletSharp } from 'react-icons/io5';
 
-import { BackendUrl } from '@/configs';
+import { apiFetch } from '@/lib/api-fetch';
 
 import { SheetClose } from '../ui/sheet';
 import Wallet from './wallet';
@@ -42,7 +42,7 @@ const ConnectWalletSidebar = () => {
       const ergo = await window.ergoConnector.nautilus.getContext();
       const rootAddress: string = await ergo.get_change_address();
 
-      const res = await fetch(`${BackendUrl}/auth/ergo/challenge`, {
+      const res = await apiFetch('/auth/ergo/challenge', {
         method: 'POST',
         headers: {
           'Content-Type': 'application/json',
@@ -67,7 +67,7 @@ const ConnectWalletSidebar = () => {
         captchaToken: 'test-token',
       };
 
-      const res2 = await fetch(`${BackendUrl}/auth/ergo/auth`, {
+      const res2 = await apiFetch('/auth/ergo/auth', {
         method: 'POST',
         headers: {
           'Content-Type': 'application/json',
