@@ -26,19 +26,6 @@ interface ErgoAuthResponse {
   accessToken: string;
 }
 
-declare global {
-  interface Window {
-    ergoConnector?: {
-      nautilus?: {
-        connect: () => Promise<boolean>;
-        getContext: () => Promise<{
-          sign_data(rootAddress: string, message: string): string;
-          get_change_address: () => Promise<string>;
-        }>;
-      };
-    };
-  }
-}
 const ConnectWalletSidebar = () => {
   const [selected, setSelected] = useState<'nautilus' | 'ergopay'>('nautilus');
   const handleConnectButtonOnClick = async () => {
