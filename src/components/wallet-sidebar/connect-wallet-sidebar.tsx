@@ -6,6 +6,7 @@ import { IoMdClose } from 'react-icons/io';
 import { IoWalletSharp } from 'react-icons/io5';
 
 import { apiFetch } from '@/lib/api-fetch';
+import { WalletManager, NautilusConnector } from '@/lib/wallets';
 import { ChallengeResponse, ErgoAuthRequest, ErgoAuthResponse } from '@/types';
 
 import { SheetClose } from '../ui/sheet';
@@ -20,54 +21,43 @@ const ConnectWalletSidebar = () => {
   const [selected, setSelected] = useState<'nautilus' | 'ergopay'>('nautilus');
 
   const handleConnectButtonOnClick = async () => {
-    if (selected == 'nautilus') {
-      if (!window.ergoConnector?.nautilus) {
-        throw new Error('❌ Nautilus not found');
-      }
+    const wallet = new WalletManager(new NautilusConnector());
 
-      const connected: boolean = await window.ergoConnector.nautilus.connect();
-      if (!connected) {
-        throw new Error('❌ Wallet connection rejected');
-      }
+    // 1. Connect wallet
+    const connected = await wallet.connect();
+    if (!connected) throw new Error('❌ Wallet connection rejected');
 
-      const ergo = await window.ergoConnector.nautilus.getContext();
-      const rootAddress: string = await ergo.get_change_address();
+    // 2. Get address
+    const address = await wallet.getAddress();
 
-      const res = await apiFetch('/auth/ergo/challenge', {
-        method: 'POST',
-        headers: {
-          'Content-Type': 'application/json',
-        },
-        body: JSON.stringify({
-          address: rootAddress,
-        }),
-      });
+    // 3. Request challenge from backend
+    const res = await apiFetch('/auth/ergo/challenge', {
+      method: 'POST',
+      headers: { 'Content-Type': 'application/json' },
+      body: JSON.stringify({ address }),
+    });
+    const challengeResponse: ChallengeResponse = await res.json();
 
-      const challengeResponse: ChallengeResponse = await res.json();
-      const proof = await ergo.sign_data(rootAddress, challengeResponse.challenge);
+    // 4. Sign challenge
+    const proof = await wallet.signMessage(address, challengeResponse.challenge);
 
-      const body: ErgoAuthRequest = {
-        address: rootAddress,
-        challenge: challengeResponse.challenge,
-        proof: proof,
-        captchaToken: 'test-token',
-      };
+    // 5. Authenticate
+    const body: ErgoAuthRequest = {
+      address,
+      challenge: challengeResponse.challenge,
+      proof,
+      captchaToken: 'test-token',
+    };
 
-      const res2 = await apiFetch('/auth/ergo/auth', {
-        method: 'POST',
-        headers: {
-          'Content-Type': 'application/json',
-        },
-        body: JSON.stringify(body),
-      });
+    const res2 = await apiFetch('/auth/ergo/auth', {
+      method: 'POST',
+      headers: { 'Content-Type': 'application/json' },
+      body: JSON.stringify(body),
+    });
+    if (!res2.ok) throw new Error('❌ Ergo authentication failed');
 
-      if (!res2.ok) {
-        throw new Error('❌ Ergo authentication failed');
-      }
-
-      const data2: ErgoAuthResponse = await res2.json();
-      console.log(data2.accessToken);
-    }
+    const data2: ErgoAuthResponse = await res2.json();
+    console.log('✅ Access token:', data2.accessToken);
   };
 
   return (
