@@ -23,14 +23,14 @@ const ConnectWalletSidebar = () => {
   const handleConnectButtonOnClick = async () => {
     const wallet = new WalletManager(new NautilusConnector());
 
-    // 1. Connect wallet
+    // Connect wallet
     const connected = await wallet.connect();
     if (!connected) throw new Error('❌ Wallet connection rejected');
 
-    // 2. Get address
+    // Get address
     const address = await wallet.getAddress();
 
-    // 3. Request challenge from backend
+    // Request challenge from backend
     const res = await apiFetch('/auth/ergo/challenge', {
       method: 'POST',
       headers: { 'Content-Type': 'application/json' },
@@ -38,10 +38,10 @@ const ConnectWalletSidebar = () => {
     });
     const challengeResponse: ChallengeResponse = await res.json();
 
-    // 4. Sign challenge
+    // Sign challenge
     const proof = await wallet.signMessage(address, challengeResponse.challenge);
 
-    // 5. Authenticate
+    // Authenticate
     const body: ErgoAuthRequest = {
       address,
       challenge: challengeResponse.challenge,
