@@ -5,3 +5,8 @@ export interface ChallengeResponse {
 export interface ErgoAuthResponse {
   accessToken: string;
 }
+
+export interface RefreshTokenResponse {
+  success: boolean;
+  newToken: string;
+}

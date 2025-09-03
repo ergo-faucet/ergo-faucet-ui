@@ -25,18 +25,16 @@ const ConnectWalletSidebar = () => {
 
     // Connect wallet
     const connected = await wallet.connect();
-    if (!connected) throw new Error('❌ Wallet connection rejected');
+    if (!connected) throw new Error('Wallet connection rejected');
 
     // Get address
     const address = await wallet.getAddress();
 
     // Request challenge from backend
-    const res = await apiFetch('/auth/ergo/challenge', {
+    const challengeResponse: ChallengeResponse = await apiFetch('/auth/ergo/challenge', {
       method: 'POST',
-      headers: { 'Content-Type': 'application/json' },
       body: JSON.stringify({ address }),
     });
-    const challengeResponse: ChallengeResponse = await res.json();
 
     // Sign challenge
     const proof = await wallet.signMessage(address, challengeResponse.challenge);
@@ -49,15 +47,12 @@ const ConnectWalletSidebar = () => {
       captchaToken: 'test-token',
     };
 
-    const res2 = await apiFetch('/auth/ergo/auth', {
+    const authResponse: ErgoAuthResponse = await apiFetch('/auth/ergo/auth', {
       method: 'POST',
-      headers: { 'Content-Type': 'application/json' },
       body: JSON.stringify(body),
     });
-    if (!res2.ok) throw new Error('❌ Ergo authentication failed');
 
-    const data2: ErgoAuthResponse = await res2.json();
-    console.log('✅ Access token:', data2.accessToken);
+    console.log(authResponse);
   };
 
   return (

@@ -9,5 +9,5 @@ export const apiFetch = async (url: string, options: RequestInit = {}) => {
     },
   });
 
-  return response;
+  return await response.json();
 };
