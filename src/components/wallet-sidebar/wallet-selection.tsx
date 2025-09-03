@@ -2,16 +2,16 @@
 
 import { useState } from 'react';
 
-import { apiFetch } from '@/lib/api-fetch';
+import { apiFetch } from '@/lib';
 import { WalletManager, NautilusConnector } from '@/lib/wallets';
-import { ChallengeResponse, ErgoAuthRequest, ErgoAuthResponse } from '@/types';
+import { ChallengeResponse } from '@/types';
 
 import { useViewStore } from './store';
 import Wallet from './wallet';
 
 export const WalletSelection = () => {
   const [selected, setSelected] = useState<'nautilus' | 'ergopay'>('nautilus');
-  const { setState } = useViewStore();
+  const { setState, setProof, setWalletAddress } = useViewStore();
   const handleConnectButtonOnClick = async () => {
     const wallet = new WalletManager(new NautilusConnector());
 
@@ -21,6 +21,7 @@ export const WalletSelection = () => {
 
     // Get address
     const address = await wallet.getAddress();
+    setWalletAddress(address);
 
     // Request challenge from backend
     const challengeResponse: ChallengeResponse = await apiFetch('/auth/ergo/challenge', {
@@ -30,23 +31,9 @@ export const WalletSelection = () => {
 
     // Sign challenge
     const proof = await wallet.signMessage(address, challengeResponse.challenge);
+    setProof(proof);
 
     setState('login');
-
-    // Authenticate
-    const body: ErgoAuthRequest = {
-      address,
-      challenge: challengeResponse.challenge,
-      proof,
-      captchaToken: 'test-token',
-    };
-
-    const authResponse: ErgoAuthResponse = await apiFetch('/auth/ergo/auth', {
-      method: 'POST',
-      body: JSON.stringify(body),
-    });
-
-    console.log(authResponse);
   };
 
   return (

@@ -5,14 +5,17 @@ interface InfoBoxProps {
 
 export const InfoBox = ({ title, info }: InfoBoxProps) => {
   return (
-    <>
-      {/* container */}
-      <div className='h-22 w-[273px]'>
-        {/* title */}
-        <span className='h-4.5 w-30 text-center text-[15px]'>{title}</span>
+    <div className='flex min-h-22 w-[273px] flex-col gap-2'>
+      {/* title */}
+      <p className='h-4.5 w-auto pl-3 text-[15px]'>{title}</p>
 
-        <div className='h-full w-full p-3'>{info}</div>
+      {/* info container */}
+      <div
+        className='dark:bg-gray-1000 h-full w-full rounded-[10px] bg-gray-100 p-3 break-words text-black
+          dark:text-white'
+      >
+        {info}
       </div>
-    </>
+    </div>
   );
 };
