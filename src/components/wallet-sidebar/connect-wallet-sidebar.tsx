@@ -6,6 +6,7 @@ import { IoMdClose } from 'react-icons/io';
 import { IoWalletSharp } from 'react-icons/io5';
 
 import { apiFetch } from '@/lib/api-fetch';
+import { ChallengeResponse, ErgoAuthRequest, ErgoAuthResponse } from '@/types';
 
 import { SheetClose } from '../ui/sheet';
 import Wallet from './wallet';
@@ -15,19 +16,9 @@ const volkhov = Volkhov({
   weight: ['400'],
 });
 
-interface ErgoAuthRequest {
-  address: string;
-  challenge: string;
-  proof: string;
-  captchaToken: string;
-}
-
-interface ErgoAuthResponse {
-  accessToken: string;
-}
-
 const ConnectWalletSidebar = () => {
   const [selected, setSelected] = useState<'nautilus' | 'ergopay'>('nautilus');
+
   const handleConnectButtonOnClick = async () => {
     if (selected == 'nautilus') {
       if (!window.ergoConnector?.nautilus) {
@@ -52,11 +43,6 @@ const ConnectWalletSidebar = () => {
         }),
       });
 
-      // Parse JSON and type it
-      interface ChallengeResponse {
-        challenge: string;
-      }
-
       const challengeResponse: ChallengeResponse = await res.json();
       const proof = await ergo.sign_data(rootAddress, challengeResponse.challenge);
 
@@ -75,7 +61,7 @@ const ConnectWalletSidebar = () => {
         body: JSON.stringify(body),
       });
 
-      if (!res.ok) {
+      if (!res2.ok) {
         throw new Error('❌ Ergo authentication failed');
       }
 
