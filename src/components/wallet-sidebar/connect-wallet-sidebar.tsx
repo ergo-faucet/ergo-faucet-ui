@@ -1,11 +1,12 @@
 'use client';
 
 import { Volkhov } from 'next/font/google';
-import { useState } from 'react';
 import { IoMdClose } from 'react-icons/io';
 import { IoWalletSharp } from 'react-icons/io5';
 
 import { SheetClose } from '../ui/sheet';
+import { Login } from './Login';
+import { useViewStore } from './store';
 import { WalletSelection } from './wallet-selection';
 
 const volkhov = Volkhov({
@@ -14,8 +15,7 @@ const volkhov = Volkhov({
 });
 
 const ConnectWalletSidebar = () => {
-  const [state] = useState<'selection' | 'login'>('selection');
-
+  const { state } = useViewStore();
   return (
     // container
     <div
@@ -36,6 +36,7 @@ const ConnectWalletSidebar = () => {
       </div>
 
       {state === 'selection' && <WalletSelection />}
+      {state === 'login' && <Login />}
     </div>
   );
 };
