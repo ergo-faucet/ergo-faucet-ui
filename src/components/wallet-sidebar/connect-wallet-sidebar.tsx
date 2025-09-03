@@ -1,6 +1,7 @@
 'use client';
 
 import { Volkhov } from 'next/font/google';
+import { useState } from 'react';
 import { IoMdClose } from 'react-icons/io';
 import { IoWalletSharp } from 'react-icons/io5';
 
@@ -39,58 +40,61 @@ declare global {
   }
 }
 const ConnectWalletSidebar = () => {
-  const handleNautilusOnClick = async () => {
-    if (!window.ergoConnector?.nautilus) {
-      throw new Error('❌ Nautilus not found');
-    }
+  const [selected, setSelected] = useState<'nautilus' | 'ergopay'>('nautilus');
+  const handleConnectButtonOnClick = async () => {
+    if (selected == 'nautilus') {
+      if (!window.ergoConnector?.nautilus) {
+        throw new Error('❌ Nautilus not found');
+      }
 
-    const connected: boolean = await window.ergoConnector.nautilus.connect();
-    if (!connected) {
-      throw new Error('❌ Wallet connection rejected');
-    }
+      const connected: boolean = await window.ergoConnector.nautilus.connect();
+      if (!connected) {
+        throw new Error('❌ Wallet connection rejected');
+      }
 
-    const ergo = await window.ergoConnector.nautilus.getContext();
-    const rootAddress: string = await ergo.get_change_address();
+      const ergo = await window.ergoConnector.nautilus.getContext();
+      const rootAddress: string = await ergo.get_change_address();
 
-    const res = await fetch(`${BackendUrl}/auth/ergo/challenge`, {
-      method: 'POST',
-      headers: {
-        'Content-Type': 'application/json',
-      },
-      body: JSON.stringify({
+      const res = await fetch(`${BackendUrl}/auth/ergo/challenge`, {
+        method: 'POST',
+        headers: {
+          'Content-Type': 'application/json',
+        },
+        body: JSON.stringify({
+          address: rootAddress,
+        }),
+      });
+
+      // Parse JSON and type it
+      interface ChallengeResponse {
+        challenge: string;
+      }
+
+      const challengeResponse: ChallengeResponse = await res.json();
+      const proof = await ergo.sign_data(rootAddress, challengeResponse.challenge);
+
+      const body: ErgoAuthRequest = {
         address: rootAddress,
-      }),
-    });
+        challenge: challengeResponse.challenge,
+        proof: proof,
+        captchaToken: 'test-token',
+      };
 
-    // Parse JSON and type it
-    interface ChallengeResponse {
-      challenge: string;
+      const res2 = await fetch(`${BackendUrl}/auth/ergo/auth`, {
+        method: 'POST',
+        headers: {
+          'Content-Type': 'application/json',
+        },
+        body: JSON.stringify(body),
+      });
+
+      if (!res.ok) {
+        throw new Error('❌ Ergo authentication failed');
+      }
+
+      const data2: ErgoAuthResponse = await res2.json();
+      console.log(data2.accessToken);
     }
-
-    const challengeResponse: ChallengeResponse = await res.json();
-    const proof = await ergo.sign_data(rootAddress, challengeResponse.challenge);
-
-    const body: ErgoAuthRequest = {
-      address: rootAddress,
-      challenge: challengeResponse.challenge,
-      proof: proof,
-      captchaToken: 'test-token',
-    };
-
-    const res2 = await fetch(`${BackendUrl}/auth/ergo/auth`, {
-      method: 'POST',
-      headers: {
-        'Content-Type': 'application/json',
-      },
-      body: JSON.stringify(body),
-    });
-
-    if (!res.ok) {
-      throw new Error('❌ Ergo authentication failed');
-    }
-
-    const data2: ErgoAuthResponse = await res2.json();
-    console.log(data2.accessToken);
   };
 
   return (
@@ -116,21 +120,28 @@ const ConnectWalletSidebar = () => {
       <div className='flex flex-col space-y-2'>
         {/* Natilus */}
         <Wallet
-          onClick={handleNautilusOnClick}
+          onClick={() => setSelected('nautilus')}
           src='/icons/natilus-40x40.png'
           alt='Natilus icon'
           size={40}
           name='Natilus'
-          selected={true}
+          selected={selected == 'nautilus'}
         />
         {/* Ergo Pay */}
-        <Wallet alt='Ergo Pay icon' size={40} name='Ergo Pay' selected={false} />
+        <Wallet
+          onClick={() => setSelected('ergopay')}
+          alt='Ergo Pay icon'
+          size={40}
+          name='Ergo Pay'
+          selected={selected == 'ergopay'}
+        />
       </div>
 
       {/* connect button */}
       <button
         className='h-11 w-25 cursor-pointer rounded-xl border border-green-400 bg-green-700 text-[17px] tracking-wider
           text-white shadow-[-2px_2px_6px_0_rgba(0,0,0)]/20 shadow-black hover:bg-green-900 dark:shadow-white'
+        onClick={handleConnectButtonOnClick}
       >
         Connect
       </button>
