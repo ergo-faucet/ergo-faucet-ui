@@ -12,9 +12,9 @@ const Searchbar = () => {
   const { addHistory, searchQuery } = useSearchbar();
   return (
     <div
-      className={`${viga.className} dark:from-gray-1100 flex h-[57px] w-[906px] items-center justify-between
-        rounded-[15px] border border-gray-700 bg-linear-to-tr from-gray-100 to-gray-300 bg-[length:200%_700%]
-        bg-bottom-left transition-all duration-300 ease-linear dark:border-gray-400 dark:via-gray-900 dark:to-gray-800`}
+      className={`${viga.className} dark:from-gray-1100 flex h-[57px] w-full items-center justify-between rounded-[15px]
+        border border-gray-700 bg-linear-to-tr from-gray-100 to-gray-300 bg-[length:200%_700%] bg-bottom-left
+        transition-all duration-300 ease-linear dark:border-gray-400 dark:via-gray-900 dark:to-gray-800`}
     >
       {/* history and input area */}
       <div className='m-3 flex flex-1 items-center'>
