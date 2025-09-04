@@ -6,12 +6,16 @@ import React, { useEffect, useState } from 'react';
 import { MoonIcon, Sun } from 'lucide-react';
 
 const ToggleThemeButton = () => {
-  const { theme, setTheme } = useTheme();
-  const [isLight, setIsLight] = useState(theme === 'light');
+  const { resolvedTheme, setTheme } = useTheme();
+  const [mounted, setMounted] = useState(false);
 
   useEffect(() => {
-    setIsLight(theme === 'light');
-  }, [theme]);
+    setMounted(true);
+  }, []);
+
+  if (!mounted) return null; // Prevent wrong icon on first SSR render
+
+  const isLight = resolvedTheme === 'light';
 
   const handleClick = () => {
     setTheme(isLight ? 'dark' : 'light');

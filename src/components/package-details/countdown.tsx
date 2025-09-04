@@ -18,7 +18,7 @@ const Card = ({ label, value }: { label: string; value: number }) => {
 
   return (
     // Card
-    <div className='mx-2 flex flex-col items-center'>
+    <div className='mx-1 flex flex-col items-center'>
       {/* digit box */}
       <div className='flex'>
         {digits.map((d, i) => (

@@ -11,7 +11,7 @@ interface NavbarProps {
 const Navbar = ({ walletAddress, walletType }: NavbarProps) => {
   return (
     // container
-    <div className='relative flex h-25 w-full flex-col items-end justify-between'>
+    <div className='relative flex h-24 w-full flex-col items-end justify-between'>
       {/* toggle theme button & wallet address */}
       <div className='flex w-full items-center justify-end gap-x-4 pt-7.5 pr-11'>
         <ToggleThemeButton />
