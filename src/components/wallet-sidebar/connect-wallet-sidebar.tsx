@@ -20,7 +20,7 @@ const ConnectWalletSidebar = () => {
     // container
     <div
       className={`${volkhov.className} dark:bg-gray-1200 relative flex h-full w-[452px] flex-col items-center
-        justify-center space-y-21 bg-[#F8F8F8]`}
+        justify-center space-y-4 bg-[#F8F8F8]`}
     >
       {/* close button */}
       <SheetClose>

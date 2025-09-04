@@ -5,7 +5,7 @@ interface InfoBoxProps {
 
 export const InfoBox = ({ title, info }: InfoBoxProps) => {
   return (
-    <div className='flex min-h-22 w-[273px] flex-col gap-2'>
+    <div className='flex min-h-22 w-full flex-col gap-2'>
       {/* title */}
       <p className='h-4.5 w-auto pl-3 text-[15px]'>{title}</p>
 
