@@ -1,5 +1,4 @@
 import { BackendUrl } from '@/configs';
-import { RefreshTokenResponse200 } from '@/types';
 
 import { apiFetch } from './api-fetch';
 import { useAuthStore } from './auth-store';
@@ -19,12 +18,12 @@ const refreshAccessToken = async (): Promise<boolean> => {
   isRefreshing = true;
 
   try {
-    const data: RefreshTokenResponse200 = await apiFetch('/auth/ergo/refresh-token', {
+    const data = await apiFetch('/auth/ergo/refresh-token', {
       method: 'GET',
       credentials: 'include', // sends HttpOnly cookie
     });
 
-    if (!data.success) return false;
+    if (!data.ok) return false;
 
     useAuthStore.getState().setAccessToken(data.newToken);
 

@@ -4,11 +4,14 @@ export type { WalletType } from './walletType';
 
 export type {
   AuthenticationBody,
+  AuthenticationResponse,
+  ChallengeBody,
+  ChallengeResponse,
+  RefreshTokenResponse,
   AuthenticationResponse200,
   AuthenticationResponseError,
+  ChallengeErrorResponse,
+  ChallengeResponse200,
   RefreshTokenResponse200,
   RefreshTokenResponse401,
-  ChallengeBody,
-  ChallengeResponse200,
-  ChallengeErrorResponse,
 } from './api/ergo-auth/types';
