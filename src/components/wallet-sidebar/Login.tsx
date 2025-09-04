@@ -85,10 +85,10 @@ export const Login = () => {
 
       {/* login button */}
       <button
-        disabled={!isLoginDisabled}
+        disabled={isLoginDisabled}
         onClick={handleLoginOnClick}
         className={`h-10.5 w-full rounded-[10px] text-[17px] font-semibold tracking-widest text-white
-          ${!isLoginDisabled ? 'cursor-not-allowed bg-gray-500' : 'cursor-pointer bg-green-700 hover:bg-green-800'}`}
+          ${isLoginDisabled ? 'cursor-not-allowed bg-gray-500' : 'cursor-pointer bg-green-700 hover:bg-green-800'}`}
       >
         Login
       </button>

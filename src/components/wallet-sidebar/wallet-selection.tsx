@@ -6,7 +6,7 @@ import { AlertCircleIcon } from 'lucide-react';
 
 import { inter } from '@/fonts';
 import { apiFetch, cn } from '@/lib';
-import { WalletManager, NautilusConnector } from '@/lib/wallets';
+import { WalletManager, NautilusConnector, ErgoPayConnector } from '@/lib/wallets';
 import { ChallengeResponse } from '@/types';
 
 import { Alert, AlertTitle, AlertDescription } from '../ui/alert';
@@ -18,17 +18,25 @@ export const WalletSelection = () => {
   const [error, setError] = useState('');
   const { setState, setProof, setWalletAddress } = useViewStore();
   const handleConnectButtonOnClick = async () => {
-    const wallet = new WalletManager(new NautilusConnector());
+    let wallet;
 
-    // Connect wallet
-    const connected = await wallet.connect();
-    if (!connected) throw new Error('Wallet connection rejected');
-
-    // Get address
-    const address = await wallet.getAddress();
-    setWalletAddress(address);
-
+    switch (selected) {
+      case 'nautilus':
+        wallet = new WalletManager(new NautilusConnector());
+        break;
+      case 'ergopay':
+        wallet = new WalletManager(new ErgoPayConnector());
+        break;
+    }
     try {
+      // Connect wallet
+      const connected = await wallet.connect();
+      if (!connected) throw new Error('Wallet connection rejected');
+
+      // Get address
+      const address = await wallet.getAddress();
+      setWalletAddress(address);
+
       // Request challenge from backend
       const challengeResponse: ChallengeResponse = await apiFetch('/auth/ergo/challenge', {
         method: 'POST',
@@ -80,13 +88,13 @@ export const WalletSelection = () => {
 
       {/* alert */}
       {error && (
-        <Alert variant='destructive' className={cn('w-full', inter.className)}>
+        <Alert variant='destructive' className={cn('max-w-[273px]', inter.className)}>
           <AlertCircleIcon />
           <AlertTitle className='text-[14px] font-semibold tracking-wide'>Unable to login</AlertTitle>
           <AlertDescription>
             <p className='text-[11px] font-medium'>{error}</p>
             <ul className='list-inside list-disc text-[10px]'>
-              <li>Check your internet connection</li>
+              <li>Check if you have the tools needed</li>
               <li>Try after a while</li>
             </ul>
           </AlertDescription>
