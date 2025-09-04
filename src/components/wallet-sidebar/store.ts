@@ -14,7 +14,7 @@ interface ViewStore {
 }
 
 export const useViewStore = create<ViewStore>((set) => ({
-  state: 'login',
+  state: 'selection',
   setState: (newState) => set({ state: newState }),
 
   walletAddress: '',

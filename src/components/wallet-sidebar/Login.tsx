@@ -55,6 +55,7 @@ export const Login = () => {
       setState('selection');
     } catch (error) {
       if (error instanceof Error) setError(error.message);
+      else setError('Unknow error happend');
     }
   };
   return (
