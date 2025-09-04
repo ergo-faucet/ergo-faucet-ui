@@ -8,7 +8,7 @@ import { AlertCircleIcon } from 'lucide-react';
 import { RecaptchaSiteKey } from '@/configs';
 import { inter } from '@/fonts';
 import { apiFetch, cn } from '@/lib';
-import { ErgoAuthRequest } from '@/types';
+import { AuthenticationBody } from '@/types';
 
 import { Alert, AlertDescription, AlertTitle } from '../ui/alert';
 import { InfoBox } from './info-box';
@@ -37,10 +37,10 @@ export const Login = () => {
 
   const handleLoginOnClick = async () => {
     // Authenticate
-    const body: ErgoAuthRequest = {
-      address: walletAddress,
-      challenge,
-      proof,
+    const body: AuthenticationBody = {
+      address: walletAddress.toString(),
+      challenge: challenge.toString(),
+      proof: proof.toString(),
       captchaToken: 'test-token',
     };
 

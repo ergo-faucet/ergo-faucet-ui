@@ -7,7 +7,7 @@ import { AlertCircleIcon } from 'lucide-react';
 import { inter } from '@/fonts';
 import { apiFetch, cn } from '@/lib';
 import { WalletManager, NautilusConnector, ErgoPayConnector } from '@/lib/wallets';
-import { ChallengeResponse } from '@/types';
+import { ChallengeResponse200 } from '@/types';
 
 import { Alert, AlertTitle, AlertDescription } from '../ui/alert';
 import { useViewStore } from './store';
@@ -38,7 +38,7 @@ export const WalletSelection = () => {
       setWalletAddress(address);
 
       // Request challenge from backend
-      const challengeResponse: ChallengeResponse = await apiFetch('/auth/ergo/challenge', {
+      const challengeResponse: ChallengeResponse200 = await apiFetch('/auth/ergo/challenge', {
         method: 'POST',
         body: JSON.stringify({ address }),
       });
