@@ -29,7 +29,7 @@ export const PackageDetails = ({
     // container
     <div
       className='dark:bg-gray-1000 flex w-83 flex-col items-start justify-center gap-y-6 rounded-[22px] border
-        border-gray-400 bg-gray-100 pb-8 pl-5 dark:border-gray-700'
+        border-gray-400 bg-gray-100 px-5 pb-8 dark:border-gray-700'
     >
       {/* header */}
       <span className={cn('mt-8 block w-full text-center text-[24px]', volkhov.className)}>{title}</span>

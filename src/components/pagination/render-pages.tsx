@@ -82,6 +82,7 @@ export const RenderPages = () => {
             hasNextPage ? 'text-black dark:text-white' : 'bg-gray-700 text-white dark:bg-gray-400 dark:text-black',
           )}
           href={''}
+          size={undefined}
         >
           {totalPages}
         </PaginationLink>
