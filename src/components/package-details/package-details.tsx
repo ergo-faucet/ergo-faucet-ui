@@ -1,7 +1,9 @@
+import { Dialog, DialogContent, DialogTrigger } from '@/components/ui/dialog';
 import { volkhov } from '@/fonts';
 import { cn } from '@/lib';
 import { Asset } from '@/types';
 
+import { ClaimModal } from '../claim-modal/claim-modal';
 import { ClaimButton } from './buttons';
 import PackageAssets from './package-assets';
 import { PackageAuth } from './package-auth';
@@ -47,7 +49,18 @@ export const PackageDetails = ({
       <PackageDescription className='-mt-5' info={description} />
 
       {/* click to claim button */}
-      <ClaimButton className='mt-6 self-center' />
+      <Dialog>
+        <DialogTrigger className='self-center'>
+          <ClaimButton className='mt-6 -ml-5 self-center' />
+        </DialogTrigger>
+        <DialogContent
+          showCloseButton={false}
+          // remove its dialog looks, so only the claim modal is shown
+          className='flex items-center justify-center overflow-visible border-none bg-transparent p-0 shadow-none'
+        >
+          <ClaimModal packageName={title} assets={assets} />
+        </DialogContent>
+      </Dialog>
     </div>
   );
 };
