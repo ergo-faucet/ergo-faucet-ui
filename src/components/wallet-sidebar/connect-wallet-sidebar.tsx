@@ -2,6 +2,7 @@ import { Volkhov } from 'next/font/google';
 import { IoMdClose } from 'react-icons/io';
 import { IoWalletSharp } from 'react-icons/io5';
 
+import { SheetClose } from '../ui/sheet';
 import Wallet from './wallet';
 
 const volkhov = Volkhov({
@@ -17,9 +18,11 @@ const ConnectWalletSidebar = () => {
         justify-center space-y-21 bg-[#F8F8F8]`}
     >
       {/* close button */}
-      <button className='absolute top-2 left-2 cursor-pointer'>
-        <IoMdClose className='h-full w-full text-gray-400' size={30} />
-      </button>
+      <SheetClose>
+        <button className='absolute top-2 left-2 cursor-pointer'>
+          <IoMdClose className='h-full w-full text-gray-400' size={30} />
+        </button>
+      </SheetClose>
 
       {/* wallet icon and connect text */}
       <div className='top-36 flex flex-col items-center justify-start gap-5'>
