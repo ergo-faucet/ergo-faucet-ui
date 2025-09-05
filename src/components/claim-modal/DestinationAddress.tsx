@@ -20,7 +20,6 @@ export const DestinationAddress = ({ className, onValidationChange }: Destinatio
   const showError = destAddress.trim().length > 0 && !isValidAddress;
 
   return (
-    // container
     <div className={cn('relative h-[51px] w-full max-w-lg bg-inherit', className)}>
       {/* label */}
       <span
@@ -35,14 +34,15 @@ export const DestinationAddress = ({ className, onValidationChange }: Destinatio
       {/* borders */}
       <div
         className={cn(
-          'relative rounded-md border bg-transparent pt-6 pb-3 pl-3',
+          // fill the 51px parent; no vertical padding
+          'relative h-full rounded-md border bg-transparent px-3',
           showError ? 'border-red-500 dark:border-red-400' : 'border-gray-700 dark:border-gray-300',
         )}
       >
         {/* input */}
         <input
           className={cn(
-            'w-full resize-none border-none bg-transparent outline-none',
+            'h-full w-full border-none bg-transparent text-xs leading-[51px] outline-none',
             showError ? 'text-red-600 dark:text-red-400' : 'text-gray-700 dark:text-gray-300',
           )}
           value={destAddress}
