@@ -44,7 +44,7 @@ const TokenDetails = ({ asset }: TokenDetailsProps) => {
               {asset.tokenId}
             </span>
           </TooltipTokenId>
-          <FaExternalLinkAlt className='top-2 right-2' size={10} />
+          <FaExternalLinkAlt className='ml-1 h-3 w-3 shrink-0' />
         </a>
       </div>
     </div>
