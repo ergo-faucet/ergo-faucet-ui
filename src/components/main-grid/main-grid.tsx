@@ -3,13 +3,12 @@
 import { useState } from 'react';
 import React from 'react';
 
+import { cn } from '@/lib';
 import { Asset } from '@/types';
 
 import { PackageDetails } from '../package-details/package-details';
 import { AuthTaskType } from '../package-details/types';
 import PackagePagination from '../pagination/package-pagination';
-import Searchbar from './searchbar/searchbar';
-import SortBy from './sort-by';
 
 interface selectedPackagedProps {
   title: string;
@@ -18,16 +17,19 @@ interface selectedPackagedProps {
   description: string;
 }
 
-export const MainGrid = () => {
+interface MainGridProps {
+  className?: string;
+}
+
+export const MainGrid = ({ className }: MainGridProps) => {
   const [selectedPackage] = useState<selectedPackagedProps>({ title: '', assets: [], authTasks: [], description: '' });
   // TODO: fetch packages here and map them to render
   return (
     // container
-    <div className='flex flex-col gap-4 p-8'>
+    <div className={cn('flex flex-col gap-4', className)}>
       <div className='flex w-full items-start justify-between gap-4'>
         {/* packages &  searchbar */}
         <div className='flex w-full flex-col items-start justify-between gap-y-4'>
-          <Searchbar />
           {/* packages */}
           <div className='justfiy-around grid w-full grid-cols-1 gap-4 md:grid-cols-2 xl:grid-cols-3 2xl:grid-cols-4'>
             {/* map packages here */}
@@ -36,7 +38,6 @@ export const MainGrid = () => {
 
         {/* sortby & package details */}
         <div className='hidden flex-col items-start justify-between gap-y-4 lg:flex'>
-          <SortBy />
           <PackageDetails
             title={selectedPackage.title}
             authTasks={selectedPackage.authTasks}
