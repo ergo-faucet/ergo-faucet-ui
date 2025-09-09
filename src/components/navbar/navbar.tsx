@@ -1,3 +1,6 @@
+'use client';
+
+import { useWalletStore } from '@/store/wallet-store';
 import { WalletType } from '@/types';
 
 import { Sheet, SheetContent, SheetTrigger } from '../ui/sheet';
@@ -12,6 +15,7 @@ interface NavbarProps {
 }
 
 const Navbar = ({ walletType }: NavbarProps) => {
+  const address = useWalletStore((s) => s.address);
   return (
     // container
     <div className='relative flex h-50 w-full flex-col items-end justify-between'>
@@ -22,7 +26,7 @@ const Navbar = ({ walletType }: NavbarProps) => {
         {/* wallet address & its sidebar */}
         <Sheet>
           <SheetTrigger asChild>
-            <WalletAddress walletAddress={'walletAddress'} walletType={walletType} />
+            <WalletAddress walletAddress={address || 'Connect Wallet'} walletType={walletType} />
           </SheetTrigger>
           <SheetContent>
             <ConnectWalletSidebar />

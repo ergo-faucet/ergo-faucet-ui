@@ -1,6 +1,6 @@
 'use client';
 
-import { useState } from 'react';
+import { useRef, useState } from 'react';
 import ReCAPTCHA from 'react-google-recaptcha';
 
 import { AlertCircleIcon } from 'lucide-react';
@@ -9,9 +9,11 @@ import useSWRMutation from 'swr/mutation';
 import { RecaptchaSiteKey } from '@/configs';
 import { inter } from '@/fonts';
 import { swrFetcher, cn } from '@/lib';
+import { useWalletStore } from '@/store/wallet-store';
 import { AuthenticationBody } from '@/types';
 
 import { Alert, AlertDescription, AlertTitle } from '../ui/alert';
+import { SheetClose } from '../ui/sheet';
 import { InfoBox } from './info-box';
 import { useViewStore } from './store';
 
@@ -20,8 +22,10 @@ export const Login = () => {
   const challenge = useViewStore((s) => s.challenge);
   const walletAddress = useViewStore((s) => s.walletAddress);
   const proof = useViewStore((s) => s.proof);
+  const setGlobalWalletAddress = useWalletStore((s) => s.setAddress);
   const [recaptchaToken, setRecaptchaToken] = useState<string | null>(null);
   const [recaptchaKey, setRecaptchaKey] = useState(0); // to reload recaptcha
+  const closeRef = useRef<HTMLButtonElement | null>(null);
 
   const isRecaptchaRequired = !!RecaptchaSiteKey;
 
@@ -56,21 +60,25 @@ export const Login = () => {
 
     // go to selection mode again
     setState('selection');
+
+    // persist wallet address globally for navbar display
+    setGlobalWalletAddress(walletAddress);
+
+    // close the sheet
+    closeRef.current?.click();
   };
 
   return (
     <div className='flex h-auto w-[273px] flex-col items-center space-y-2'>
+      {/* hidden close button to programmatically close the sheet */}
+      <SheetClose asChild>
+        <button ref={closeRef} className='hidden' />
+      </SheetClose>
       {/* wallet addres */}
-      <InfoBox
-        title={'Wallet Address'}
-        info={'somerandomtextas1234walletaddress56781234567890abcdefghijklmnopqrstuvwxyz'}
-      />
+      <InfoBox title={'Wallet Address'} info={walletAddress} />
 
       {/* signing proof */}
-      <InfoBox
-        title={'Signing Proof'}
-        info={'this is a sample signing proof message. 1234567890abcdefghijklmnopqrstuvwxyz'}
-      />
+      <InfoBox title={'Signing Proof'} info={proof} />
 
       {/* ReCAPTCHA */}
       {isRecaptchaRequired && (
