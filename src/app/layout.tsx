@@ -1,6 +1,6 @@
 import type { Metadata } from 'next';
 
-import LeftNavbar from '@/components/navbar/left-navbar';
+import LeftSidebar from '@/components/navbar/left-sidebar';
 import { robotoCondensed } from '@/fonts';
 import { Providers } from '@/providers';
 
@@ -21,7 +21,7 @@ export default function RootLayout({
       <body className={`antialiased transition-colors ${robotoCondensed.className}`}>
         <Providers>
           <div className='flex h-full w-full items-start justify-start bg-gray-300 dark:bg-gray-900'>
-            <LeftNavbar className='sticky top-0 h-screen' />
+            <LeftSidebar className='sticky top-0 h-screen' />
             {children}
           </div>
         </Providers>

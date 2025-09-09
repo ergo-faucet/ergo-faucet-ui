@@ -1,4 +1,4 @@
-import { MainGrid } from '@/components/main-grid';
+import { MainGrid } from '@/components/main-grid/main-grid';
 import Navbar from '@/components/navbar/navbar';
 
 export default function Home() {
