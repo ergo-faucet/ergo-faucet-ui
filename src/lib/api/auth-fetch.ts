@@ -4,30 +4,29 @@ import { apiFetch } from './api-fetch';
 import { useAuthStore } from './auth-store';
 
 let isRefreshing = false;
-let refreshQueue: Array<() => void> = []; // to prevent race conditions
+let refreshQueue: Array<() => void> = [];
 
 /**
  * Refresh access token using HttpOnly refresh cookie
  */
 const refreshAccessToken = async (): Promise<boolean> => {
   if (isRefreshing) {
-    // wait for ongoing refresh
     return new Promise((resolve) => refreshQueue.push(() => resolve(true)));
   }
 
   isRefreshing = true;
 
   try {
-    const data = await apiFetch('/auth/ergo/refresh-token', {
+    const response = await apiFetch('/auth/ergo/refresh-token', {
       method: 'GET',
-      credentials: 'include', // sends HttpOnly cookie
+      credentials: 'include',
     });
 
-    if (!data.ok) return false;
+    if (!response.ok) return false;
 
+    const data = await response.json();
     useAuthStore.getState().setAccessToken(data.newToken);
 
-    // resolve queued requests
     refreshQueue.forEach((cb) => cb());
     refreshQueue = [];
     return true;
@@ -40,6 +39,8 @@ const refreshAccessToken = async (): Promise<boolean> => {
 
 /**
  * Authenticated fetch wrapper
+ * - Attaches Bearer token
+ * - Refreshes on 401 and retries once
  */
 export const authFetch = async (url: string, options: RequestInit = {}) => {
   let accessToken = useAuthStore.getState().accessToken;
@@ -47,6 +48,7 @@ export const authFetch = async (url: string, options: RequestInit = {}) => {
 
   const headers = new Headers(options.headers || {});
   headers.set('Authorization', `Bearer ${accessToken}`);
+  headers.set('Content-Type', 'application/json');
 
   let response = await apiFetch(url, {
     ...options,
@@ -54,13 +56,14 @@ export const authFetch = async (url: string, options: RequestInit = {}) => {
     credentials: 'include',
   });
 
+  // Handle 401 → attempt refresh
   if (response.status === 401) {
     const refreshed = await refreshAccessToken();
-    if (!refreshed) throw new Error('Authentication failed, please login.');
+    if (!refreshed) throw new Error('Authentication failed, please login again.');
 
-    // Retry after refresh
     accessToken = useAuthStore.getState().accessToken;
     headers.set('Authorization', `Bearer ${accessToken}`);
+
     response = await fetch(`${BackendUrl}${url}`, {
       ...options,
       headers,
@@ -68,5 +71,12 @@ export const authFetch = async (url: string, options: RequestInit = {}) => {
     });
   }
 
+  if (!response.ok) {
+    throw new Error(`API error: ${response.status}`);
+  }
+
   return response.json();
 };
+
+// SWR fetcher for authenticated endpoints
+export const swrAuthFetcher = (url: string) => authFetch(url);

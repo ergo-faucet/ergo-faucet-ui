@@ -9,5 +9,12 @@ export const apiFetch = async (url: string, options: RequestInit = {}) => {
     },
   });
 
-  return await response.json();
+  if (!response.ok) {
+    throw new Error(`API error: ${response.statusText}`);
+  }
+
+  return response.json();
 };
+
+// fetcher for SWR
+export const swrFetcher = (url: string) => apiFetch(url);
