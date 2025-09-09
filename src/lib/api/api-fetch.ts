@@ -27,8 +27,6 @@ export const swrFetcher = async (url: string, options?: RequestInit | { arg?: Re
     requestInit = options as RequestInit | undefined;
   }
 
-  const res = await apiFetch(url, requestInit);
-
-  if (!res.ok) throw new Error(`API error: ${res.status}`);
-  return res.json();
+  // Delegate to apiFetch which already parses JSON and throws on non-OK
+  return apiFetch(url, requestInit);
 };

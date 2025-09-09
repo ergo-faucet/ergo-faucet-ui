@@ -3,7 +3,7 @@
 import { useEffect, useState } from 'react';
 
 import { AlertCircleIcon } from 'lucide-react';
-import useSWR from 'swr';
+import useSWRMutation from 'swr/mutation';
 
 import { inter } from '@/fonts';
 import { swrFetcher, cn } from '@/lib';
@@ -18,10 +18,11 @@ export const WalletSelection = () => {
   const [selected, setSelected] = useState<'nautilus' | 'ergopay'>('nautilus');
   const setState = useViewStore((s) => s.setState);
   const setProof = useViewStore((s) => s.setProof);
+  const setChallenge = useViewStore((s) => s.setChallenge);
   const setWalletAddress = useViewStore((s) => s.setWalletAddress);
   const [localError, setLocalError] = useState('');
 
-  const { mutate, isLoading, error } = useSWR('/auth/ergo/challenge', swrFetcher, { revalidateOnMount: false });
+  const { trigger, isMutating, error } = useSWRMutation('/auth/ergo/challenge', swrFetcher);
 
   useEffect(() => {
     if (error) {
@@ -53,16 +54,14 @@ export const WalletSelection = () => {
       setWalletAddress(address);
 
       // Request challenge from backend
-      const challengeResponse: ChallengeResponse200 = await mutate(
-        async () =>
-          await swrFetcher('/auth/ergo/challenge', {
-            method: 'POST',
-            body: JSON.stringify({ address }),
-          }),
-      );
+      const challengeResponse: ChallengeResponse200 = await trigger({
+        method: 'POST',
+        body: JSON.stringify({ address }),
+      });
 
       // Sign challenge
       const proof = await wallet.signMessage(address, challengeResponse.challenge);
+      setChallenge(challengeResponse.challenge);
       setProof(proof);
 
       setState('login');
@@ -96,13 +95,13 @@ export const WalletSelection = () => {
 
       {/* connect button */}
       <button
-        disabled={isLoading}
+        disabled={isMutating}
         className={`h-11 w-25 cursor-pointer rounded-xl border border-green-400
-          ${isLoading ? 'cursor-not-allowed bg-gray-500' : 'bg-green-700 hover:bg-green-900'} text-[17px] tracking-wider
-          text-white shadow-[-2px_2px_6px_0_rgba(0,0,0)]/20 shadow-black dark:shadow-white`}
+          ${isMutating ? 'cursor-not-allowed bg-gray-500' : 'bg-green-700 hover:bg-green-900'} text-[17px]
+          tracking-wider text-white shadow-[-2px_2px_6px_0_rgba(0,0,0)]/20 shadow-black dark:shadow-white`}
         onClick={handleConnectButtonOnClick}
       >
-        {isLoading ? 'Connecting...' : 'Connect'}
+        {isMutating ? 'Connecting...' : 'Connect'}
       </button>
 
       {/* alert */}
