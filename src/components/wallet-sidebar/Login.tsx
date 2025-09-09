@@ -17,7 +17,6 @@ import { useViewStore } from './store';
 
 export const Login = () => {
   const { setState, challenge, walletAddress, proof } = useViewStore();
-  const [error, setError] = useState('');
   const [recaptchaToken, setRecaptchaToken] = useState<string | null>(null);
   const [recaptchaKey, setRecaptchaKey] = useState(0); // to reload recaptcha
 
@@ -27,7 +26,7 @@ export const Login = () => {
   const isAddressValid = walletAddress.trim().length > 10;
   const isLoginDisabled = !isAddressValid || (isRecaptchaRequired && !recaptchaToken);
 
-  const { trigger } = useSWRMutation('/auth/ergo/auth', swrFetcher);
+  const { trigger, isMutating, error } = useSWRMutation('/auth/ergo/auth', swrFetcher);
 
   const handleRecaptchaChange = (token: string | null) => {
     setRecaptchaToken(token);
@@ -47,19 +46,15 @@ export const Login = () => {
       captchaToken: 'test-token',
     };
 
-    try {
-      await trigger({
-        method: 'POST',
-        body: JSON.stringify(body),
-      });
+    await trigger({
+      method: 'POST',
+      body: JSON.stringify(body),
+    });
 
-      // go to selection mode again
-      setState('selection');
-    } catch (error) {
-      if (error instanceof Error) setError(error.message);
-      else setError('Unknow error happend');
-    }
+    // go to selection mode again
+    setState('selection');
   };
+
   return (
     <div className='flex h-auto w-[273px] flex-col items-center space-y-2'>
       {/* wallet addres */}
@@ -87,12 +82,12 @@ export const Login = () => {
 
       {/* login button */}
       <button
-        disabled={isLoginDisabled}
+        disabled={isLoginDisabled || isMutating}
         onClick={handleLoginOnClick}
         className={`h-10.5 w-full rounded-[10px] text-[17px] font-semibold tracking-widest text-white
-          ${isLoginDisabled ? 'cursor-not-allowed bg-gray-500' : 'cursor-pointer bg-green-700 hover:bg-green-800'}`}
+          ${isLoginDisabled || isMutating ? 'cursor-not-allowed bg-gray-500' : 'cursor-pointer bg-green-700 hover:bg-green-800'}`}
       >
-        Login
+        {isMutating ? 'Logging in...' : 'Login'}
       </button>
 
       {/* alert */}
@@ -101,7 +96,7 @@ export const Login = () => {
           <AlertCircleIcon />
           <AlertTitle className='text-[14px] font-semibold tracking-wide'>Unable to login</AlertTitle>
           <AlertDescription>
-            <p className='text-[11px] font-medium'>{error}</p>
+            <p className='text-[11px] font-medium'>{(error as Error).message}</p>
             <ul className='list-inside list-disc text-[10px]'>
               <li>Check your internet connection</li>
               <li>Try after a while</li>

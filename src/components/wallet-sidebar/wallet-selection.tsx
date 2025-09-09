@@ -16,10 +16,11 @@ import Wallet from './wallet';
 
 export const WalletSelection = () => {
   const [selected, setSelected] = useState<'nautilus' | 'ergopay'>('nautilus');
-  const [error, setError] = useState('');
   const { setState, setProof, setWalletAddress } = useViewStore();
+  const [_error, _setError] = useState('');
 
-  const { mutate } = useSWR('/auth/ergo/challenge', swrFetcher, { revalidateOnMount: false });
+  const { mutate, isLoading, error } = useSWR('/auth/ergo/challenge', swrFetcher, { revalidateOnMount: false });
+  _setError(error);
 
   const handleConnectButtonOnClick = async () => {
     let wallet;
@@ -56,8 +57,7 @@ export const WalletSelection = () => {
 
       setState('login');
     } catch (error) {
-      if (error instanceof Error) setError(error.message);
-      else setError('Unknow error happend');
+      if (error instanceof Error) _setError(error.message);
     }
   };
 
@@ -86,20 +86,22 @@ export const WalletSelection = () => {
 
       {/* connect button */}
       <button
-        className='h-11 w-25 cursor-pointer rounded-xl border border-green-400 bg-green-700 text-[17px] tracking-wider
-          text-white shadow-[-2px_2px_6px_0_rgba(0,0,0)]/20 shadow-black hover:bg-green-900 dark:shadow-white'
+        disabled={isLoading}
+        className={`h-11 w-25 cursor-pointer rounded-xl border border-green-400
+          ${isLoading ? 'cursor-not-allowed bg-gray-500' : 'bg-green-700 hover:bg-green-900'} text-[17px] tracking-wider
+          text-white shadow-[-2px_2px_6px_0_rgba(0,0,0)]/20 shadow-black dark:shadow-white`}
         onClick={handleConnectButtonOnClick}
       >
-        Connect
+        {isLoading ? 'Connecting...' : 'Connect'}
       </button>
 
       {/* alert */}
-      {error && (
+      {_error && (
         <Alert variant='destructive' className={cn('max-w-[273px]', inter.className)}>
           <AlertCircleIcon />
           <AlertTitle className='text-[14px] font-semibold tracking-wide'>Unable to login</AlertTitle>
           <AlertDescription>
-            <p className='text-[11px] font-medium'>{error}</p>
+            <p className='text-[11px] font-medium'>{(error as Error).message}</p>
             <ul className='list-inside list-disc text-[10px]'>
               <li>Check if you have the tools needed</li>
               <li>Try after a while</li>
