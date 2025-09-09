@@ -16,7 +16,10 @@ import { InfoBox } from './info-box';
 import { useViewStore } from './store';
 
 export const Login = () => {
-  const { setState, challenge, walletAddress, proof } = useViewStore();
+  const setState = useViewStore((s) => s.setState);
+  const challenge = useViewStore((s) => s.challenge);
+  const walletAddress = useViewStore((s) => s.walletAddress);
+  const proof = useViewStore((s) => s.proof);
   const [recaptchaToken, setRecaptchaToken] = useState<string | null>(null);
   const [recaptchaKey, setRecaptchaKey] = useState(0); // to reload recaptcha
 

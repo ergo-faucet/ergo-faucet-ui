@@ -1,6 +1,6 @@
 'use client';
 
-import { useState } from 'react';
+import { useEffect, useState } from 'react';
 
 import { AlertCircleIcon } from 'lucide-react';
 import useSWR from 'swr';
@@ -16,11 +16,21 @@ import Wallet from './wallet';
 
 export const WalletSelection = () => {
   const [selected, setSelected] = useState<'nautilus' | 'ergopay'>('nautilus');
-  const { setState, setProof, setWalletAddress } = useViewStore();
-  const [_error, _setError] = useState('');
+  const setState = useViewStore((s) => s.setState);
+  const setProof = useViewStore((s) => s.setProof);
+  const setWalletAddress = useViewStore((s) => s.setWalletAddress);
+  const [localError, setLocalError] = useState('');
 
   const { mutate, isLoading, error } = useSWR('/auth/ergo/challenge', swrFetcher, { revalidateOnMount: false });
-  _setError(error);
+
+  useEffect(() => {
+    if (error) {
+      const message = error instanceof Error ? error.message : String(error);
+      setLocalError(message);
+    } else {
+      setLocalError('');
+    }
+  }, [error]);
 
   const handleConnectButtonOnClick = async () => {
     let wallet;
@@ -57,7 +67,7 @@ export const WalletSelection = () => {
 
       setState('login');
     } catch (error) {
-      if (error instanceof Error) _setError(error.message);
+      if (error instanceof Error) setLocalError(error.message);
     }
   };
 
@@ -96,12 +106,12 @@ export const WalletSelection = () => {
       </button>
 
       {/* alert */}
-      {_error && (
+      {localError && (
         <Alert variant='destructive' className={cn('max-w-[273px]', inter.className)}>
           <AlertCircleIcon />
           <AlertTitle className='text-[14px] font-semibold tracking-wide'>Unable to login</AlertTitle>
           <AlertDescription>
-            <p className='text-[11px] font-medium'>{(error as Error).message}</p>
+            <p className='text-[11px] font-medium'>{localError}</p>
             <ul className='list-inside list-disc text-[10px]'>
               <li>Check if you have the tools needed</li>
               <li>Try after a while</li>

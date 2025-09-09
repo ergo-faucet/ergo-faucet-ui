@@ -15,7 +15,7 @@ const volkhov = Volkhov({
 });
 
 const ConnectWalletSidebar = () => {
-  const { state } = useViewStore();
+  const state = useViewStore((s) => s.state);
   return (
     // container
     <div
