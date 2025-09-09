@@ -22,7 +22,7 @@ const ToggleThemeButton = () => {
   };
 
   return (
-    <button onClick={handleClick} className='relative flex size-12 items-center justify-center'>
+    <button onClick={handleClick} className='relative flex size-12 cursor-pointer items-center justify-center'>
       {/* Sun */}
       <div
         className={`absolute transition-transform duration-500 ease-in-out
