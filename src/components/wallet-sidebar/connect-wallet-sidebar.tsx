@@ -24,9 +24,9 @@ const ConnectWalletSidebar = () => {
     >
       {/* close button */}
       <SheetClose>
-        <button className='absolute top-2 left-2 cursor-pointer'>
+        <div className='absolute top-2 left-2 cursor-pointer'>
           <IoMdClose className='h-full w-full text-gray-400' size={30} />
-        </button>
+        </div>
       </SheetClose>
 
       {/* wallet icon and connect text */}
