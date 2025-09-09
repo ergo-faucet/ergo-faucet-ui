@@ -20,25 +20,27 @@ const TokenDetails = ({ asset }: TokenDetailsProps) => {
   return (
     // container
     <div
-      className={`h-8 w-71.5 bg-transparent text-sm font-light text-black dark:text-white ${inter.className} flex
-        items-center justify-between`}
+      className={`h-8 w-full bg-transparent text-sm font-light text-black dark:text-white ${inter.className} flex
+        items-center justify-between gap-3 overflow-hidden`}
     >
       {/* token name & logo */}
-      <div className='flex items-center justify-center gap-2'>
+      <div className='flex min-w-0 items-center gap-2'>
         <TokenAvatar assetName={asset.name} colors={colors} />
-        <span className='text-[14px] font-medium'>{asset.name}</span>
+        <span className='max-w-[150px] truncate text-[14px] font-medium'>{asset.name}</span>
       </div>
 
       {/* formatted amount */}
-      <FormattedAmount amount={asset.amount} decimal={asset.decimal} />
+      <div className='w-16 flex-none text-right'>
+        <FormattedAmount amount={asset.amount} decimal={asset.decimal} />
+      </div>
 
       {/* token ID & link */}
-      <div className='relative flex h-full items-center justify-end'>
+      <div className='relative flex h-full min-w-0 items-center justify-end'>
         {/* external link */}
         <a href={url} target='_blank' className='relative flex h-full w-full items-center gap-1'>
           {/* token ID */}
           <TooltipTokenId tokenId={asset.tokenId}>
-            <span className='max-w-[48px] cursor-pointer truncate text-[11px] font-light hover:underline'>
+            <span className='max-w-[120px] cursor-pointer truncate text-[11px] font-light hover:underline'>
               {asset.tokenId}
             </span>
           </TooltipTokenId>
