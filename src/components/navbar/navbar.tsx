@@ -3,6 +3,7 @@
 import { useTheme } from 'next-themes';
 
 import { cn } from '@/lib';
+import { useConnectSidebarStore } from '@/store/connect-sidebar-store';
 import { useWalletStore } from '@/store/wallet-store';
 import { WalletType } from '@/types';
 
@@ -23,6 +24,8 @@ interface NavbarProps {
 const Navbar = ({ walletType, className }: NavbarProps) => {
   const { theme } = useTheme();
   const address = useWalletStore((s) => s.address);
+  const isOpen = useConnectSidebarStore((s) => s.isOpen);
+  const setOpen = useConnectSidebarStore((s) => s.setOpen);
   return (
     // container
     <div className={cn('relative flex w-full flex-col items-end justify-between gap-4 gap-y-16', className)}>
@@ -38,7 +41,7 @@ const Navbar = ({ walletType, className }: NavbarProps) => {
           <ToggleThemeButton />
 
           {/* wallet address & its sidebar */}
-          <Sheet>
+          <Sheet open={isOpen} onOpenChange={setOpen}>
             <SheetTrigger asChild>
               <WalletAddress walletAddress={address || 'Connect Wallet'} walletType={walletType} />
             </SheetTrigger>

@@ -1,6 +1,8 @@
 import { Dialog, DialogContent, DialogTrigger } from '@/components/ui/dialog';
 import { volkhov } from '@/fonts';
 import { cn } from '@/lib';
+import { useAuthStore } from '@/lib/api/auth-store';
+import { useConnectSidebarStore } from '@/store/connect-sidebar-store';
 import { Asset } from '@/types';
 
 import { ClaimModal } from '../claim-modal/claim-modal';
@@ -27,6 +29,8 @@ export const PackageDetails = ({
   lastRequestDate,
   lastRequestStatus,
 }: PackageDetailsProps) => {
+  const accessToken = useAuthStore((s) => s.accessToken);
+  const openSidebar = useConnectSidebarStore((s) => s.open);
   return (
     // container
     <div
@@ -50,7 +54,15 @@ export const PackageDetails = ({
 
       {/* click to claim button */}
       <Dialog>
-        <DialogTrigger className='self-center'>
+        <DialogTrigger
+          onClick={(e) => {
+            if (!accessToken) {
+              e.preventDefault();
+              openSidebar();
+            }
+          }}
+          className='self-center'
+        >
           <ClaimButton className='mt-6 self-center' />
         </DialogTrigger>
         <DialogContent

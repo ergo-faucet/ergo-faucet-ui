@@ -1,6 +1,5 @@
 import { BackendUrl } from '@/configs';
 
-import { apiFetch } from './api-fetch';
 import { useAuthStore } from './auth-store';
 
 let isRefreshing = false;
@@ -17,7 +16,7 @@ const refreshAccessToken = async (): Promise<boolean> => {
   isRefreshing = true;
 
   try {
-    const response = await apiFetch('/auth/ergo/refresh-token', {
+    const response = await fetch(`${BackendUrl}/auth/ergo/refresh-token`, {
       method: 'GET',
       credentials: 'include',
     });
@@ -50,7 +49,7 @@ export const authFetch = async (url: string, options: RequestInit = {}) => {
   headers.set('Authorization', `Bearer ${accessToken}`);
   headers.set('Content-Type', 'application/json');
 
-  let response = await apiFetch(url, {
+  let response = await fetch(`${BackendUrl}${url}`, {
     ...options,
     headers,
     credentials: 'include',

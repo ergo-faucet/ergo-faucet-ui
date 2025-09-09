@@ -9,7 +9,9 @@ import useSWRMutation from 'swr/mutation';
 import { RecaptchaSiteKey } from '@/configs';
 import { inter } from '@/fonts';
 import { swrFetcher, cn } from '@/lib';
+import { useAuthStore } from '@/lib/api/auth-store';
 import { useWalletStore } from '@/store/wallet-store';
+import { AuthenticationResponse } from '@/types';
 import { AuthenticationBody } from '@/types';
 
 import { Alert, AlertDescription, AlertTitle } from '../ui/alert';
@@ -26,6 +28,7 @@ export const Login = () => {
   const [recaptchaToken, setRecaptchaToken] = useState<string | null>(null);
   const [recaptchaKey, setRecaptchaKey] = useState(0); // to reload recaptcha
   const closeRef = useRef<HTMLButtonElement | null>(null);
+  const setAccessToken = useAuthStore((s) => s.setAccessToken);
 
   const isRecaptchaRequired = !!RecaptchaSiteKey;
 
@@ -53,10 +56,13 @@ export const Login = () => {
       captchaToken: 'test-token',
     };
 
-    await trigger({
+    const res: AuthenticationResponse = await trigger({
       method: 'POST',
       body: JSON.stringify(body),
     });
+
+    // Save token
+    setAccessToken(res.accessToken);
 
     // go to selection mode again
     setState('selection');
