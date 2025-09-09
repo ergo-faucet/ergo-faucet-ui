@@ -5,7 +5,7 @@ export interface AuthenticationBody {
   captchaToken: string;
 }
 
-export type AuthenticationResponse200 = {
+export type AuthenticationResponse = {
   success: boolean;
   payload: {
     userId: number;
@@ -15,35 +15,15 @@ export type AuthenticationResponse200 = {
   accessToken: string;
 };
 
-export type AuthenticationResponseError = {
-  error: string;
-  code: string;
-};
-
-export type AuthenticationResponse = AuthenticationResponse200 | AuthenticationResponseError;
-
-export interface RefreshTokenResponse200 {
+export interface RefreshTokenResponse {
   success: boolean;
   newToken: string;
 }
-
-export interface RefreshTokenResponse401 {
-  error: string;
-}
-
-export type RefreshTokenResponse = RefreshTokenResponse200 | RefreshTokenResponse401;
 
 export interface ChallengeBody {
   address: string;
 }
 
-export interface ChallengeResponse200 {
+export interface ChallengeResponse {
   challenge: string;
 }
-
-export interface ChallengeErrorResponse {
-  error: string;
-  code?: string;
-}
-
-export type ChallengeResponse = ChallengeResponse200 | ChallengeErrorResponse;

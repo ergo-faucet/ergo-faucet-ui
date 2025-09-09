@@ -8,7 +8,7 @@ import useSWRMutation from 'swr/mutation';
 import { inter } from '@/fonts';
 import { swrFetcher, cn } from '@/lib';
 import { WalletManager, NautilusConnector, ErgoPayConnector } from '@/lib/wallets';
-import { ChallengeResponse200 } from '@/types';
+import { ChallengeResponse } from '@/types';
 
 import { Alert, AlertTitle, AlertDescription } from '../ui/alert';
 import { useViewStore } from './store';
@@ -54,7 +54,7 @@ export const WalletSelection = () => {
       setWalletAddress(address);
 
       // Request challenge from backend
-      const challengeResponse: ChallengeResponse200 = await trigger({
+      const challengeResponse: ChallengeResponse = await trigger({
         method: 'POST',
         body: JSON.stringify({ address }),
       });
