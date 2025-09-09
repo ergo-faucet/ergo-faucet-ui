@@ -17,4 +17,18 @@ export const apiFetch = async (url: string, options: RequestInit = {}) => {
 };
 
 // fetcher for SWR
-export const swrFetcher = (url: string) => apiFetch(url);
+export const swrFetcher = async (url: string, options?: RequestInit | { arg?: RequestInit }) => {
+  let requestInit: RequestInit | undefined;
+
+  // If options has 'arg' (SWR mutation), use it; otherwise use options directly
+  if (options && 'arg' in options) {
+    requestInit = options.arg;
+  } else {
+    requestInit = options as RequestInit | undefined;
+  }
+
+  const res = await apiFetch(url, requestInit);
+
+  if (!res.ok) throw new Error(`API error: ${res.status}`);
+  return res.json();
+};

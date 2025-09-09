@@ -3,9 +3,10 @@
 import { useState } from 'react';
 
 import { AlertCircleIcon } from 'lucide-react';
+import useSWR from 'swr';
 
 import { inter } from '@/fonts';
-import { apiFetch, cn } from '@/lib';
+import { swrFetcher, cn } from '@/lib';
 import { WalletManager, NautilusConnector, ErgoPayConnector } from '@/lib/wallets';
 import { ChallengeResponse200 } from '@/types';
 
@@ -17,6 +18,9 @@ export const WalletSelection = () => {
   const [selected, setSelected] = useState<'nautilus' | 'ergopay'>('nautilus');
   const [error, setError] = useState('');
   const { setState, setProof, setWalletAddress } = useViewStore();
+
+  const { mutate } = useSWR('/auth/ergo/challenge', swrFetcher, { revalidateOnMount: false });
+
   const handleConnectButtonOnClick = async () => {
     let wallet;
 
@@ -38,10 +42,13 @@ export const WalletSelection = () => {
       setWalletAddress(address);
 
       // Request challenge from backend
-      const challengeResponse: ChallengeResponse200 = await apiFetch('/auth/ergo/challenge', {
-        method: 'POST',
-        body: JSON.stringify({ address }),
-      });
+      const challengeResponse: ChallengeResponse200 = await mutate(
+        async () =>
+          await swrFetcher('/auth/ergo/challenge', {
+            method: 'POST',
+            body: JSON.stringify({ address }),
+          }),
+      );
 
       // Sign challenge
       const proof = await wallet.signMessage(address, challengeResponse.challenge);

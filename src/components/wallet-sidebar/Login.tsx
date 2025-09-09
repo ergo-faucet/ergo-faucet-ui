@@ -4,10 +4,11 @@ import { useState } from 'react';
 import ReCAPTCHA from 'react-google-recaptcha';
 
 import { AlertCircleIcon } from 'lucide-react';
+import useSWRMutation from 'swr/mutation';
 
 import { RecaptchaSiteKey } from '@/configs';
 import { inter } from '@/fonts';
-import { apiFetch, cn } from '@/lib';
+import { swrFetcher, cn } from '@/lib';
 import { AuthenticationBody } from '@/types';
 
 import { Alert, AlertDescription, AlertTitle } from '../ui/alert';
@@ -25,6 +26,8 @@ export const Login = () => {
   // TODO: actually validate it
   const isAddressValid = walletAddress.trim().length > 10;
   const isLoginDisabled = !isAddressValid || (isRecaptchaRequired && !recaptchaToken);
+
+  const { trigger } = useSWRMutation('/auth/ergo/auth', swrFetcher);
 
   const handleRecaptchaChange = (token: string | null) => {
     setRecaptchaToken(token);
@@ -45,8 +48,7 @@ export const Login = () => {
     };
 
     try {
-      //   const authResponse: ErgoAuthResponse =
-      await apiFetch('/auth/ergo/auth', {
+      await trigger({
         method: 'POST',
         body: JSON.stringify(body),
       });
