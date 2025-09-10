@@ -71,7 +71,7 @@ export const MainGrid = ({ className }: MainGridProps) => {
   return (
     // container
     <div className={cn('flex flex-col gap-4', className)}>
-      <div className='flex w-full items-start justify-between gap-4'>
+      <div className='flex w-full flex-1 items-stretch justify-between gap-4'>
         {/* packages &  searchbar */}
         <div className='flex w-full flex-col items-start justify-between gap-y-4'>
           {/* packages */}
@@ -142,7 +142,7 @@ export const MainGrid = ({ className }: MainGridProps) => {
         </div>
 
         {/* sortby & package details */}
-        <div className='hidden flex-col items-start justify-between gap-y-4 lg:flex'>
+        <div className='hidden flex-1 flex-col items-start justify-between gap-y-4 lg:flex'>
           <PackageDetails
             title={selectedPackage.title}
             authTasks={selectedPackage.authTasks}
