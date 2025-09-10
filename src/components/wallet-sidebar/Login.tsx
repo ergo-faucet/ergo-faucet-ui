@@ -63,7 +63,6 @@ export const Login = () => {
 
     // Save token
     setAccessToken(res.accessToken);
-
     // go to selection mode again
     setState('selection');
 
