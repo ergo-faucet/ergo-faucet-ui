@@ -6,4 +6,4 @@ export { copyToClipboard } from './copy-to-clipboard';
 export { GenerateWalletIcon } from './generate-wallet-icon';
 export { apiFetch, swrFetcher } from './api/api-fetch';
 export { authFetch, swrAuthFetcher } from './api/auth-fetch';
-export type { useAuthStore } from './api/auth-store';
+export { useAuthStore } from './api/auth-store';
