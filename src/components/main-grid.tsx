@@ -77,7 +77,7 @@ export const MainGrid = ({ className }: MainGridProps) => {
           {/* packages */}
           <div className='justfiy-around grid w-full grid-cols-1 gap-4 md:grid-cols-2 xl:grid-cols-3 2xl:grid-cols-4'>
             {isLoading &&
-              Array.from({ length: entriesPerPage || 6 }).map((_, i) => (
+              Array.from({ length: Math.max(1, entriesPerPage) }).map((_, i) => (
                 <div
                   key={`pkg-skel-${i}`}
                   className='dark:bg-gray-1000 flex h-[195px] min-w-[250px] flex-col rounded-[18px] border
