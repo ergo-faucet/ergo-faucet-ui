@@ -8,6 +8,7 @@ import useSWR from 'swr';
 import { useSortStore } from '@/components/navbar/sort-store';
 import Package from '@/components/package/package';
 import { usePaginationStore } from '@/components/pagination/useStore';
+import { Skeleton } from '@/components/ui/skeleton';
 import { cn } from '@/lib';
 import { swrFetcher } from '@/lib/api/api-fetch';
 import { swrAuthFetcher } from '@/lib/api/auth-fetch';
@@ -75,7 +76,23 @@ export const MainGrid = ({ className }: MainGridProps) => {
         <div className='flex w-full flex-col items-start justify-between gap-y-4'>
           {/* packages */}
           <div className='justfiy-around grid w-full grid-cols-1 gap-4 md:grid-cols-2 xl:grid-cols-3 2xl:grid-cols-4'>
-            {isLoading && <div className='text-gray-600 dark:text-gray-400'>Loading packages...</div>}
+            {isLoading &&
+              Array.from({ length: entriesPerPage || 6 }).map((_, i) => (
+                <div
+                  key={`pkg-skel-${i}`}
+                  className='dark:bg-gray-1000 flex h-[195px] min-w-[250px] flex-col rounded-[18px] border
+                    border-gray-500 bg-gray-100 p-4 dark:border-gray-700'
+                >
+                  <Skeleton className='mb-2 h-5 w-2/3' />
+                  <Skeleton className='mb-3 h-3 w-1/3' />
+                  <div className='mt-1 flex items-center justify-between'>
+                    <Skeleton className='h-4 w-28' />
+                    <Skeleton className='h-6 w-16 rounded-full' />
+                  </div>
+                  <Skeleton className='mt-3 h-3 w-5/6' />
+                  <Skeleton className='mt-2 h-3 w-2/3' />
+                </div>
+              ))}
             {error && <div className='text-red-600 dark:text-red-400'>Failed to load packages</div>}
             {Array.isArray(data) &&
               (data as PackageDto[]).map((p: PackageDto) => (
