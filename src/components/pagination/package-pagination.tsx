@@ -1,20 +1,14 @@
 'use client';
 
-import { Pavanam } from 'next/font/google';
-
 import { ChevronLeftIcon, ChevronRightIcon } from 'lucide-react';
 
 import { Pagination, PaginationContent, PaginationItem } from '@/components/ui/pagination';
+import { pavanam } from '@/fonts';
 import { cn } from '@/lib/utils';
 
 import { ItemsPerPageSelector } from './items-per-page-selector';
 import { RenderPages } from './render-pages';
 import { useCurrentLastIndex, useHasNextPage, useHasPreviousPage, usePaginationStore } from './useStore';
-
-const pavanam = Pavanam({
-  subsets: ['latin'],
-  weight: ['400'],
-});
 
 const PackagePagination = () => {
   // TODO: set totalEntries by fetching and calculating

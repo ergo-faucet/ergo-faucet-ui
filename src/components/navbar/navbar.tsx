@@ -9,10 +9,10 @@ import { WalletType } from '@/types';
 
 import { ErgoFaucetDark } from '../icons/ergo-faucet-dark';
 import { ErgoFaucetLight } from '../icons/ergo-faucet-light';
-import Searchbar from '../main-grid/searchbar/searchbar';
-import SortBy from '../main-grid/sort-by';
 import { Sheet, SheetContent, SheetTrigger } from '../ui/sheet';
 import ConnectWalletSidebar from '../wallet-sidebar/connect-wallet-sidebar';
+import Searchbar from './searchbar/searchbar';
+import SortBy from './sort-by';
 import ToggleThemeButton from './toggle-theme-button';
 import WalletAddress from './wallet-address';
 

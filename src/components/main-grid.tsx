@@ -21,22 +21,28 @@ export const MainGrid = () => {
   // TODO: fetch packages here and map them to render
   return (
     // container
-    <div className='m-4 ml-0 flex w-full items-start justify-start gap-4'>
-      {/* packages & pagination */}
-      <div className='flex flex-col items-start justify-center gap-y-4'>
-        {/* packages */}
-        <div className='justfiy-around grid w-[972px] grid-cols-3 gap-y-4'>{/* TODO: map packages here */}</div>
-        {/* pagination */}
-        <PackagePagination />
-      </div>
+    <div className='flex flex-col gap-4 p-8'>
+      <div className='flex w-full items-start justify-between gap-4'>
+        {/* packages &  searchbar */}
+        <div className='flex w-full flex-col items-start justify-between gap-y-4'>
+          {/* packages */}
+          <div className='justfiy-around grid w-full grid-cols-1 gap-4 md:grid-cols-2 xl:grid-cols-3 2xl:grid-cols-4'>
+            {/* map packages here */}
+          </div>
+        </div>
 
-      {/* package details */}
-      <PackageDetails
-        title={selectedPackage.title}
-        authTasks={selectedPackage.authTasks}
-        assets={selectedPackage.assets}
-        description={selectedPackage.description}
-      />
+        {/* sortby & package details */}
+        <div className='hidden flex-col items-start justify-between gap-y-4 lg:flex'>
+          <PackageDetails
+            title={selectedPackage.title}
+            authTasks={selectedPackage.authTasks}
+            assets={selectedPackage.assets}
+            description={selectedPackage.description}
+          />
+        </div>
+      </div>
+      {/* pagination */}
+      <PackagePagination />
     </div>
   );
 };
