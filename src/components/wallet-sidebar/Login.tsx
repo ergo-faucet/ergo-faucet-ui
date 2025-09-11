@@ -59,6 +59,7 @@ export const Login = () => {
     const res: AuthenticationResponse = await trigger({
       method: 'POST',
       body: JSON.stringify(body),
+      credentials: 'include',
     });
 
     // Save token
