@@ -25,9 +25,9 @@ const SortBy = () => {
   const setOrder = useSortStore((s) => s.setOrder);
 
   useEffect(() => {
-    // sync initial to store
-    setField(selected === 'Name' ? 'name' : 'releaseDate');
-    setOrder(isAscending ? 'asc' : 'desc');
+    // reflect current store to UI labels without overriding store (URL may have set it)
+    setSelected(useSortStore.getState().field === 'name' ? 'Name' : 'Release Date');
+    setIsAscending(useSortStore.getState().order === 'asc');
   }, []);
 
   return (

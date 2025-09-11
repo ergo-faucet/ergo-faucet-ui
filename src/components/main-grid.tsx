@@ -1,5 +1,6 @@
 'use client';
 
+import { useRouter, useSearchParams } from 'next/navigation';
 import { useEffect, useMemo, useState } from 'react';
 import React from 'react';
 
@@ -40,13 +41,20 @@ export const MainGrid = ({ className }: MainGridProps) => {
   const accessToken = useAuthStore((s) => s.accessToken);
   const fetcher = useMemo(() => (accessToken ? swrAuthFetcher : (url: string) => swrFetcher(url)), [accessToken]);
 
+  const router = useRouter();
+  const searchParams = useSearchParams();
+
   const entriesPerPage = usePaginationStore((s) => s.entriesPerPage);
   const currentPage = usePaginationStore((s) => s.currentPage);
   const setTotalEntries = usePaginationStore((s) => s.setTotalEntries);
   const setTotalPages = usePaginationStore((s) => s.setTotalPages);
+  const setEntriesPerPage = usePaginationStore((s) => s.setEntriesPerPage);
+  const setCurrentPage = usePaginationStore((s) => s.setCurrentPage);
 
   const sortField = useSortStore((s) => s.field);
   const sortOrder = useSortStore((s) => s.order);
+  const setSortField = useSortStore((s) => s.setField);
+  const setSortOrder = useSortStore((s) => s.setOrder);
 
   // Map UI sort field to backend query field
   const backendSort = sortField === 'name' ? 'name' : 'openAt';
@@ -59,6 +67,61 @@ export const MainGrid = ({ className }: MainGridProps) => {
   );
 
   const { data, error, isLoading } = useSWR<PackageDto[]>(key, fetcher);
+
+  // Initialize stores from URL on first mount
+  useEffect(() => {
+    const sp = new URLSearchParams(searchParams?.toString());
+    const pageParam = sp.get('page');
+    const perPageParam = sp.get('perPage');
+    const sortParam = sp.get('sort');
+    const orderParam = sp.get('order');
+
+    const allowedPerPage = [10, 20, 50];
+
+    // Apply perPage first so that it doesn't reset a page set later
+    if (perPageParam) {
+      const per = parseInt(perPageParam);
+      if (allowedPerPage.includes(per)) {
+        if (per !== entriesPerPage) setEntriesPerPage(per);
+      } else {
+        // fall back to default 10 if invalid
+        if (entriesPerPage !== 10) setEntriesPerPage(10);
+      }
+    }
+    if (pageParam) {
+      const pageNum = Math.max(1, parseInt(pageParam));
+      if (!Number.isNaN(pageNum)) setCurrentPage(pageNum);
+    }
+    if (sortParam === 'name' || sortParam === 'releaseDate') {
+      setSortField(sortParam);
+    }
+    if (orderParam === 'asc' || orderParam === 'desc') {
+      setSortOrder(orderParam);
+    }
+    // eslint-disable-next-line react-hooks/exhaustive-deps
+  }, []);
+
+  // Keep URL in sync with store values
+  useEffect(() => {
+    const sp = new URLSearchParams(searchParams?.toString());
+    const next = new URLSearchParams();
+
+    const allowedPerPage = [10, 20, 50];
+    const perPageSanitized = allowedPerPage.includes(entriesPerPage) ? entriesPerPage : 10;
+    const pageSanitized = Math.max(1, Number.isFinite(currentPage) ? currentPage : 1);
+    const sortSanitized = sortField === 'name' || sortField === 'releaseDate' ? sortField : 'releaseDate';
+    const orderSanitized = sortOrder === 'asc' || sortOrder === 'desc' ? sortOrder : 'desc';
+
+    next.set('page', String(pageSanitized));
+    next.set('perPage', String(perPageSanitized));
+    next.set('sort', sortSanitized);
+    next.set('order', orderSanitized);
+
+    if (sp.toString() !== next.toString()) {
+      const query = next.toString();
+      router.replace(query ? `?${query}` : '?', { scroll: false });
+    }
+  }, [currentPage, entriesPerPage, sortField, sortOrder, router, searchParams]);
 
   useEffect(() => {
     if (Array.isArray(data)) {
@@ -75,7 +138,9 @@ export const MainGrid = ({ className }: MainGridProps) => {
         {/* packages &  searchbar */}
         <div className='flex w-full flex-col items-start justify-between gap-y-4'>
           {/* packages */}
-          <div className='justfiy-around grid w-full grid-cols-1 gap-4 md:grid-cols-2 xl:grid-cols-3 2xl:grid-cols-4'>
+          <div
+            className={cn('justfiy-around grid w-full grid-cols-1 gap-4 md:grid-cols-2 xl:grid-cols-3 2xl:grid-cols-4')}
+          >
             {isLoading &&
               Array.from({ length: Math.max(1, entriesPerPage) }).map((_, i) => (
                 <div
@@ -94,6 +159,15 @@ export const MainGrid = ({ className }: MainGridProps) => {
                 </div>
               ))}
             {error && <div className='text-red-600 dark:text-red-400'>Failed to load packages</div>}
+            {Array.isArray(data) && data.length === 0 && !isLoading && !error && (
+              <div
+                className='flex h-[195px] max-w-[360px] min-w-[250px] flex-col items-center justify-center
+                  justify-self-center rounded-[18px] p-4 text-center text-gray-700 dark:text-gray-400'
+              >
+                <div className='text-[16px] font-semibold'>No packages on this page</div>
+                <div className='mt-1 text-[14px]'>Try previous page, next page, or change items per page.</div>
+              </div>
+            )}
             {Array.isArray(data) &&
               (data as PackageDto[]).map((p: PackageDto) => (
                 <div
