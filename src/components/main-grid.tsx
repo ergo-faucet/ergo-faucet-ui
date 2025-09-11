@@ -4,6 +4,7 @@ import { useRouter, useSearchParams } from 'next/navigation';
 import { useEffect, useMemo, useState } from 'react';
 import React from 'react';
 
+import { toast } from 'sonner';
 import useSWR from 'swr';
 
 import { useSortStore } from '@/components/navbar/sort-store';
@@ -131,6 +132,20 @@ export const MainGrid = ({ className }: MainGridProps) => {
     }
   }, [data, entriesPerPage, offset, limit, setTotalEntries, setTotalPages]);
 
+  // Show toast for load errors
+  useEffect(() => {
+    if (error) {
+      let message = 'Failed to load packages';
+      if (typeof error === 'object' && error !== null && 'message' in error) {
+        const possibleMessage = (error as { message?: unknown }).message;
+        if (typeof possibleMessage === 'string') {
+          message = possibleMessage;
+        }
+      }
+      toast.error(message);
+    }
+  }, [error]);
+
   return (
     // container
     <div className={cn('flex flex-col gap-4', className)}>
@@ -158,7 +173,6 @@ export const MainGrid = ({ className }: MainGridProps) => {
                   <Skeleton className='mt-2 h-3 w-2/3' />
                 </div>
               ))}
-            {error && <div className='text-red-600 dark:text-red-400'>Failed to load packages</div>}
             {Array.isArray(data) && data.length === 0 && !isLoading && !error && (
               <div
                 className='flex h-[195px] max-w-[360px] min-w-[250px] flex-col items-center justify-center
