@@ -9,6 +9,7 @@ import useSWRMutation from 'swr/mutation';
 import { RecaptchaSiteKey } from '@/configs';
 import { inter } from '@/fonts';
 import { swrFetcher, cn } from '@/lib';
+import { refreshAccessToken } from '@/lib/api/auth-fetch';
 import { useAuthStore } from '@/lib/api/auth-store';
 import { useWalletStore } from '@/store/wallet-store';
 import { AuthenticationResponse } from '@/types';
@@ -64,6 +65,21 @@ export const Login = () => {
 
     // Save token
     setAccessToken(res.accessToken);
+
+    // Test refresh token flow: log, refresh, log - 3 times
+    try {
+      for (let i = 1; i <= 3; i++) {
+        // Log current access token
+        console.log(`[Refresh Test] Before refresh #${i}:`, useAuthStore.getState().accessToken);
+        // Attempt refresh
+        const ok = await refreshAccessToken();
+        console.log(`[Refresh Test] Refresh #${i} status:`, ok ? 'success' : 'failed');
+        // Log updated access token
+        console.log(`[Refresh Test] After refresh #${i}:`, useAuthStore.getState().accessToken);
+      }
+    } catch (e) {
+      console.error('[Refresh Test] Error during refresh loop:', e);
+    }
 
     // go to selection mode again
     setState('selection');

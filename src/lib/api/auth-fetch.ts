@@ -8,7 +8,7 @@ let refreshQueue: Array<() => void> = [];
 /**
  * Refresh access token using HttpOnly refresh cookie
  */
-const refreshAccessToken = async (): Promise<boolean> => {
+export const refreshAccessToken = async (): Promise<boolean> => {
   if (isRefreshing) {
     return new Promise((resolve) => refreshQueue.push(() => resolve(true)));
   }
