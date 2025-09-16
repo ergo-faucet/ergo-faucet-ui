@@ -1,6 +1,7 @@
 import type { Metadata } from 'next';
 
 import LeftSidebar from '@/components/navbar/left-sidebar';
+import { Toaster } from '@/components/ui/sonner';
 import { robotoCondensed } from '@/fonts';
 import { Providers } from '@/providers';
 
@@ -24,6 +25,7 @@ export default function RootLayout({
             <LeftSidebar className='sticky top-0 h-screen' />
             {children}
           </div>
+          <Toaster position='top-center' richColors closeButton expand={false} />
         </Providers>
       </body>
     </html>
