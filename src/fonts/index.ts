@@ -1,4 +1,4 @@
-import { Volkhov, Roboto_Condensed, Viga, Inter, JetBrains_Mono } from 'next/font/google';
+import { Volkhov, Roboto_Condensed, Viga, Inter, JetBrains_Mono, Pavanam } from 'next/font/google';
 
 export const volkhov = Volkhov({
   subsets: ['latin'],
@@ -21,6 +21,11 @@ export const inter = Inter({
 });
 
 export const jetBrainsMono = JetBrains_Mono({
+  subsets: ['latin'],
+  weight: ['400'],
+});
+
+export const pavanam = Pavanam({
   subsets: ['latin'],
   weight: ['400'],
 });

@@ -1,18 +1,14 @@
 'use client';
 
-import { Volkhov } from 'next/font/google';
 import { IoMdClose } from 'react-icons/io';
 import { IoWalletSharp } from 'react-icons/io5';
+
+import { volkhov } from '@/fonts';
 
 import { SheetClose } from '../ui/sheet';
 import { Login } from './Login';
 import { useViewStore } from './store';
 import { WalletSelection } from './wallet-selection';
-
-const volkhov = Volkhov({
-  subsets: ['latin'],
-  weight: ['400'],
-});
 
 const ConnectWalletSidebar = () => {
   const state = useViewStore((s) => s.state);

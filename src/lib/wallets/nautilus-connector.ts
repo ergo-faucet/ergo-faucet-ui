@@ -48,6 +48,23 @@ export class NautilusConnector implements WalletConnector {
   }
 
   /**
+   * Aggregates used and unused addresses
+   */
+  async getAddresses(): Promise<string[]> {
+    const ctx = await window.ergoConnector?.nautilus?.getContext();
+    if (!ctx) throw new Error('Nautilus context unavailable');
+    const used = await ctx.get_used_addresses();
+    const unused = await ctx.get_unused_addresses();
+    return [...used, ...unused];
+  }
+
+  async getChangeAddress(): Promise<string> {
+    const ctx = await window.ergoConnector?.nautilus?.getContext();
+    if (!ctx) throw new Error('Nautilus context unavailable');
+    return ctx.get_change_address();
+  }
+
+  /**
    * Signs an arbitrary message with the wallet.
    *
    * @param {string} address - The address to sign the message from.
