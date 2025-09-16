@@ -5,6 +5,7 @@ import { Toaster } from '@/components/ui/sonner';
 import { robotoCondensed } from '@/fonts';
 import { Providers } from '@/providers';
 
+import { URLAuthNotifier } from '../components/url-auth-notifier';
 import './globals.css';
 
 export const metadata: Metadata = {
@@ -26,6 +27,7 @@ export default function RootLayout({
             {children}
           </div>
           <Toaster position='top-center' richColors closeButton expand={false} />
+          <URLAuthNotifier />
         </Providers>
       </body>
     </html>

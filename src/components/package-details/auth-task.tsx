@@ -1,3 +1,7 @@
+'use client';
+
+import { usePathname, useSearchParams } from 'next/navigation';
+
 import { ClickToCompleteButton } from '@/components/package-details/buttons';
 import { GenerateAuthTypeIcon } from '@/lib';
 
@@ -9,6 +13,9 @@ interface AuthTaskProps {
 }
 
 const AuthTask = ({ authTask }: AuthTaskProps) => {
+  const pathname = usePathname();
+  const searchParams = useSearchParams();
+
   const handleLogin = () => {
     let endpoint = '';
 
@@ -23,8 +30,13 @@ const AuthTask = ({ authTask }: AuthTaskProps) => {
       return;
     }
 
-    // Redirect browser directly to backend OAuth endpoint
-    window.location.href = `${process.env.NEXT_PUBLIC_BACKEND_URL}${endpoint}`;
+    // Build state as current route (path + query if present)
+    const currentQuery = searchParams.toString();
+    const frontState = currentQuery ? `${pathname}?${currentQuery}` : pathname;
+
+    // Redirect browser directly to backend OAuth endpoint with state
+    const url = `${process.env.NEXT_PUBLIC_BACKEND_URL}${endpoint}?state=${encodeURIComponent(frontState)}`;
+    window.location.href = url;
   };
 
   return (
