@@ -21,7 +21,8 @@ export interface RefreshTokenResponse {
 }
 
 export interface ChallengeBody {
-  address: string;
+  changedAddress: string;
+  addresses: string[];
 }
 
 export interface ChallengeResponse {
