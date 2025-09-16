@@ -20,7 +20,6 @@ const AuthTask = ({ authTask }: AuthTaskProps) => {
     } else if (authTask.authType === 'x-platform') {
       endpoint = '/auth/x-platform/login';
     } else {
-      console.error('Unsupported auth type:', authTask.authType);
       return;
     }
 
