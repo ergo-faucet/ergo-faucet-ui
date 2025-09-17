@@ -99,7 +99,7 @@ export const WalletSelection = () => {
       {/* connect button */}
       <button
         disabled={isMutating}
-        className={`h-11 w-25 cursor-pointer rounded-xl border border-green-400
+        className={`h-11 w-[273px] cursor-pointer rounded-xl border border-green-400 px-4 whitespace-nowrap
           ${isMutating ? 'cursor-not-allowed bg-gray-500' : 'bg-green-700 hover:bg-green-900'} text-[17px]
           tracking-wider text-white shadow-[-2px_2px_6px_0_rgba(0,0,0)]/20 shadow-black dark:shadow-white`}
         onClick={handleConnectButtonOnClick}

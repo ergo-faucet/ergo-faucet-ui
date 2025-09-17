@@ -1,6 +1,7 @@
 import { BackendUrl } from '@/configs';
+import { useConnectSidebarStore } from '@/store/connect-sidebar-store';
+import { useWalletStore } from '@/store/wallet-store';
 
-import { apiFetch } from './api-fetch';
 import { useAuthStore } from './auth-store';
 
 let isRefreshing = false;
@@ -17,12 +18,18 @@ const refreshAccessToken = async (): Promise<boolean> => {
   isRefreshing = true;
 
   try {
-    const response = await apiFetch('/auth/ergo/refresh-token', {
+    const response = await fetch(`${BackendUrl}/auth/ergo/refresh-token`, {
       method: 'GET',
       credentials: 'include',
     });
 
-    if (!response.ok) return false;
+    if (!response.ok) {
+      // Treat as signed out
+      useAuthStore.getState().setAccessToken(null);
+      useWalletStore.getState().disconnect();
+      useConnectSidebarStore.getState().open();
+      return false;
+    }
 
     const data = await response.json();
     useAuthStore.getState().setAccessToken(data.newToken);
@@ -31,6 +38,10 @@ const refreshAccessToken = async (): Promise<boolean> => {
     refreshQueue = [];
     return true;
   } catch {
+    // Network or other failure: treat as signed out
+    useAuthStore.getState().setAccessToken(null);
+    useWalletStore.getState().disconnect();
+    useConnectSidebarStore.getState().open();
     return false;
   } finally {
     isRefreshing = false;
@@ -50,7 +61,7 @@ export const authFetch = async (url: string, options: RequestInit = {}) => {
   headers.set('Authorization', `Bearer ${accessToken}`);
   headers.set('Content-Type', 'application/json');
 
-  let response = await apiFetch(url, {
+  let response = await fetch(`${BackendUrl}${url}`, {
     ...options,
     headers,
     credentials: 'include',
@@ -59,7 +70,9 @@ export const authFetch = async (url: string, options: RequestInit = {}) => {
   // Handle 401 → attempt refresh
   if (response.status === 401) {
     const refreshed = await refreshAccessToken();
-    if (!refreshed) throw new Error('Authentication failed, please login again.');
+    if (!refreshed) {
+      throw new Error('Your session has expired. Please sign in again.');
+    }
 
     accessToken = useAuthStore.getState().accessToken;
     headers.set('Authorization', `Bearer ${accessToken}`);
