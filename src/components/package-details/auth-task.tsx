@@ -1,6 +1,7 @@
 'use client';
 
 import { usePathname, useSearchParams } from 'next/navigation';
+import { Suspense } from 'react';
 
 import { ClickToCompleteButton } from '@/components/package-details/buttons';
 import { GenerateAuthTypeIcon } from '@/lib';
@@ -12,7 +13,7 @@ interface AuthTaskProps {
   authTask: AuthTaskType;
 }
 
-const AuthTask = ({ authTask }: AuthTaskProps) => {
+const AuthTaskInner = ({ authTask }: AuthTaskProps) => {
   const pathname = usePathname();
   const searchParams = useSearchParams();
 
@@ -52,5 +53,11 @@ const AuthTask = ({ authTask }: AuthTaskProps) => {
     </div>
   );
 };
+
+const AuthTask = (props: AuthTaskProps) => (
+  <Suspense fallback={null}>
+    <AuthTaskInner {...props} />
+  </Suspense>
+);
 
 export default AuthTask;

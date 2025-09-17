@@ -2,7 +2,7 @@
 
 import { useRouter, useSearchParams } from 'next/navigation';
 import { useEffect, useMemo, useState } from 'react';
-import React from 'react';
+import React, { Suspense } from 'react';
 
 import { toast } from 'sonner';
 import useSWR from 'swr';
@@ -32,7 +32,7 @@ interface MainGridProps {
   className?: string;
 }
 
-export const MainGrid = ({ className }: MainGridProps) => {
+const MainGridInner = ({ className }: MainGridProps) => {
   const [selectedPackage, setSelectedPackage] = useState<selectedPackagedProps>({
     title: '',
     assets: [],
@@ -303,3 +303,9 @@ export const MainGrid = ({ className }: MainGridProps) => {
     </div>
   );
 };
+
+export const MainGrid = (props: MainGridProps) => (
+  <Suspense fallback={null}>
+    <MainGridInner {...props} />
+  </Suspense>
+);

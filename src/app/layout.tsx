@@ -1,11 +1,9 @@
 import type { Metadata } from 'next';
 
 import LeftSidebar from '@/components/navbar/left-sidebar';
-import { Toaster } from '@/components/ui/sonner';
 import { robotoCondensed } from '@/fonts';
 import { Providers } from '@/providers';
 
-import { URLAuthNotifier } from '../components/url-auth-notifier';
 import './globals.css';
 
 export const metadata: Metadata = {
@@ -26,8 +24,6 @@ export default function RootLayout({
             <LeftSidebar className='sticky top-0 h-screen' />
             {children}
           </div>
-          <Toaster position='top-center' richColors closeButton expand={false} />
-          <URLAuthNotifier />
         </Providers>
       </body>
     </html>
