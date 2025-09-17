@@ -1,8 +1,8 @@
 'use client';
 
-import { useRouter, useSearchParams } from 'next/navigation';
-import { useEffect, useMemo, useState } from 'react';
-import React, { Suspense } from 'react';
+import { useRouter } from 'next/navigation';
+import { Suspense, useEffect, useMemo, useState } from 'react';
+import React from 'react';
 
 import { toast } from 'sonner';
 import useSWR from 'swr';
@@ -17,9 +17,10 @@ import { swrAuthFetcher } from '@/lib/api/auth-fetch';
 import { useAuthStore } from '@/lib/api/auth-store';
 import { Asset, AuthType, PackageDto } from '@/types';
 
-import { PackageDetails } from './package-details/package-details';
-import { AuthTaskType } from './package-details/types';
-import PackagePagination from './pagination/package-pagination';
+import { PackageDetails } from '../package-details/package-details';
+import { AuthTaskType } from '../package-details/types';
+import PackagePagination from '../pagination/package-pagination';
+import MainGridSearchParamsSync from './search-params-sync';
 
 interface selectedPackagedProps {
   title: string;
@@ -32,7 +33,7 @@ interface MainGridProps {
   className?: string;
 }
 
-const MainGridInner = ({ className }: MainGridProps) => {
+export const MainGrid = ({ className }: MainGridProps) => {
   const [selectedPackage, setSelectedPackage] = useState<selectedPackagedProps>({
     title: '',
     assets: [],
@@ -45,7 +46,6 @@ const MainGridInner = ({ className }: MainGridProps) => {
   const fetcher = useMemo(() => (accessToken ? swrAuthFetcher : (url: string) => swrFetcher(url)), [accessToken]);
 
   const router = useRouter();
-  const searchParams = useSearchParams();
 
   const entriesPerPage = usePaginationStore((s) => s.entriesPerPage);
   const currentPage = usePaginationStore((s) => s.currentPage);
@@ -71,57 +71,12 @@ const MainGridInner = ({ className }: MainGridProps) => {
 
   const { data, error, isLoading } = useSWR<PackageDto[]>(key, fetcher);
 
-  // Initialize stores from URL on first mount
-  useEffect(() => {
-    const sp = new URLSearchParams(searchParams?.toString());
-    const pageParam = sp.get('page');
-    const perPageParam = sp.get('perPage');
-    const sortParam = sp.get('sort');
-    const orderParam = sp.get('order');
-    const selectedParam = sp.get('selected');
-
-    const allowedPerPage = [10, 20, 50];
-
-    // Apply perPage first so that it doesn't reset a page set later
-    if (perPageParam) {
-      const per = parseInt(perPageParam);
-      if (allowedPerPage.includes(per)) {
-        if (per !== entriesPerPage) setEntriesPerPage(per);
-      } else {
-        // fall back to default 10 if invalid
-        if (entriesPerPage !== 10) setEntriesPerPage(10);
-      }
-    }
-    if (pageParam) {
-      const pageNum = Math.max(1, parseInt(pageParam));
-      if (!Number.isNaN(pageNum)) setCurrentPage(pageNum);
-    }
-    if (sortParam === 'name' || sortParam === 'releaseDate') {
-      setSortField(sortParam);
-    }
-    if (orderParam === 'asc' || orderParam === 'desc') {
-      setSortOrder(orderParam);
-    }
-    if (selectedParam) {
-      setSelectedPackageId(selectedParam);
-    }
-    setDidInitFromUrl(true);
-    // eslint-disable-next-line react-hooks/exhaustive-deps
-  }, []);
-
-  // Keep selectedPackageId in sync with URL when params change (e.g., back/forward or external navigation)
-  useEffect(() => {
-    const sp = new URLSearchParams(searchParams?.toString());
-    const selectedParam = sp.get('selected') || '';
-    if (selectedParam !== selectedPackageId) {
-      setSelectedPackageId(selectedParam);
-    }
-  }, [searchParams, selectedPackageId]);
+  // search params syncing is handled by a dedicated component
 
   // Keep URL in sync with store values without causing loops
   useEffect(() => {
     if (!didInitFromUrl) return;
-    const currentSearch = typeof window !== 'undefined' ? window.location.search : searchParams?.toString() || '';
+    const currentSearch = typeof window !== 'undefined' ? window.location.search : '';
     const sp = new URLSearchParams(currentSearch);
 
     const allowedPerPage = [10, 20, 50];
@@ -204,6 +159,19 @@ const MainGridInner = ({ className }: MainGridProps) => {
   return (
     // container
     <div className={cn('flex flex-col gap-4', className)}>
+      <Suspense fallback={null}>
+        <MainGridSearchParamsSync
+          entriesPerPage={entriesPerPage}
+          setEntriesPerPage={setEntriesPerPage}
+          setCurrentPage={setCurrentPage}
+          setSortField={setSortField}
+          setSortOrder={setSortOrder}
+          setSelectedPackageId={setSelectedPackageId}
+          selectedPackageId={selectedPackageId}
+          didInitFromUrl={didInitFromUrl}
+          setDidInitFromUrl={setDidInitFromUrl}
+        />
+      </Suspense>
       <div className='flex w-full flex-1 items-stretch justify-between gap-4'>
         {/* packages &  searchbar */}
         <div className='flex w-full flex-col items-start justify-between gap-y-4'>
@@ -303,9 +271,3 @@ const MainGridInner = ({ className }: MainGridProps) => {
     </div>
   );
 };
-
-export const MainGrid = (props: MainGridProps) => (
-  <Suspense fallback={null}>
-    <MainGridInner {...props} />
-  </Suspense>
-);
