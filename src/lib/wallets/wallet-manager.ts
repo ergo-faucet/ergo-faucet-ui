@@ -56,6 +56,28 @@ export class WalletManager {
   }
 
   /**
+   * Retrieves all wallet addresses if supported by the connector.
+   * Falls back to a single address array.
+   */
+  async getAddresses(): Promise<string[]> {
+    if (this.connector.getAddresses) {
+      return this.connector.getAddresses();
+    }
+    const single = await this.connector.getAddress();
+    return [single];
+  }
+
+  /**
+   * Retrieves the change address if supported; falls back to primary address.
+   */
+  async getChangeAddress(): Promise<string> {
+    if (this.connector.getChangeAddress) {
+      return this.connector.getChangeAddress();
+    }
+    return this.connector.getAddress();
+  }
+
+  /**
    * Signs a message using the current wallet connector.
    *
    * @param {string} addr - The wallet address to sign from.

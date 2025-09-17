@@ -38,6 +38,16 @@ export interface WalletConnector {
   getAddress(): Promise<string>;
 
   /**
+   * Returns all relevant wallet addresses for auth (used + unused)
+   */
+  getAddresses?(): Promise<string[]>;
+
+  /**
+   * Returns the wallet's change address (explicitly)
+   */
+  getChangeAddress?(): Promise<string>;
+
+  /**
    * Signs an arbitrary message with the wallet.
    *
    * @param {string} address - The wallet address to sign from.

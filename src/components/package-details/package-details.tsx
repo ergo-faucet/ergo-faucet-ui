@@ -34,11 +34,13 @@ export const PackageDetails = ({
   return (
     // container
     <div
-      className='dark:bg-gray-1000 flex h-full w-83 flex-col items-start justify-between gap-y-6 rounded-[22px] border
+      className='dark:bg-gray-1000 flex w-83 flex-col items-start justify-center gap-y-6 rounded-[22px] border
         border-gray-400 bg-gray-100 px-5 pb-8 dark:border-gray-700'
     >
       {/* header */}
-      <span className={cn('mt-8 block w-full text-center text-[24px]', volkhov.className)}>{title}</span>
+      <span className={cn('mt-8 block w-full truncate text-center text-[24px] font-bold', volkhov.className)}>
+        {title}
+      </span>
 
       {/* timeline */}
       <Timeline cooldownTime={cooldownTime} lastRequestDate={lastRequestDate} lastRequestStatus={lastRequestStatus} />

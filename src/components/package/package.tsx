@@ -23,8 +23,8 @@ const Package = ({ title, assets, authTypes, startDate, endDate, onClick }: Pack
     >
       {/* title */}
       <div
-        className={`${volkhov.className} mt-4 ml-6 min-h-[51px] max-w-[250px] text-[20px] tracking-wider text-gray-900
-          dark:text-gray-200`}
+        className={`${volkhov.className} mt-4 mr-6 ml-6 min-h-[51px] max-w-[250px] truncate text-[20px] font-normal
+          tracking-wider text-gray-900 dark:text-gray-200`}
       >
         {title}
       </div>

@@ -6,7 +6,8 @@ import { AlertCircleIcon } from 'lucide-react';
 import useSWRMutation from 'swr/mutation';
 
 import { inter } from '@/fonts';
-import { swrFetcher, cn } from '@/lib';
+import { swrFetcher } from '@/lib/api';
+import { cn } from '@/lib/utils';
 import { WalletManager, NautilusConnector, ErgoPayConnector } from '@/lib/wallets';
 import { ChallengeResponse } from '@/types';
 
@@ -49,14 +50,16 @@ export const WalletSelection = () => {
       const connected = await wallet.connect();
       if (!connected) throw new Error('Wallet connection rejected');
 
-      // Get address
-      const address = await wallet.getAddress();
+      // Get addresses (used + unused) and change address
+      const addresses = await wallet.getAddresses();
+      const changedAddress = await wallet.getChangeAddress();
+      const address = changedAddress || addresses[0];
       setWalletAddress(address);
 
       // Request challenge from backend
       const challengeResponse: ChallengeResponse = await trigger({
         method: 'POST',
-        body: JSON.stringify({ address }),
+        body: JSON.stringify({ changedAddress: address, addresses }),
       });
 
       // Sign challenge
