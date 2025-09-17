@@ -6,7 +6,8 @@ import { AlertCircleIcon } from 'lucide-react';
 import useSWRMutation from 'swr/mutation';
 
 import { inter } from '@/fonts';
-import { swrFetcher, cn } from '@/lib';
+import { swrFetcher } from '@/lib/api';
+import { cn } from '@/lib/utils';
 import { WalletManager, NautilusConnector, ErgoPayConnector } from '@/lib/wallets';
 import { ChallengeResponse } from '@/types';
 

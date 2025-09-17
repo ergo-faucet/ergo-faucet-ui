@@ -8,7 +8,8 @@ import useSWRMutation from 'swr/mutation';
 
 import { RecaptchaSiteKey } from '@/configs';
 import { inter } from '@/fonts';
-import { swrFetcher, cn } from '@/lib';
+import { swrFetcher } from '@/lib/api';
+import { cn } from '@/lib/utils';
 import { useWalletStore } from '@/store/wallet-store';
 import { AuthenticationBody } from '@/types';
 

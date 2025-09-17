@@ -2,7 +2,6 @@
 
 import { FiLogOut } from 'react-icons/fi';
 
-import { apiFetch } from '@/lib/api/api-fetch';
 import { useAuthStore } from '@/lib/api/auth-store';
 import { useWalletStore } from '@/store/wallet-store';
 import { WalletType } from '@/types';
@@ -24,12 +23,8 @@ const Navbar = ({ walletType }: NavbarProps) => {
 
   const handleLogout = async () => {
     try {
-      await apiFetch('/auth/ergo/logout', {
-        method: 'POST',
-        credentials: 'include',
-      });
+      // intentionally left empty per instruction
     } catch {
-      // ignore network/API errors here; proceed to clear local state
     } finally {
       setAccessToken(null);
       disconnect();
