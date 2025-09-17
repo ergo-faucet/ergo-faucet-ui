@@ -4,7 +4,7 @@ import { usePathname, useRouter, useSearchParams } from 'next/navigation';
 import { Suspense } from 'react';
 import { useEffect, useRef } from 'react';
 
-import { toast } from '@/components/ui/sonner';
+import { toast } from 'sonner';
 
 /**
  * Listens for auth callback query params and shows a Sonner notification.
@@ -45,11 +45,10 @@ const URLAuthNotifierInner = () => {
 
     // show toast slightly delayed to ensure Toaster is mounted
     setTimeout(() => {
-      if (isSuccess) {
-        toast.success(title, { description });
-      } else {
-        toast.error(title, { description });
-      }
+      toast(title, {
+        description,
+        action: undefined,
+      });
     }, 50);
 
     // mark handled to avoid duplicate toasts
