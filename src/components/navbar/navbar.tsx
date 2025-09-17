@@ -23,7 +23,7 @@ const Navbar = ({ walletType }: NavbarProps) => {
 
   const handleLogout = async () => {
     try {
-      // intentionally left empty per instruction
+      // TODO: use logout endpoint to clear http only cookie
     } catch {
     } finally {
       setAccessToken(null);
