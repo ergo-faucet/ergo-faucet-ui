@@ -35,7 +35,7 @@ const TokenDetails = ({ asset }: TokenDetailsProps) => {
       </div>
 
       {/* token ID & link */}
-      <div className='relative flex h-full min-w-0 items-center justify-end'>
+      <div className='relative ml-2 flex h-full min-w-0 items-center justify-end'>
         {/* external link */}
         <a href={url} target='_blank' className='relative flex h-full w-full items-center gap-1'>
           {/* token ID */}
