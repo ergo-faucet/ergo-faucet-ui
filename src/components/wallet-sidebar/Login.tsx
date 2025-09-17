@@ -56,6 +56,7 @@ export const Login = () => {
     await trigger({
       method: 'POST',
       body: JSON.stringify(body),
+      credentials: 'include',
     });
 
     // go to selection mode again

@@ -3,6 +3,7 @@ import { BackendUrl } from '@/configs';
 export const apiFetch = async (url: string, options: RequestInit = {}) => {
   const response = await fetch(`${BackendUrl}${url}`, {
     ...options,
+    credentials: options.credentials ?? 'include',
     headers: {
       'Content-Type': 'application/json',
       ...options.headers,
