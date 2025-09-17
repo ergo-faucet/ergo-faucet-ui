@@ -21,7 +21,7 @@ const TokenDetails = ({ asset }: TokenDetailsProps) => {
     // container
     <div
       className={`h-8 w-full bg-transparent text-sm font-light text-black dark:text-white ${inter.className} flex
-        items-center justify-between gap-3 overflow-hidden`}
+        items-center justify-between gap-1 overflow-hidden`}
     >
       {/* token name & logo */}
       <div className='flex min-w-0 items-center gap-2'>

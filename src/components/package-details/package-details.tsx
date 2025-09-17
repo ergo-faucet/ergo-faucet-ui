@@ -47,7 +47,7 @@ export const PackageDetails = ({
       <PackageAuth title='Authentication Methods/Tasks' authTasks={authTasks} />
 
       {/* assets */}
-      <PackageAssets assets={assets} />
+      <PackageAssets className='mb-6' assets={assets} />
 
       {/* description */}
       <PackageDescription className='-mt-5' info={description} />
