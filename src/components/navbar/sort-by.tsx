@@ -10,7 +10,6 @@ import {
   DropdownMenuLabel,
   DropdownMenuTrigger,
 } from '@/components/ui/dropdown-menu';
-import { viga } from '@/fonts';
 import { cn } from '@/lib/utils';
 
 import { useSortStore } from './sort-store';
@@ -33,9 +32,9 @@ const SortBy = () => {
   return (
     // Container
     <div
-      className={`${viga.className} dark:from-gray-1100 flex h-[57px] min-w-[185px] cursor-pointer items-center
-        justify-between rounded-2xl border border-gray-400 bg-gradient-to-r from-gray-100 to-gray-300
-        bg-[length:200%_200%] bg-bottom-left dark:border-gray-700 dark:to-gray-800 [&_*]:transition-colors`}
+      className={`dark:from-gray-1100 flex h-[57px] w-[210px] cursor-pointer items-center justify-between rounded-2xl
+        border border-gray-400 bg-gradient-to-r from-gray-100 to-gray-300 bg-[length:200%_200%] bg-bottom-left
+        dark:border-gray-700 dark:to-gray-800 [&_*]:transition-colors`}
     >
       {/* Dropdown Menu */}
       <DropdownMenu>
@@ -47,10 +46,13 @@ const SortBy = () => {
           {/* Texts */}
           <div className='flex flex-col items-start justify-center space-y-0.5 pt-1 pl-[18px]'>
             <span className='text-[12px] text-gray-700 dark:text-gray-500'>Sort by</span>
-            <span className='text-[15px] tracking-wider text-black dark:text-white'>{selected}</span>
+            <span className='font-regular text-[15px] tracking-wider text-black dark:text-white'>{selected}</span>
           </div>
         </DropdownMenuTrigger>
-        <DropdownMenuContent className='dark:bg-gray-1100 w-[183px] border border-gray-800 bg-gray-100' align='start'>
+        <DropdownMenuContent
+          className='dark:bg-gray-1100 w-[183px] rounded-[15px] border border-gray-800 bg-gray-100'
+          align='start'
+        >
           <DropdownMenuLabel className='text-[13px] text-gray-800 dark:text-gray-500'>Sort by</DropdownMenuLabel>
           {sortOptions.map((option) => (
             <DropdownMenuItem
@@ -60,7 +62,8 @@ const SortBy = () => {
                 setField(option === 'Name' ? 'name' : 'releaseDate');
               }}
               className={cn(
-                'h-[39px] cursor-pointer text-[15px] font-bold',
+                `dark:hover:bg-gray-1000 h-[39px] cursor-pointer rounded-[8px] text-[15px] font-normal
+                hover:bg-gray-300`,
                 selected === option ? 'dark:bg-gray-1000 bg-gray-300 text-black dark:text-white' : '',
               )}
             >

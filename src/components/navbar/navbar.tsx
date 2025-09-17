@@ -9,6 +9,8 @@ import { WalletType } from '@/types';
 import { DropdownMenu, DropdownMenuContent, DropdownMenuItem, DropdownMenuTrigger } from '../ui/dropdown-menu';
 import { Sheet, SheetContent, SheetTrigger } from '../ui/sheet';
 import ConnectWalletSidebar from '../wallet-sidebar/connect-wallet-sidebar';
+import Searchbar from './searchbar/searchbar';
+import SortBy from './sort-by';
 import ToggleThemeButton from './toggle-theme-button';
 import WalletAddress from './wallet-address';
 
@@ -32,7 +34,7 @@ const Navbar = ({ walletType }: NavbarProps) => {
   };
   return (
     // container
-    <div className='relative flex h-24 w-full flex-col items-end justify-between'>
+    <div className='relative flex w-full flex-col items-end justify-between'>
       {/* toggle theme button & wallet address */}
       <div className='flex w-full items-center justify-end gap-x-4 pt-7.5 pr-11'>
         <ToggleThemeButton />
@@ -69,6 +71,14 @@ const Navbar = ({ walletType }: NavbarProps) => {
             </SheetContent>
           </Sheet>
         )}
+      </div>
+
+      {/* searchbar & sortby */}
+      <div className='flex w-full gap-x-6.5 self-center p-11'>
+        <div className='flex-1'>
+          <Searchbar />
+        </div>
+        <SortBy />
       </div>
     </div>
   );
