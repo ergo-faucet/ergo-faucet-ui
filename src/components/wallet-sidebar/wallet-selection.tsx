@@ -22,6 +22,8 @@ export const WalletSelection = () => {
   const setChallenge = useViewStore((s) => s.setChallenge);
   const setWalletAddress = useViewStore((s) => s.setWalletAddress);
   const [localError, setLocalError] = useState('');
+  const [errorDescription, setErrorDescription] = useState('');
+  const [errorSuggestions, setErrorSuggestions] = useState<string[]>([]);
 
   const { trigger, isMutating, error } = useSWRMutation('/auth/ergo/challenge', swrFetcher);
 
@@ -29,8 +31,27 @@ export const WalletSelection = () => {
     if (error) {
       const message = error instanceof Error ? error.message : String(error);
       setLocalError(message);
+      setErrorDescription('Fetching challenge failed');
+      const lower = message.toLowerCase();
+      if (
+        lower.includes('fetch') ||
+        lower.includes('network') ||
+        lower.includes('challenge') ||
+        lower.includes('timeout')
+      ) {
+        setErrorSuggestions([
+          'Check your internet connection',
+          'Wait a moment and try again',
+          'Disable ad blockers for this site and retry',
+          'Verify the backend API is reachable from your network',
+        ]);
+      } else {
+        setErrorSuggestions([]);
+      }
     } else {
       setLocalError('');
+      setErrorDescription('');
+      setErrorSuggestions([]);
     }
   }, [error]);
 
@@ -45,31 +66,69 @@ export const WalletSelection = () => {
         wallet = new WalletManager(new ErgoPayConnector());
         break;
     }
+    // reset previous errors
+    setLocalError('');
+    setErrorDescription('');
+    setErrorSuggestions([]);
+
+    // 1) Wallet operations (connect + addresses)
+    let address = '';
+    let addresses: string[] = [];
     try {
-      // Connect wallet
       const connected = await wallet.connect();
       if (!connected) throw new Error('Wallet connection rejected');
-
-      // Get addresses (used + unused) and change address
-      const addresses = await wallet.getAddresses();
+      addresses = await wallet.getAddresses();
       const changedAddress = await wallet.getChangeAddress();
-      const address = changedAddress || addresses[0];
+      address = changedAddress || addresses[0];
       setWalletAddress(address);
+    } catch (error) {
+      const message = error instanceof Error ? error.message : String(error);
+      setLocalError(message);
+      setErrorDescription('Wallet connection error');
+      setErrorSuggestions([
+        'Ensure your wallet/extension is installed and enabled',
+        'Open the wallet and unlock it',
+        'Approve the connection request in your wallet',
+        'Reload this page and try again',
+      ]);
+      return;
+    }
 
-      // Request challenge from backend
+    // 2) Backend challenge + signing
+    try {
       const challengeResponse: ChallengeResponse = await trigger({
         method: 'POST',
         body: JSON.stringify({ changedAddress: address, addresses }),
       });
-
-      // Sign challenge
       const proof = await wallet.signMessage(address, challengeResponse.challenge);
       setChallenge(challengeResponse.challenge);
       setProof(proof);
-
       setState('login');
     } catch (error) {
-      if (error instanceof Error) setLocalError(error.message);
+      const message = error instanceof Error ? error.message : String(error);
+      setLocalError(message);
+      const lower = message.toLowerCase();
+      if (
+        lower.includes('fetch') ||
+        lower.includes('network') ||
+        lower.includes('challenge') ||
+        lower.includes('timeout')
+      ) {
+        setErrorDescription('Network error while fetching');
+        setErrorSuggestions([
+          'Check your internet connection',
+          'Wait a moment and try again',
+          'Disable ad blockers for this site and retry',
+          'Verify the backend API is reachable from your network',
+        ]);
+      } else {
+        setErrorDescription('Signing or server error');
+        setErrorSuggestions([
+          'Re-open your wallet and try signing again',
+          'If prompted, approve the signing request',
+          'Retry after a short while',
+        ]);
+      }
     }
   };
 
@@ -113,11 +172,14 @@ export const WalletSelection = () => {
           <AlertCircleIcon />
           <AlertTitle className='text-[14px] font-semibold tracking-wide'>Unable to login</AlertTitle>
           <AlertDescription>
-            <p className='text-[11px] font-medium'>{localError}</p>
-            <ul className='list-inside list-disc text-[10px]'>
-              <li>Check if you have the tools needed</li>
-              <li>Try after a while</li>
-            </ul>
+            <p className='text-[11px] font-medium'>{errorDescription || localError}</p>
+            {errorSuggestions.length > 0 && (
+              <ul className='list-inside list-disc text-[10px]'>
+                {errorSuggestions.map((tip, idx) => (
+                  <li key={idx}>{tip}</li>
+                ))}
+              </ul>
+            )}
           </AlertDescription>
         </Alert>
       )}
