@@ -2,6 +2,7 @@
 
 import { FiLogOut } from 'react-icons/fi';
 
+import { apiFetch } from '@/lib/api';
 import { useAuthStore } from '@/lib/api/auth-store';
 import { useWalletStore } from '@/store/wallet-store';
 import { WalletType } from '@/types';
@@ -23,7 +24,7 @@ const Navbar = ({ walletType }: NavbarProps) => {
 
   const handleLogout = async () => {
     try {
-      // TODO: use logout endpoint to clear http only cookie
+      await apiFetch('/auth/ergo/logout', { method: 'GET', credentials: 'include' });
     } catch {
     } finally {
       setAccessToken(null);
