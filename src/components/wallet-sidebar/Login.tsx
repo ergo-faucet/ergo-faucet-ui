@@ -1,6 +1,6 @@
 'use client';
 
-import { useRef, useState } from 'react';
+import { useEffect, useRef, useState } from 'react';
 import ReCAPTCHA from 'react-google-recaptcha';
 
 import { AlertCircleIcon } from 'lucide-react';
@@ -35,6 +35,22 @@ export const Login = () => {
   const isLoginDisabled = !isAddressValid || (isRecaptchaRequired && !recaptchaToken);
 
   const { trigger, isMutating, error } = useSWRMutation('/auth/ergo/auth', swrFetcher);
+  const [errorDescription, setErrorDescription] = useState('');
+  const [errorSuggestions, setErrorSuggestions] = useState<string[]>([]);
+
+  useEffect(() => {
+    if (error) {
+      setErrorDescription('Authentication request failed');
+      setErrorSuggestions([
+        'Check your internet connection',
+        'Wait a moment and try again',
+        'Verify the backend API is reachable from your network',
+      ]);
+    } else {
+      setErrorDescription('');
+      setErrorSuggestions([]);
+    }
+  }, [error]);
 
   const handleRecaptchaChange = (token: string | null) => {
     setRecaptchaToken(token);
@@ -109,11 +125,14 @@ export const Login = () => {
           <AlertCircleIcon />
           <AlertTitle className='text-[14px] font-semibold tracking-wide'>Unable to login</AlertTitle>
           <AlertDescription>
-            <p className='text-[11px] font-medium'>{(error as Error).message}</p>
-            <ul className='list-inside list-disc text-[10px]'>
-              <li>Check your internet connection</li>
-              <li>Try after a while</li>
-            </ul>
+            <p className='text-[11px] font-medium'>{errorDescription || (error as Error).message}</p>
+            {errorSuggestions.length > 0 && (
+              <ul className='list-inside list-disc text-[10px]'>
+                {errorSuggestions.map((tip, idx) => (
+                  <li key={idx}>{tip}</li>
+                ))}
+              </ul>
+            )}
           </AlertDescription>
         </Alert>
       )}
