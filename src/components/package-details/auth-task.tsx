@@ -5,6 +5,7 @@ import { Suspense } from 'react';
 
 import { ClickToCompleteButton } from '@/components/package-details/buttons';
 import { GenerateAuthTypeIcon } from '@/lib';
+import { useAuthStore } from '@/lib/api/auth-store';
 import { useConnectSidebarStore } from '@/store/connect-sidebar-store';
 
 import { CheckIcon } from './check-icon';
@@ -19,9 +20,12 @@ const AuthTaskInner = ({ authTask }: AuthTaskProps) => {
   const searchParams = useSearchParams();
 
   const openSidebar = useConnectSidebarStore((s) => s.open);
+  const accessToken = useAuthStore((s) => s.accessToken);
+  console.log('accessToken', accessToken);
 
-  const handleLogin = () => {
-    if (typeof authTask.status === 'undefined') {
+  const handleComplete = () => {
+    // If user is not logged in, open wallet connect sidebar
+    if (!accessToken) {
       openSidebar();
       return;
     }
@@ -56,7 +60,7 @@ const AuthTaskInner = ({ authTask }: AuthTaskProps) => {
         <GenerateAuthTypeIcon authType={authTask.authType} />
       </div>
 
-      {authTask.isCompleted ? <CheckIcon /> : <ClickToCompleteButton handleOnClick={handleLogin} />}
+      {authTask.isCompleted ? <CheckIcon /> : <ClickToCompleteButton handleOnClick={handleComplete} />}
     </div>
   );
 };

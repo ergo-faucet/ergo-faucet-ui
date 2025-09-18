@@ -3,6 +3,7 @@
 import { FiLogOut } from 'react-icons/fi';
 
 import { useAuthStore } from '@/lib/api/auth-store';
+import { useConnectSidebarStore } from '@/store/connect-sidebar-store';
 import { useWalletStore } from '@/store/wallet-store';
 import { WalletType } from '@/types';
 
@@ -22,6 +23,8 @@ const Navbar = ({ walletType }: NavbarProps) => {
   const address = useWalletStore((s) => s.address);
   const disconnect = useWalletStore((s) => s.disconnect);
   const setAccessToken = useAuthStore((s) => s.setAccessToken);
+  const isConnectSidebarOpen = useConnectSidebarStore((s) => s.isOpen);
+  const setConnectSidebarOpen = useConnectSidebarStore((s) => s.setOpen);
 
   const handleLogout = async () => {
     try {
@@ -62,7 +65,7 @@ const Navbar = ({ walletType }: NavbarProps) => {
             </DropdownMenuContent>
           </DropdownMenu>
         ) : (
-          <Sheet>
+          <Sheet open={isConnectSidebarOpen} onOpenChange={setConnectSidebarOpen}>
             <SheetTrigger asChild>
               <WalletAddress walletAddress={'Connect Wallet'} walletType={walletType} />
             </SheetTrigger>
