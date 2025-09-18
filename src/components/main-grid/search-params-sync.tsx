@@ -57,7 +57,6 @@ const MainGridSearchParamsSync = ({
       setSelectedPackageId(selectedParam);
     }
     setDidInitFromUrl(true);
-    // eslint-disable-next-line react-hooks/exhaustive-deps
   }, []);
 
   React.useEffect(() => {
