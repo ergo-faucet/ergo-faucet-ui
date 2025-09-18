@@ -50,7 +50,7 @@ export const PackageDetails = ({
       ) : (
         <>
           {/* header */}
-          <span className={cn('mt-8 block w-full truncate text-center text-[24px] font-bold', volkhov.className)}>
+          <span className={cn('mt-8 block w-full text-center text-[24px] font-bold break-words', volkhov.className)}>
             {title}
           </span>
 
