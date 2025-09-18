@@ -41,11 +41,7 @@ export const Login = () => {
   useEffect(() => {
     if (error) {
       setErrorDescription('Authentication request failed');
-      setErrorSuggestions([
-        'Check your internet connection',
-        'Wait a moment and try again',
-        'Verify the backend API is reachable from your network',
-      ]);
+      setErrorSuggestions(['Check your internet connection', 'Wait a moment and try again']);
     } else {
       setErrorDescription('');
       setErrorSuggestions([]);

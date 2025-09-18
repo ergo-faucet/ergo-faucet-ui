@@ -32,22 +32,7 @@ export const WalletSelection = () => {
       const message = error instanceof Error ? error.message : String(error);
       setLocalError(message);
       setErrorDescription('Fetching challenge failed');
-      const lower = message.toLowerCase();
-      if (
-        lower.includes('fetch') ||
-        lower.includes('network') ||
-        lower.includes('challenge') ||
-        lower.includes('timeout')
-      ) {
-        setErrorSuggestions([
-          'Check your internet connection',
-          'Wait a moment and try again',
-          'Disable ad blockers for this site and retry',
-          'Verify the backend API is reachable from your network',
-        ]);
-      } else {
-        setErrorSuggestions([]);
-      }
+      setErrorSuggestions(['Check your internet connection', 'Wait a moment and try again']);
     } else {
       setLocalError('');
       setErrorDescription('');
@@ -95,11 +80,23 @@ export const WalletSelection = () => {
     }
 
     // 2) Backend challenge + signing
+    // 2a) Backend challenge (network)
+    let challengeResponse: ChallengeResponse;
     try {
-      const challengeResponse: ChallengeResponse = await trigger({
+      challengeResponse = await trigger({
         method: 'POST',
         body: JSON.stringify({ changedAddress: address, addresses }),
       });
+    } catch (error) {
+      const message = error instanceof Error ? error.message : String(error);
+      setLocalError(message);
+      setErrorDescription('Network error while fetching');
+      setErrorSuggestions(['Check your internet connection', 'Wait a moment and try again']);
+      return;
+    }
+
+    // 2b) Signing
+    try {
       const proof = await wallet.signMessage(address, challengeResponse.challenge);
       setChallenge(challengeResponse.challenge);
       setProof(proof);
@@ -107,28 +104,12 @@ export const WalletSelection = () => {
     } catch (error) {
       const message = error instanceof Error ? error.message : String(error);
       setLocalError(message);
-      const lower = message.toLowerCase();
-      if (
-        lower.includes('fetch') ||
-        lower.includes('network') ||
-        lower.includes('challenge') ||
-        lower.includes('timeout')
-      ) {
-        setErrorDescription('Network error while fetching');
-        setErrorSuggestions([
-          'Check your internet connection',
-          'Wait a moment and try again',
-          'Disable ad blockers for this site and retry',
-          'Verify the backend API is reachable from your network',
-        ]);
-      } else {
-        setErrorDescription('Signing or server error');
-        setErrorSuggestions([
-          'Re-open your wallet and try signing again',
-          'If prompted, approve the signing request',
-          'Retry after a short while',
-        ]);
-      }
+      setErrorDescription('Signing error');
+      setErrorSuggestions([
+        'Re-open your wallet and try signing again',
+        'If prompted, approve the signing request',
+        'Retry after a short while',
+      ]);
     }
   };
 
