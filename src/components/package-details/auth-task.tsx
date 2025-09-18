@@ -5,6 +5,7 @@ import { Suspense } from 'react';
 
 import { ClickToCompleteButton } from '@/components/package-details/buttons';
 import { GenerateAuthTypeIcon } from '@/lib';
+import { useConnectSidebarStore } from '@/store/connect-sidebar-store';
 
 import { CheckIcon } from './check-icon';
 import { AuthTaskType } from './types';
@@ -17,7 +18,13 @@ const AuthTaskInner = ({ authTask }: AuthTaskProps) => {
   const pathname = usePathname();
   const searchParams = useSearchParams();
 
+  const openSidebar = useConnectSidebarStore((s) => s.open);
+
   const handleLogin = () => {
+    if (typeof authTask.status === 'undefined') {
+      openSidebar();
+      return;
+    }
     let endpoint = '';
 
     // Choose endpoint based on auth type
