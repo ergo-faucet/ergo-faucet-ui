@@ -34,22 +34,21 @@ export default function AssetDetails({ assets }: AssetDetailsProps) {
               <td colSpan={2}>
                 {/* aseet row */}
                 <div
-                  className='flex h-7 w-full items-center justify-between gap-3 rounded-[5px] border border-gray-700
+                  className='flex h-7 w-full items-center justify-between rounded-[5px] border border-gray-700
                     bg-transparent px-3 py-2 pr-4 text-[10px] text-black hover:bg-[#B5B2B2] dark:border-gray-500
                     dark:hover:bg-[#473F3F]'
                 >
                   {/* logo and name */}
-                  <div className='flex min-w-0 items-center gap-2 text-center text-gray-700 dark:text-white'>
+                  <div className='flex items-center gap-2 text-center text-gray-700 dark:text-white'>
                     <TokenAvatar colors={getAssetColors(asset.name)} assetName={asset.name} />
                     <TooltipTokenId tokenId={asset.tokenId}>
                       <a
                         href={`${ExplorerURL}/tokens/${asset.tokenId}`}
                         target='_blank'
-                        className='flex max-w-[200px] min-w-0 cursor-pointer items-center gap-1 text-gray-700
-                          dark:text-white'
+                        className='flex cursor-pointer items-center gap-1 text-gray-700 dark:text-white'
                       >
-                        <span className='min-w-0 truncate text-[14px] font-medium tracking-wide'>{asset.name}</span>
-                        <FaExternalLinkAlt className='ml-1 h-3 w-3 shrink-0' />
+                        <span className='text-[14px] font-medium tracking-wide'>{asset.name}</span>
+                        <FaExternalLinkAlt className='top-2 right-2' size={10} />
                       </a>
                     </TooltipTokenId>
                   </div>

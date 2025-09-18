@@ -1,6 +1,6 @@
 'use client';
 
-import React, { useEffect, useState } from 'react';
+import React, { useState } from 'react';
 import { LuArrowDownWideNarrow, LuArrowUpNarrowWide } from 'react-icons/lu';
 
 import {
@@ -13,22 +13,11 @@ import {
 import { viga } from '@/fonts';
 import { cn } from '@/lib/utils';
 
-import { useSortStore } from './sort-store';
-
 const sortOptions = ['Name', 'Release Date'];
 
 const SortBy = () => {
   const [isAscending, setIsAscending] = useState(true);
   const [selected, setSelected] = useState('Release Date');
-
-  const setField = useSortStore((s) => s.setField);
-  const setOrder = useSortStore((s) => s.setOrder);
-
-  useEffect(() => {
-    // reflect current store to UI labels without overriding store (URL may have set it)
-    setSelected(useSortStore.getState().field === 'name' ? 'Name' : 'Release Date');
-    setIsAscending(useSortStore.getState().order === 'asc');
-  }, []);
 
   return (
     // Container
@@ -55,10 +44,7 @@ const SortBy = () => {
           {sortOptions.map((option) => (
             <DropdownMenuItem
               key={option}
-              onSelect={() => {
-                setSelected(option);
-                setField(option === 'Name' ? 'name' : 'releaseDate');
-              }}
+              onSelect={() => setSelected(option)}
               className={cn(
                 'h-[39px] cursor-pointer text-[15px] font-bold',
                 selected === option ? 'dark:bg-gray-1000 bg-gray-300 text-black dark:text-white' : '',
@@ -71,11 +57,7 @@ const SortBy = () => {
       </DropdownMenu>
       {/* Icon button with vertical separator */}
       <button
-        onClick={() => {
-          const next = !isAscending;
-          setIsAscending(next);
-          setOrder(next ? 'asc' : 'desc');
-        }}
+        onClick={() => setIsAscending(!isAscending)}
         className='relative mr-2 h-full w-auto cursor-pointer bg-transparent pl-4 text-gray-600 before:absolute
           before:top-1/2 before:left-3 before:h-9 before:w-px before:-translate-y-1/2 before:bg-gray-600'
       >

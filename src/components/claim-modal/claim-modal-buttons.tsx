@@ -1,5 +1,3 @@
-import { DialogClose } from '@/components/ui/dialog';
-
 interface ClaimModalButtonsProps {
   disabled: boolean;
   recaptchaToken: string | null;
@@ -11,16 +9,14 @@ export const ClaimModalButtons = ({ disabled, recaptchaToken, onCancel, onConfir
   return (
     <div className='flex h-full w-full items-center justify-end gap-4 p-[31px] pt-0'>
       {/* Cancel */}
-      <DialogClose asChild>
-        <button
-          type='button'
-          onClick={onCancel}
-          className='cursor-pointer text-[16px] font-semibold text-black hover:text-gray-900 dark:text-white
-            dark:hover:text-gray-100'
-        >
-          Cancel
-        </button>
-      </DialogClose>
+      <button
+        type='button'
+        onClick={onCancel}
+        className='cursor-pointer text-[16px] font-semibold text-black hover:text-gray-900 dark:text-white
+          dark:hover:text-gray-100'
+      >
+        Cancel
+      </button>
 
       {/* Confirm */}
       <button

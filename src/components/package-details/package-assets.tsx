@@ -9,7 +9,7 @@ interface PackageAssetsProps {
 
 const PackageAssets = ({ assets }: PackageAssetsProps) => {
   return (
-    <div className='flex h-auto w-full flex-col items-start justify-start overflow-hidden'>
+    <div className='flex h-auto w-[286px] flex-col items-start justify-start'>
       <LineAfterText text='Assets' />
       {assets.map((asset, idx) => {
         return <TokenDetails key={idx} asset={asset} />;

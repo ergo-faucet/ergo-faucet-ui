@@ -1,5 +1,4 @@
 import { create } from 'zustand';
-import { persist } from 'zustand/middleware';
 
 interface PaginationState {
   currentPage: number;
@@ -20,62 +19,54 @@ interface PaginationState {
   decreaseCurrentPage: () => void;
 }
 
-export const usePaginationStore = create<PaginationState>()(
-  persist(
-    (set, get) => ({
-      // Initial state
-      currentPage: 1,
-      currentFirstIndex: 1,
-      entriesPerPage: 10,
-      totalPages: 1,
-      totalEntries: 0,
+export const usePaginationStore = create<PaginationState>((set, get) => ({
+  // Initial state (fetch later)
+  currentPage: 1,
+  currentFirstIndex: 1,
+  entriesPerPage: 10,
+  totalPages: 26,
+  totalEntries: 233,
 
-      // Basic setters
-      setCurrentPage: (page) => {
-        const { entriesPerPage } = get();
-        set({
-          currentPage: page,
-          currentFirstIndex: (page - 1) * entriesPerPage + 1,
-        });
-      },
-      setCurrentFirstIndex: (index) => set({ currentFirstIndex: index }),
-      setEntriesPerPage: (value) => {
-        const { totalEntries, setTotalPages, setCurrentPage, setCurrentFirstIndex } = get();
-        set({ entriesPerPage: value });
-        setTotalPages(Math.max(1, Math.ceil(totalEntries / value)));
-        setCurrentPage(1);
-        setCurrentFirstIndex(1);
-      },
-      setTotalPages: (total) => set({ totalPages: total }),
-      setTotalEntries: (total) => set({ totalEntries: total }),
+  // Basic setters
+  setCurrentPage: (page) => {
+    const { entriesPerPage } = get();
+    set({
+      currentPage: page,
+      currentFirstIndex: (page - 1) * entriesPerPage + 1,
+    });
+  },
+  setCurrentFirstIndex: (index) => set({ currentFirstIndex: index }),
+  setEntriesPerPage: (value) => {
+    const { totalEntries, setTotalPages, setCurrentPage, setCurrentFirstIndex } = get();
+    set({ entriesPerPage: value });
+    setTotalPages(Math.ceil(totalEntries / value));
+    setCurrentPage(1);
+    setCurrentFirstIndex(1);
+  },
+  setTotalPages: (total) => set({ totalPages: total }),
+  setTotalEntries: (total) => set({ totalEntries: total }),
 
-      // Increase and decrease with boundary checks
-      increaseCurrentPage: () => {
-        const { currentPage, totalPages, entriesPerPage } = get();
-        if (currentPage < totalPages) {
-          set({
-            currentPage: currentPage + 1,
-            currentFirstIndex: currentPage * entriesPerPage + 1,
-          });
-        }
-      },
+  // Increase and decrease with boundary checks
+  increaseCurrentPage: () => {
+    const { currentPage, totalPages, entriesPerPage } = get();
+    if (currentPage < totalPages) {
+      set({
+        currentPage: currentPage + 1,
+        currentFirstIndex: currentPage * entriesPerPage + 1,
+      });
+    }
+  },
 
-      decreaseCurrentPage: () => {
-        const { currentPage, entriesPerPage } = get();
-        if (currentPage > 1) {
-          set({
-            currentPage: currentPage - 1,
-            currentFirstIndex: (currentPage - 2) * entriesPerPage + 1,
-          });
-        }
-      },
-    }),
-    {
-      name: 'pagination-storage',
-      partialize: (state) => ({ entriesPerPage: state.entriesPerPage }),
-    },
-  ),
-);
+  decreaseCurrentPage: () => {
+    const { currentPage, entriesPerPage } = get();
+    if (currentPage > 1) {
+      set({
+        currentPage: currentPage - 1,
+        currentFirstIndex: (currentPage - 2) * entriesPerPage + 1,
+      });
+    }
+  },
+}));
 
 /*
  Derived selectors 
