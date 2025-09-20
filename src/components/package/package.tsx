@@ -8,8 +8,8 @@ interface PackageProps {
   title: string;
   assets: Asset[];
   authTypes: AuthType[];
-  startDate: Date;
-  endDate: Date;
+  startDate?: Date;
+  endDate?: Date;
   onClick?: React.MouseEventHandler<HTMLDivElement>;
 }
 
@@ -38,7 +38,7 @@ const Package = ({ title, assets, authTypes, startDate, endDate, onClick }: Pack
       {/* auth methods */}
       <span className='mt-2 ml-4 text-gray-800 dark:text-[#A4A4A4]'>{authTypes.length} Auth methods/task required</span>
 
-      {/* deadline */}
+      {/* deadline - always show */}
       <Deadline startDate={startDate} endDate={endDate} className='mt-4 ml-4 pr-8' />
     </div>
   );

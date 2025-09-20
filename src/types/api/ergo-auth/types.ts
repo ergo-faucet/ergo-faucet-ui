@@ -47,9 +47,9 @@ export interface PackageDto {
   name: string;
   description: string;
   type: string;
-  openAt?: string;
-  closeAt?: string;
-  delay: number;
+  openAt: number;
+  closeAt: number;
+  delay: string;
   numberEachUser: number;
   assets: PackageAssetDto[];
   authMethods: PackageAuthMethodDto[];

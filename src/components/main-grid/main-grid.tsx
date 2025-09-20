@@ -245,10 +245,8 @@ export const MainGrid = ({ className }: MainGridProps) => {
                       })) as Asset[]
                     }
                     authTypes={(p.authMethods || []).map((m: PackageDto['authMethods'][number]) => m.name as AuthType)}
-                    startDate={p.openAt ? new Date(p.openAt) : new Date()}
-                    endDate={
-                      p.closeAt ? new Date(p.closeAt) : new Date(Date.now() + 24 * 60 * 60 * 1000 * (p.delay || 0))
-                    }
+                    startDate={p.openAt && p.openAt > 0 ? new Date(p.openAt) : undefined}
+                    endDate={p.closeAt && p.closeAt > 0 ? new Date(p.closeAt) : undefined}
                   />
                 </div>
               ))
