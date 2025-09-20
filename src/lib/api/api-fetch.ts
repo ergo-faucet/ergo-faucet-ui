@@ -28,6 +28,5 @@ export const swrFetcher = async (url: string, options?: RequestInit | { arg?: Re
     requestInit = options as RequestInit | undefined;
   }
 
-  // Delegate to apiFetch which already parses JSON and throws on non-OK
   return apiFetch(url, requestInit);
 };
