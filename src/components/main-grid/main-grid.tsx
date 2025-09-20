@@ -23,6 +23,7 @@ import PackagePagination from '../pagination/package-pagination';
 import MainGridSearchParamsSync from './search-params-sync';
 
 interface selectedPackagedProps {
+  id?: number;
   title: string;
   authTasks: AuthTaskType[];
   assets: Asset[];
@@ -36,6 +37,7 @@ interface MainGridProps {
 
 export const MainGrid = ({ className }: MainGridProps) => {
   const [selectedPackage, setSelectedPackage] = useState<selectedPackagedProps>({
+    id: undefined,
     title: '',
     assets: [],
     authTasks: [],
@@ -124,6 +126,7 @@ export const MainGrid = ({ className }: MainGridProps) => {
         const matched = (data as PackageDto[]).find((p) => String(p.id || p.name) === selectedPackageId);
         if (matched) {
           const details: selectedPackagedProps = {
+            id: matched.id,
             title: matched.name,
             description: matched.description,
             delay: matched.delay,
@@ -218,6 +221,7 @@ export const MainGrid = ({ className }: MainGridProps) => {
                     // set selected package details
                     // convert API dto into PackageDetails expected types
                     const details: selectedPackagedProps = {
+                      id: p.id,
                       title: p.name,
                       description: p.description,
                       delay: p.delay,
@@ -260,6 +264,7 @@ export const MainGrid = ({ className }: MainGridProps) => {
         {/* sortby & package details */}
         <div className='hidden flex-1 flex-col items-start justify-between gap-y-4 lg:flex'>
           <PackageDetails
+            packageId={selectedPackage.id}
             title={selectedPackage.title}
             authTasks={selectedPackage.authTasks}
             assets={selectedPackage.assets}

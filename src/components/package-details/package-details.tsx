@@ -1,8 +1,6 @@
 import { Dialog, DialogContent, DialogTrigger } from '@/components/ui/dialog';
 import { volkhov } from '@/fonts';
 import { cn } from '@/lib';
-import { useAuthStore } from '@/lib/api/auth-store';
-import { useConnectSidebarStore } from '@/store/connect-sidebar-store';
 import { Asset } from '@/types';
 
 import { ClaimModal } from '../claim-modal/claim-modal';
@@ -14,6 +12,7 @@ import { Timeline, TimelineProps } from './timeline';
 import { AuthTaskType } from './types';
 
 interface PackageDetailsProps extends TimelineProps {
+  packageId?: number;
   title: string;
   authTasks: AuthTaskType[];
   assets: Asset[];
@@ -21,6 +20,7 @@ interface PackageDetailsProps extends TimelineProps {
 }
 
 export const PackageDetails = ({
+  packageId,
   title,
   authTasks,
   assets,
@@ -29,8 +29,6 @@ export const PackageDetails = ({
   lastRequestDate,
   lastRequestStatus,
 }: PackageDetailsProps) => {
-  const accessToken = useAuthStore((s) => s.accessToken);
-  const openSidebar = useConnectSidebarStore((s) => s.open);
   const isEmpty = !title;
   return (
     // container
@@ -72,15 +70,7 @@ export const PackageDetails = ({
 
           {/* click to claim button */}
           <Dialog>
-            <DialogTrigger
-              onClick={(e) => {
-                if (!accessToken) {
-                  e.preventDefault();
-                  openSidebar();
-                }
-              }}
-              className='self-center'
-            >
+            <DialogTrigger className='self-center'>
               <ClaimButton className='mt-6 self-center' />
             </DialogTrigger>
             <DialogContent
@@ -88,7 +78,7 @@ export const PackageDetails = ({
               // remove its dialog looks, so only the claim modal is shown
               className='flex items-center justify-center overflow-visible border-none bg-transparent p-0 shadow-none'
             >
-              <ClaimModal packageName={title} assets={assets} />
+              <ClaimModal packageId={packageId || 0} packageName={title} assets={assets} />
             </DialogContent>
           </Dialog>
         </>

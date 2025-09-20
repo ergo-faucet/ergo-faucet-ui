@@ -28,8 +28,6 @@ export interface ChallengeBody {
 export interface ChallengeResponse {
   challenge: string;
 }
-
-// API: GET /controller/packages
 export interface PackageAssetDto {
   id: number;
   tokenId: string;
@@ -53,4 +51,14 @@ export interface PackageDto {
   numberEachUser: number;
   assets: PackageAssetDto[];
   authMethods: PackageAuthMethodDto[];
+}
+
+export interface PackageRequestBody {
+  packageId: number;
+  destAddress: string;
+  captchaToken: string;
+}
+
+export interface PackageRequestResponse {
+  requestId: number;
 }

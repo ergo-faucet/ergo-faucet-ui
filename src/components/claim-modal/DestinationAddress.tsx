@@ -7,17 +7,23 @@ import { cn } from '@/lib';
 interface DestinationAddressProps {
   className?: string;
   onValidationChange?: (isValid: boolean) => void;
+  onAddressChange?: (address: string) => void;
 }
 
-export const DestinationAddress = ({ className, onValidationChange }: DestinationAddressProps) => {
+export const DestinationAddress = ({ className, onValidationChange, onAddressChange }: DestinationAddressProps) => {
   const [destAddress, setDestAddress] = useState('');
 
-  // TODO: actually validate it
-  const isValidAddress = destAddress.trim().length > 10;
+  // Basic Ergo address validation - Ergo addresses typically start with '9' and are 51 characters long
+  // For now, just check minimum length, but this should be improved
+  const isValidAddress = destAddress.trim().length >= 10;
 
   useEffect(() => {
     onValidationChange?.(isValidAddress);
   }, [isValidAddress, onValidationChange]);
+
+  useEffect(() => {
+    onAddressChange?.(destAddress);
+  }, [destAddress, onAddressChange]);
 
   const showError = destAddress.trim().length > 0 && !isValidAddress;
 

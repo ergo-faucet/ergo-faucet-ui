@@ -1,7 +1,5 @@
 import { inter } from '@/fonts';
 import { cn } from '@/lib';
-import { useAuthStore } from '@/lib/api/auth-store';
-import { useConnectSidebarStore } from '@/store/connect-sidebar-store';
 
 export const ClickToCompleteButton = ({ handleOnClick }: { handleOnClick: () => void }) => {
   return (
@@ -21,16 +19,8 @@ interface ClaimButtonProps {
 }
 
 export const ClaimButton = ({ className }: ClaimButtonProps) => {
-  const accessToken = useAuthStore((s) => s.accessToken);
-  const openSidebar = useConnectSidebarStore((s) => s.open);
   return (
     <button
-      onClick={(e) => {
-        if (!accessToken) {
-          e.preventDefault();
-          openSidebar();
-        }
-      }}
       className={cn(
         `flex h-10.5 w-42.5 cursor-pointer items-center justify-center rounded-[12px] border border-green-400
         bg-green-700 text-[18px] leading-none font-extrabold tracking-wider text-white

@@ -85,7 +85,19 @@ export const authFetch = async (url: string, options: RequestInit = {}) => {
   }
 
   if (!response.ok) {
-    throw new Error(`API error: ${response.status}`);
+    let errorMessage = `API error: ${response.status}`;
+    try {
+      const errorData = await response.json();
+      if (errorData.error) {
+        errorMessage = `${errorData.error} (${response.status})`;
+      }
+      if (errorData.code) {
+        errorMessage += ` - Code: ${errorData.code}`;
+      }
+    } catch {
+      // If we can't parse the error response, use the default message
+    }
+    throw new Error(errorMessage);
   }
 
   return response.json();

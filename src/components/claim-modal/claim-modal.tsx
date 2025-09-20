@@ -13,14 +13,16 @@ import { DestinationAddress } from './DestinationAddress';
 import ModalHeader from './modal-header';
 
 interface ClaimModalProps {
+  packageId: number;
   packageName: string;
   assets: Asset[];
 }
 
-export const ClaimModal = ({ packageName, assets }: ClaimModalProps) => {
+export const ClaimModal = ({ packageId, packageName, assets }: ClaimModalProps) => {
   const [recaptchaToken, setRecaptchaToken] = useState<string | null>(null);
   const [recaptchaKey, setRecaptchaKey] = useState(0); // to reload recaptcha
   const [isAddressValid, setIsAddressValid] = useState(false);
+  const [destAddress, setDestAddress] = useState('');
 
   const isRecaptchaRequired = !!RecaptchaSiteKey;
 
@@ -44,7 +46,11 @@ export const ClaimModal = ({ packageName, assets }: ClaimModalProps) => {
       <AssetDetails assets={assets} />
 
       {/* Destination Address */}
-      <DestinationAddress className='mb-6 px-9.5' onValidationChange={setIsAddressValid} />
+      <DestinationAddress
+        className='mb-6 px-9.5'
+        onValidationChange={setIsAddressValid}
+        onAddressChange={setDestAddress}
+      />
 
       {/* ReCAPTCHA */}
       {isRecaptchaRequired && (
@@ -56,7 +62,12 @@ export const ClaimModal = ({ packageName, assets }: ClaimModalProps) => {
         />
       )}
 
-      <ClaimModalButtons disabled={isConfirmDisabled} recaptchaToken={recaptchaToken} />
+      <ClaimModalButtons
+        disabled={isConfirmDisabled}
+        recaptchaToken={recaptchaToken}
+        packageId={packageId}
+        destAddress={destAddress}
+      />
     </div>
   );
 };

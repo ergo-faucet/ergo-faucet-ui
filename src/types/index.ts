@@ -9,4 +9,6 @@ export type {
   ChallengeResponse,
   RefreshTokenResponse,
   PackageDto,
+  PackageRequestBody,
+  PackageRequestResponse,
 } from './api/ergo-auth/types';
