@@ -21,7 +21,6 @@ const AuthTaskInner = ({ authTask }: AuthTaskProps) => {
 
   const openSidebar = useConnectSidebarStore((s) => s.open);
   const accessToken = useAuthStore((s) => s.accessToken);
-  console.log('accessToken', accessToken);
 
   const handleComplete = () => {
     // If user is not logged in, open wallet connect sidebar
