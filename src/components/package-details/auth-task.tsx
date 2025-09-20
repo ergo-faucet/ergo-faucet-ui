@@ -4,6 +4,8 @@ import { usePathname, useSearchParams } from 'next/navigation';
 
 import { ClickToCompleteButton } from '@/components/package-details/buttons';
 import { GenerateAuthTypeIcon } from '@/lib';
+import { useAuthStore } from '@/lib/api/auth-store';
+import { useConnectSidebarStore } from '@/store/connect-sidebar-store';
 
 import { CheckIcon } from './check-icon';
 import { AuthTaskType } from './types';
@@ -15,8 +17,15 @@ interface AuthTaskProps {
 const AuthTask = ({ authTask }: AuthTaskProps) => {
   const pathname = usePathname();
   const searchParams = useSearchParams();
+  const accessToken = useAuthStore((s) => s.accessToken);
+  const openSidebar = useConnectSidebarStore((s) => s.open);
 
   const handleLogin = () => {
+    // If user is not logged in, open wallet connect sidebar
+    if (!accessToken) {
+      openSidebar();
+      return;
+    }
     let endpoint = '';
 
     // Choose endpoint based on auth type
