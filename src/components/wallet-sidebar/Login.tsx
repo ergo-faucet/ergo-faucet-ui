@@ -36,15 +36,12 @@ export const Login = () => {
 
   const { trigger, isMutating, error } = useSWRMutation('/auth/ergo/auth', swrFetcher);
   const [errorDescription, setErrorDescription] = useState('');
-  const [errorSuggestions, setErrorSuggestions] = useState<string[]>([]);
 
   useEffect(() => {
     if (error) {
       setErrorDescription('Authentication request failed');
-      setErrorSuggestions(['Check your internet connection', 'Wait a moment and try again']);
     } else {
       setErrorDescription('');
-      setErrorSuggestions([]);
     }
   }, [error]);
 
@@ -122,13 +119,6 @@ export const Login = () => {
           <AlertTitle className='text-[14px] font-semibold tracking-wide'>Unable to login</AlertTitle>
           <AlertDescription>
             <p className='text-[11px] font-medium'>{errorDescription || (error as Error).message}</p>
-            {errorSuggestions.length > 0 && (
-              <ul className='list-inside list-disc text-[10px]'>
-                {errorSuggestions.map((tip, idx) => (
-                  <li key={idx}>{tip}</li>
-                ))}
-              </ul>
-            )}
           </AlertDescription>
         </Alert>
       )}

@@ -32,7 +32,6 @@ export const WalletSelection = () => {
       const message = error instanceof Error ? error.message : String(error);
       setLocalError(message);
       setErrorDescription('Fetching challenge failed');
-      setErrorSuggestions(['Check your internet connection', 'Wait a moment and try again']);
     } else {
       setLocalError('');
       setErrorDescription('');
@@ -56,7 +55,7 @@ export const WalletSelection = () => {
     setErrorDescription('');
     setErrorSuggestions([]);
 
-    // 1) Wallet operations (connect + addresses)
+    // Wallet operations
     let address = '';
     let addresses: string[] = [];
     try {
@@ -70,17 +69,12 @@ export const WalletSelection = () => {
       const message = error instanceof Error ? error.message : String(error);
       setLocalError(message);
       setErrorDescription('Wallet connection error');
-      setErrorSuggestions([
-        'Ensure your wallet/extension is installed and enabled',
-        'Open the wallet and unlock it',
-        'Approve the connection request in your wallet',
-        'Reload this page and try again',
-      ]);
+      setErrorSuggestions(['Ensure your wallet/extension is installed and enabled', 'Reload this page and try again']);
       return;
     }
 
-    // 2) Backend challenge + signing
-    // 2a) Backend challenge (network)
+    // Backend challenge + signing
+    // Backend challenge (network)
     let challengeResponse: ChallengeResponse;
     try {
       challengeResponse = await trigger({
@@ -91,11 +85,10 @@ export const WalletSelection = () => {
       const message = error instanceof Error ? error.message : String(error);
       setLocalError(message);
       setErrorDescription('Network error while fetching');
-      setErrorSuggestions(['Check your internet connection', 'Wait a moment and try again']);
       return;
     }
 
-    // 2b) Signing
+    //  Signing
     try {
       const proof = await wallet.signMessage(address, challengeResponse.challenge);
       setChallenge(challengeResponse.challenge);
@@ -105,11 +98,6 @@ export const WalletSelection = () => {
       const message = error instanceof Error ? error.message : String(error);
       setLocalError(message);
       setErrorDescription('Signing error');
-      setErrorSuggestions([
-        'Re-open your wallet and try signing again',
-        'If prompted, approve the signing request',
-        'Retry after a short while',
-      ]);
     }
   };
 
