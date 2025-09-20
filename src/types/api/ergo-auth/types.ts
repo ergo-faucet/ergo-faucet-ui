@@ -40,6 +40,7 @@ export interface PackageAssetDto {
 export interface PackageAuthMethodDto {
   id: number;
   name: string; // matches AuthType values
+  status?: string;
 }
 
 export interface PackageDto {
