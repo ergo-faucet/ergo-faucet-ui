@@ -27,6 +27,7 @@ interface selectedPackagedProps {
   authTasks: AuthTaskType[];
   assets: Asset[];
   description: string;
+  delay?: string;
 }
 
 interface MainGridProps {
@@ -39,6 +40,7 @@ export const MainGrid = ({ className }: MainGridProps) => {
     assets: [],
     authTasks: [],
     description: '',
+    delay: undefined,
   });
   const [selectedPackageId, setSelectedPackageId] = useState<string>('');
   const [didInitFromUrl, setDidInitFromUrl] = useState<boolean>(false);
@@ -125,6 +127,7 @@ export const MainGrid = ({ className }: MainGridProps) => {
           const details: selectedPackagedProps = {
             title: matched.name,
             description: matched.description,
+            delay: matched.delay,
             authTasks: (matched.authMethods || []).map((m: PackageDto['authMethods'][number]) => ({
               authType: m.name as AuthType,
               isCompleted: false,
@@ -218,6 +221,7 @@ export const MainGrid = ({ className }: MainGridProps) => {
                     const details: selectedPackagedProps = {
                       title: p.name,
                       description: p.description,
+                      delay: p.delay,
                       authTasks: (p.authMethods || []).map((m: PackageDto['authMethods'][number]) => ({
                         authType: m.name as AuthType,
                         isCompleted: false,
@@ -261,6 +265,7 @@ export const MainGrid = ({ className }: MainGridProps) => {
             authTasks={selectedPackage.authTasks}
             assets={selectedPackage.assets}
             description={selectedPackage.description}
+            cooldownTime={selectedPackage.delay}
           />
         </div>
       </div>

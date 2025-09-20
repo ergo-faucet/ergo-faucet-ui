@@ -31,10 +31,10 @@ export const Timeline = ({ lastRequestStatus, lastRequestDate, cooldownTime }: T
       )}
 
       {/* cooldown time */}
-      {cooldownTime && (
+      {cooldownTime && parseInt(String(cooldownTime)) > 0 && (
         <div className='flex h-15 w-full flex-col items-start justify-start gap-0'>
-          <LineAfterText text='Cooldoown Time' />
-          <CountdownTimer date={cooldownTime} />
+          <LineAfterText text='Cooldown Time' />
+          <CountdownTimer date={Date.now() + parseInt(String(cooldownTime)) * 1000} />
         </div>
       )}
     </div>
