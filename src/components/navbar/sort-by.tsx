@@ -14,18 +14,25 @@ import { cn } from '@/lib/utils';
 
 import { useSortStore } from './sort-store';
 
-const sortOptions = ['Name', 'Release Date'];
+const sortOptions = [
+  { label: 'ID', value: 'id' },
+  { label: 'Name', value: 'name' },
+  { label: 'Open Date', value: 'openAt' },
+  { label: 'Close Date', value: 'closeAt' },
+];
 
 const SortBy = () => {
   const [isAscending, setIsAscending] = useState(true);
-  const [selected, setSelected] = useState('Release Date');
+  const [selected, setSelected] = useState('ID');
 
   const setField = useSortStore((s) => s.setField);
   const setOrder = useSortStore((s) => s.setOrder);
 
   useEffect(() => {
     // reflect current store to UI labels without overriding store (URL may have set it)
-    setSelected(useSortStore.getState().field === 'name' ? 'Name' : 'Release Date');
+    const currentField = useSortStore.getState().field;
+    const currentOption = sortOptions.find((option) => option.value === currentField);
+    setSelected(currentOption?.label || 'ID');
     setIsAscending(useSortStore.getState().order === 'asc');
   }, []);
 
@@ -56,18 +63,18 @@ const SortBy = () => {
           <DropdownMenuLabel className='text-[13px] text-gray-800 dark:text-gray-500'>Sort by</DropdownMenuLabel>
           {sortOptions.map((option) => (
             <DropdownMenuItem
-              key={option}
+              key={option.value}
               onSelect={() => {
-                setSelected(option);
-                setField(option === 'Name' ? 'name' : 'releaseDate');
+                setSelected(option.label);
+                setField(option.value as 'id' | 'name' | 'openAt' | 'closeAt');
               }}
               className={cn(
                 `dark:hover:bg-gray-1000 h-[39px] cursor-pointer rounded-[8px] text-[15px] font-normal
                 hover:bg-gray-300`,
-                selected === option ? 'dark:bg-gray-1000 bg-gray-300 text-black dark:text-white' : '',
+                selected === option.label ? 'dark:bg-gray-1000 bg-gray-300 text-black dark:text-white' : '',
               )}
             >
-              {option}
+              {option.label}
             </DropdownMenuItem>
           ))}
         </DropdownMenuContent>

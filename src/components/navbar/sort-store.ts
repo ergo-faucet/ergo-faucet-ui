@@ -1,6 +1,6 @@
 import { create } from 'zustand';
 
-export type SortField = 'name' | 'releaseDate';
+export type SortField = 'id' | 'name' | 'openAt' | 'closeAt';
 export type SortOrder = 'asc' | 'desc';
 
 interface SortState {
@@ -12,7 +12,7 @@ interface SortState {
 }
 
 export const useSortStore = create<SortState>((set, get) => ({
-  field: 'releaseDate',
+  field: 'id',
   order: 'desc',
   setField: (field) => set({ field }),
   setOrder: (order) => set({ order }),

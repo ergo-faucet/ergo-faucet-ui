@@ -61,14 +61,13 @@ export const MainGrid = ({ className }: MainGridProps) => {
   const setSortField = useSortStore((s) => s.setField);
   const setSortOrder = useSortStore((s) => s.setOrder);
 
-  // Map UI sort field to backend query field
-  const backendSort = sortField === 'name' ? 'name' : 'openAt';
+  // Sort fields now match backend API directly
   const offset = (currentPage - 1) * entriesPerPage;
   const limit = entriesPerPage;
 
   const key = useMemo(
-    () => `/controller/packages?offset=${offset}&limit=${limit}&sort=${backendSort}&order=${sortOrder}`,
-    [offset, limit, backendSort, sortOrder],
+    () => `/controller/packages?offset=${offset}&limit=${limit}&sort=${sortField}&order=${sortOrder}`,
+    [offset, limit, sortField, sortOrder],
   );
 
   const { data, error, isLoading } = useSWR<PackageDto[]>(key, fetcher);
@@ -84,7 +83,7 @@ export const MainGrid = ({ className }: MainGridProps) => {
     const allowedPerPage = [10, 20, 50];
     const desiredPerPage = allowedPerPage.includes(entriesPerPage) ? entriesPerPage : 10;
     const desiredPage = Math.max(1, Number.isFinite(currentPage) ? currentPage : 1);
-    const desiredSort = sortField === 'name' || sortField === 'releaseDate' ? sortField : 'releaseDate';
+    const desiredSort = ['id', 'name', 'openAt', 'closeAt'].includes(sortField) ? sortField : 'id';
     const desiredOrder = sortOrder === 'asc' || sortOrder === 'desc' ? sortOrder : 'desc';
     const desiredSelected = selectedPackageId || '';
 
