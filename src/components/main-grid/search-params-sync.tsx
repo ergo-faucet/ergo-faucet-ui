@@ -16,7 +16,7 @@ const MainGridSearchParamsSync = ({
   entriesPerPage: number;
   setEntriesPerPage: (n: number) => void;
   setCurrentPage: (n: number) => void;
-  setSortField: (v: 'name' | 'releaseDate') => void;
+  setSortField: (v: 'id' | 'name' | 'openAt' | 'closeAt') => void;
   setSortOrder: (v: 'asc' | 'desc') => void;
   setSelectedPackageId: (v: string) => void;
   selectedPackageId: string;
@@ -47,7 +47,7 @@ const MainGridSearchParamsSync = ({
       const pageNum = Math.max(1, parseInt(pageParam));
       if (!Number.isNaN(pageNum)) setCurrentPage(pageNum);
     }
-    if (sortParam === 'name' || sortParam === 'releaseDate') {
+    if (sortParam === 'id' || sortParam === 'name' || sortParam === 'openAt' || sortParam === 'closeAt') {
       setSortField(sortParam);
     }
     if (orderParam === 'asc' || orderParam === 'desc') {
