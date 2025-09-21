@@ -22,9 +22,9 @@ const SortBy = () => {
   return (
     // Container
     <div
-      className={`${viga.className} dark:from-gray-1100 flex h-[57px] min-w-[185px] items-center justify-between
-        rounded-2xl border border-gray-400 bg-gradient-to-r from-gray-100 to-gray-300 bg-[length:200%_200%]
-        bg-bottom-left dark:border-gray-700 dark:to-gray-800 [&_*]:transition-colors`}
+      className={`${viga.className} dark:from-gray-1100 flex h-[57px] min-w-[185px] cursor-pointer items-center
+        justify-between rounded-2xl border border-gray-400 bg-gradient-to-r from-gray-100 to-gray-300
+        bg-[length:200%_200%] bg-bottom-left dark:border-gray-700 dark:to-gray-800 [&_*]:transition-colors`}
     >
       {/* Dropdown Menu */}
       <DropdownMenu>

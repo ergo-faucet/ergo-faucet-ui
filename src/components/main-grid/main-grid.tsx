@@ -5,11 +5,11 @@ import React from 'react';
 
 import { Asset } from '@/types';
 
+import Searchbar from '../navbar/searchbar/searchbar';
+import SortBy from '../navbar/sort-by';
 import { PackageDetails } from '../package-details/package-details';
 import { AuthTaskType } from '../package-details/types';
 import PackagePagination from '../pagination/package-pagination';
-import Searchbar from './searchbar/searchbar';
-import SortBy from './sort-by';
 
 interface selectedPackagedProps {
   title: string;
