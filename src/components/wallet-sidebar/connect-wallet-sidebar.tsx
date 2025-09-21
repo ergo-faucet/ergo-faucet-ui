@@ -6,7 +6,7 @@ import { IoWalletSharp } from 'react-icons/io5';
 import { volkhov } from '@/fonts';
 
 import { SheetClose } from '../ui/sheet';
-import { Login } from './Login';
+import { SignIn } from './signin';
 import { useViewStore } from './store';
 import { WalletSelection } from './wallet-selection';
 
@@ -32,7 +32,7 @@ const ConnectWalletSidebar = () => {
       </div>
 
       {state === 'selection' && <WalletSelection />}
-      {state === 'login' && <Login />}
+      {state === 'login' && <SignIn />}
     </div>
   );
 };

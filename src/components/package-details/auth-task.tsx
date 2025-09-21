@@ -3,10 +3,10 @@
 import { usePathname, useSearchParams } from 'next/navigation';
 
 import { ClickToCompleteButton } from '@/components/package-details/buttons';
-import { BackendUrl } from '@/configs';
-import { GenerateAuthTypeIcon } from '@/lib';
+import { authFetch, GenerateAuthTypeIcon } from '@/lib';
 import { useAuthStore } from '@/lib/api/auth-store';
 import { useConnectSidebarStore } from '@/store/connect-sidebar-store';
+import { AuthLoginResponse } from '@/types';
 
 import { CheckIcon } from './check-icon';
 import { AuthTaskType } from './types';
@@ -27,34 +27,19 @@ const AuthTask = ({ authTask }: AuthTaskProps) => {
       openSidebar();
       return;
     }
-    let endpoint = '';
 
     // Choose endpoint based on auth type
-    if (authTask.authType === 'discord') {
-      endpoint = '/auth/discord/login';
-    } else if (authTask.authType === 'google') {
-      endpoint = '/auth/google/login';
-    } else if (authTask.authType === 'x-platform') {
-      endpoint = '/auth/x-platform/login';
-    } else {
-      return;
-    }
+    const endpoint = `/auth/${authTask.authType}/login`;
 
     // Build state as current route (path + query if present)
     const currentQuery = searchParams.toString();
     const frontState = currentQuery ? `${pathname}?${currentQuery}` : pathname;
 
-    await fetch(`${BackendUrl}${endpoint}`, {
+    const res: AuthLoginResponse = await authFetch(`${endpoint}?state=${encodeURIComponent(frontState)}`, {
       method: 'GET',
-      headers: {
-        Authorization: `Bearer ${accessToken}`,
-      },
-      redirect: 'follow',
     });
 
-    // Redirect browser directly to backend OAuth endpoint with state
-    const url = `${process.env.NEXT_PUBLIC_BACKEND_URL}${endpoint}?state=${encodeURIComponent(frontState)}`;
-    window.location.href = url;
+    window.location.href = res.redirectURL;
   };
 
   return (
