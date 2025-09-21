@@ -3,6 +3,7 @@
 import { usePathname, useSearchParams } from 'next/navigation';
 
 import { ClickToCompleteButton } from '@/components/package-details/buttons';
+import { BackendUrl } from '@/configs';
 import { GenerateAuthTypeIcon } from '@/lib';
 import { useAuthStore } from '@/lib/api/auth-store';
 import { useConnectSidebarStore } from '@/store/connect-sidebar-store';
@@ -20,7 +21,7 @@ const AuthTask = ({ authTask }: AuthTaskProps) => {
   const accessToken = useAuthStore((s) => s.accessToken);
   const openSidebar = useConnectSidebarStore((s) => s.open);
 
-  const handleLogin = () => {
+  const handleLogin = async () => {
     // If user is not logged in, open wallet connect sidebar
     if (!accessToken) {
       openSidebar();
@@ -42,6 +43,14 @@ const AuthTask = ({ authTask }: AuthTaskProps) => {
     // Build state as current route (path + query if present)
     const currentQuery = searchParams.toString();
     const frontState = currentQuery ? `${pathname}?${currentQuery}` : pathname;
+
+    await fetch(`${BackendUrl}${endpoint}`, {
+      method: 'GET',
+      headers: {
+        Authorization: `Bearer ${accessToken}`,
+      },
+      redirect: 'follow',
+    });
 
     // Redirect browser directly to backend OAuth endpoint with state
     const url = `${process.env.NEXT_PUBLIC_BACKEND_URL}${endpoint}?state=${encodeURIComponent(frontState)}`;
