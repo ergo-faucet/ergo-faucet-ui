@@ -6,7 +6,7 @@ import { IoWalletSharp } from 'react-icons/io5';
 import { volkhov } from '@/fonts';
 
 import { SheetClose } from '../ui/sheet';
-import { Login } from './Login';
+import { Login } from './login';
 import { useViewStore } from './store';
 import { WalletSelection } from './wallet-selection';
 
