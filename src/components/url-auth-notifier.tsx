@@ -3,7 +3,7 @@
 import { usePathname, useRouter, useSearchParams } from 'next/navigation';
 import { useEffect, useRef } from 'react';
 
-import { toast } from '@/components/ui/sonner';
+import { toast } from 'sonner';
 
 /**
  * Listens for auth callback query params and shows a Sonner notification.
@@ -17,13 +17,13 @@ export const URLAuthNotifier = () => {
 
   useEffect(() => {
     if (hasHandledRef.current) return; // avoid double-run in React Strict Mode
+    if (!searchParams) return;
 
     let authMethod = searchParams.get('authMethod');
     let status = searchParams.get('authMethodStatus');
     let message = searchParams.get('message');
 
     // Fallback parsing for malformed URLs with an extra '?' before auth params
-    // Example: ...&selected=1?authMethod=google&authMethodStatus=success&message=...
     if (!authMethod || !status) {
       const href = typeof window !== 'undefined' ? window.location.href : '';
       const getParam = (name: string) => {
@@ -42,7 +42,7 @@ export const URLAuthNotifier = () => {
     const title = `${authMethod} authentication`;
     const description = message ?? (isSuccess ? 'Authentication succeeded.' : 'Authentication failed.');
 
-    // show toast slightly delayed to ensure Toaster is mounted
+    // small delay to ensure Toaster is mounted
     setTimeout(() => {
       if (isSuccess) {
         toast.success(title, { description });
@@ -51,12 +51,10 @@ export const URLAuthNotifier = () => {
       }
     }, 50);
 
-    // mark handled to avoid duplicate toasts
     hasHandledRef.current = true;
 
-    // Defer URL cleaning more to avoid interrupting the toast render
+    // Defer URL cleaning a bit so the toast can render
     setTimeout(() => {
-      // remove auth-related params from URL (normal case)
       const newParams = new URLSearchParams(searchParams.toString());
       newParams.delete('authMethod');
       newParams.delete('authMethodStatus');
@@ -74,15 +72,13 @@ export const URLAuthNotifier = () => {
         if (cutIdx >= 0) {
           const origin = window.location.origin;
           const base = href.substring(0, cutIdx);
-          // convert absolute to relative for Next router
           url = base.startsWith(origin) ? base.substring(origin.length) : base;
         }
       }
 
       router.replace(url);
     }, 400);
-    // eslint-disable-next-line react-hooks/exhaustive-deps
-  }, []);
+  }, [searchParams, pathname, router]);
 
   return null;
 };

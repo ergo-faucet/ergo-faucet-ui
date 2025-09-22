@@ -1,21 +1,5 @@
 import { WalletConnector } from './wallet-connector';
 
-/**
- * NautilusConnector
- *
- * This class implements the WalletConnector interface for the Nautilus wallet.
- * Nautilus is a browser extension wallet for Ergo that allows connecting,
- * fetching addresses, and signing messages or transactions directly from the browser.
- *
- * @example
- * import { WalletManager } from '@/lib/wallets';
- * import { NautilusConnector } from '@/lib/wallets/nautilus-connector';
- *
- * const wallet = new WalletManager(new NautilusConnector());
- * await wallet.connect();
- * const address = await wallet.getAddress();
- * const signature = await wallet.signMessage(address, "Hello world");
- */
 export class NautilusConnector implements WalletConnector {
   /** Name of the wallet connector */
   name = 'nautilus';

@@ -29,7 +29,6 @@ export interface ChallengeResponse {
   challenge: string;
 }
 
-// API: GET /controller/packages
 export interface PackageAssetDto {
   id: number;
   tokenId: string;
@@ -39,7 +38,7 @@ export interface PackageAssetDto {
 
 export interface PackageAuthMethodDto {
   id: number;
-  name: string; // matches AuthType values
+  name: string;
 }
 
 export interface PackageDto {

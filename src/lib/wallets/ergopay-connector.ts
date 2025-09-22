@@ -1,17 +1,5 @@
 import { WalletConnector } from './wallet-connector';
 
-/**
- * ErgoPayConnector
- *
- * This class implements the WalletConnector interface as a placeholder for the ErgoPay wallet.
- *
- * @example
- * import { WalletManager } from '@/lib/wallets';
- * import { ErgoPayConnector } from '@/lib/wallets/ergopay-connector';
- *
- * const wallet = new WalletManager(new ErgoPayConnector());
- * await wallet.connect();
- */
 export class ErgoPayConnector implements WalletConnector {
   /** Name of the wallet connector */
   name = 'ergopay';
