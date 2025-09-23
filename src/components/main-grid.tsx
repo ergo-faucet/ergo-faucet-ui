@@ -1,7 +1,7 @@
 'use client';
 
 import { useRouter, useSearchParams } from 'next/navigation';
-import { useEffect, useMemo, useState } from 'react';
+import { useEffect, useMemo, useState, Suspense } from 'react';
 import React from 'react';
 
 import { toast } from 'sonner';
@@ -32,7 +32,7 @@ interface MainGridProps {
   className?: string;
 }
 
-export const MainGrid = ({ className }: MainGridProps) => {
+function MainGridInner({ className }: MainGridProps) {
   const [selectedPackage, setSelectedPackage] = useState<selectedPackagedProps>({
     title: '',
     assets: [],
@@ -88,7 +88,6 @@ export const MainGrid = ({ className }: MainGridProps) => {
       if (allowedPerPage.includes(per)) {
         if (per !== entriesPerPage) setEntriesPerPage(per);
       } else {
-        // fall back to default 10 if invalid
         if (entriesPerPage !== 10) setEntriesPerPage(10);
       }
     }
@@ -109,7 +108,7 @@ export const MainGrid = ({ className }: MainGridProps) => {
     // eslint-disable-next-line react-hooks/exhaustive-deps
   }, []);
 
-  // Keep selectedPackageId in sync with URL when params change (e.g., back/forward or external navigation)
+  // Keep selectedPackageId in sync with URL
   useEffect(() => {
     const sp = new URLSearchParams(searchParams?.toString());
     const selectedParam = sp.get('selected') || '';
@@ -118,7 +117,7 @@ export const MainGrid = ({ className }: MainGridProps) => {
     }
   }, [searchParams, selectedPackageId]);
 
-  // Keep URL in sync with store values without causing loops
+  // Keep URL in sync with store values
   useEffect(() => {
     if (!didInitFromUrl) return;
     const currentSearch = typeof window !== 'undefined' ? window.location.search : searchParams?.toString() || '';
@@ -163,7 +162,6 @@ export const MainGrid = ({ className }: MainGridProps) => {
       setTotalEntries(approximateTotal);
       setTotalPages(Math.max(1, Math.ceil(approximateTotal / entriesPerPage)));
 
-      // If we have a selected id and the data for the current page includes it, populate selectedPackage
       if (selectedPackageId) {
         const matched = (data as PackageDto[]).find((p) => String(p.id || p.name) === selectedPackageId);
         if (matched) {
@@ -187,7 +185,6 @@ export const MainGrid = ({ className }: MainGridProps) => {
     }
   }, [data, entriesPerPage, offset, limit, setTotalEntries, setTotalPages, selectedPackageId]);
 
-  // Show toast for load errors
   useEffect(() => {
     if (error) {
       let message = 'Failed to load packages';
@@ -202,12 +199,9 @@ export const MainGrid = ({ className }: MainGridProps) => {
   }, [error]);
 
   return (
-    // container
     <div className={cn('flex flex-col gap-4', className)}>
       <div className='flex w-full flex-1 items-stretch justify-between gap-4'>
-        {/* packages &  searchbar */}
         <div className='flex w-full flex-col items-start justify-between gap-y-4'>
-          {/* packages */}
           <div
             className={cn('justfiy-around grid w-full grid-cols-1 gap-4 md:grid-cols-2 xl:grid-cols-3 2xl:grid-cols-4')}
           >
@@ -245,8 +239,6 @@ export const MainGrid = ({ className }: MainGridProps) => {
                   key={p.id || p.name}
                   className='w-full cursor-pointer'
                   onClick={() => {
-                    // set selected package details
-                    // convert API dto into PackageDetails expected types
                     const details: selectedPackagedProps = {
                       title: p.name,
                       description: p.description,
@@ -261,7 +253,6 @@ export const MainGrid = ({ className }: MainGridProps) => {
                         tokenId: a.tokenId,
                       })),
                     };
-                    // local state setter
                     setSelectedPackage(details);
                     setSelectedPackageId(String(p.id || p.name));
                   }}
@@ -288,7 +279,6 @@ export const MainGrid = ({ className }: MainGridProps) => {
           </div>
         </div>
 
-        {/* sortby & package details */}
         <div className='hidden flex-1 flex-col items-start justify-between gap-y-4 lg:flex'>
           <PackageDetails
             title={selectedPackage.title}
@@ -298,8 +288,15 @@ export const MainGrid = ({ className }: MainGridProps) => {
           />
         </div>
       </div>
-      {/* pagination */}
       <PackagePagination />
     </div>
+  );
+}
+
+export const MainGrid = (props: MainGridProps) => {
+  return (
+    <Suspense fallback={<div>Loading packages...</div>}>
+      <MainGridInner {...props} />
+    </Suspense>
   );
 };

@@ -1,7 +1,7 @@
 'use client';
 
 import { usePathname, useRouter, useSearchParams } from 'next/navigation';
-import { useEffect, useRef } from 'react';
+import { useEffect, useRef, Suspense } from 'react';
 
 import { toast } from 'sonner';
 
@@ -9,7 +9,7 @@ import { toast } from 'sonner';
  * Listens for auth callback query params and shows a Sonner notification.
  * Then cleans the URL (removes auth-related params) without a full reload.
  */
-export const URLAuthNotifier = () => {
+const InnerURLAuthNotifier = () => {
   const searchParams = useSearchParams();
   const router = useRouter();
   const pathname = usePathname();
@@ -81,4 +81,12 @@ export const URLAuthNotifier = () => {
   }, [searchParams, pathname, router]);
 
   return null;
+};
+
+export const URLAuthNotifier = () => {
+  return (
+    <Suspense fallback={null}>
+      <InnerURLAuthNotifier />
+    </Suspense>
+  );
 };
