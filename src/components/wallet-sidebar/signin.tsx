@@ -1,6 +1,6 @@
 'use client';
 
-import { useRef, useState } from 'react';
+import { useEffect, useRef, useState } from 'react';
 import ReCAPTCHA from 'react-google-recaptcha';
 
 import { AlertCircleIcon } from 'lucide-react';
@@ -8,8 +8,8 @@ import useSWRMutation from 'swr/mutation';
 
 import { RecaptchaSiteKey } from '@/configs';
 import { inter } from '@/fonts';
-import { swrFetcher, cn } from '@/lib';
-import { useAuthStore } from '@/lib/api/auth-store';
+import { cn } from '@/lib';
+import { swrFetcher, useAuthStore } from '@/lib/api';
 import { useWalletStore } from '@/store/wallet-store';
 import { AuthenticationResponse } from '@/types';
 import { AuthenticationBody } from '@/types';
@@ -37,6 +37,15 @@ export const SignIn = () => {
   const isLoginDisabled = !isAddressValid || (isRecaptchaRequired && !recaptchaToken);
 
   const { trigger, isMutating, error } = useSWRMutation('/auth/ergo/auth', swrFetcher);
+  const [errorDescription, setErrorDescription] = useState('');
+
+  useEffect(() => {
+    if (error) {
+      setErrorDescription('Authentication request failed');
+    } else {
+      setErrorDescription('');
+    }
+  }, [error]);
 
   const handleRecaptchaChange = (token: string | null) => {
     setRecaptchaToken(token);
@@ -114,11 +123,7 @@ export const SignIn = () => {
           <AlertCircleIcon />
           <AlertTitle className='text-[14px] font-semibold tracking-wide'>Unable to login</AlertTitle>
           <AlertDescription>
-            <p className='text-[11px] font-medium'>{(error as Error).message}</p>
-            <ul className='list-inside list-disc text-[10px]'>
-              <li>Check your internet connection</li>
-              <li>Try after a while</li>
-            </ul>
+            <p className='text-[11px] font-medium'>{errorDescription || (error as Error).message}</p>
           </AlertDescription>
         </Alert>
       )}
