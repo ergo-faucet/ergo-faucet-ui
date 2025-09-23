@@ -18,7 +18,7 @@ import { SheetClose } from '../ui/sheet';
 import { InfoBox } from './info-box';
 import { useViewStore } from './store';
 
-export const Login = () => {
+export const SignIn = () => {
   const setState = useViewStore((s) => s.setState);
   const challenge = useViewStore((s) => s.challenge);
   const walletAddress = useViewStore((s) => s.walletAddress);
