@@ -1,3 +1,5 @@
+import { Asset } from '@/types';
+
 export interface AuthenticationBody {
   address: string;
   challenge: string;
@@ -27,4 +29,18 @@ export interface ChallengeBody {
 
 export interface ChallengeResponse {
   challenge: string;
+}
+
+export interface GetPackagesResponse {
+  id: number;
+  name: string;
+  description: string;
+  openAt: number;
+  closeAt: number;
+  assets: Asset[];
+  authMethods: {
+    id: number;
+    name: string;
+    status?: string;
+  }[];
 }
