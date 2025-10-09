@@ -40,6 +40,7 @@
   "devDependencies": {
     "@eslint/eslintrc": "^3.3.1",
     "@tailwindcss/postcss": "^4.0.0",
+    "@trivago/prettier-plugin-sort-imports": "^5.2.2",
     "@types/decimal.js": "^0.0.32",
     "@types/node": "^24.0.13",
     "@types/react": "^19.1.8",
