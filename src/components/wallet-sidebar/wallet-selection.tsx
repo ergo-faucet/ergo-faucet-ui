@@ -3,7 +3,7 @@
 import { useEffect, useState } from 'react';
 
 import { AlertCircleIcon } from 'lucide-react';
-import useSWRMutation from 'swr/mutation';
+import { mutate } from 'swr';
 
 import { inter } from '@/fonts';
 import { swrFetcher } from '@/lib/api';
@@ -22,17 +22,17 @@ export const WalletSelection = () => {
   const setChallenge = useViewStore((s) => s.setChallenge);
   const setWalletAddress = useViewStore((s) => s.setWalletAddress);
   const [localError, setLocalError] = useState('');
-
-  const { trigger, isMutating, error } = useSWRMutation('/auth/ergo/challenge', swrFetcher);
+  const [errorDescription, setErrorDescription] = useState('');
+  const [errorSuggestions, setErrorSuggestions] = useState<string[]>([]);
 
   useEffect(() => {
-    if (error) {
-      const message = error instanceof Error ? error.message : String(error);
-      setLocalError(message);
+    if (localError) {
+      setErrorDescription('Network or wallet error occurred');
     } else {
-      setLocalError('');
+      setErrorDescription('');
+      setErrorSuggestions([]);
     }
-  }, [error]);
+  }, [localError]);
 
   const handleConnectButtonOnClick = async () => {
     let wallet;
@@ -45,31 +45,60 @@ export const WalletSelection = () => {
         wallet = new WalletManager(new ErgoPayConnector());
         break;
     }
+
+    // reset previous errors
+    setLocalError('');
+    setErrorDescription('');
+    setErrorSuggestions([]);
+
+    // Wallet operations
+    let address = '';
+    let addresses: string[] = [];
     try {
-      // Connect wallet
       const connected = await wallet.connect();
       if (!connected) throw new Error('Wallet connection rejected');
 
-      // Get addresses (used + unused) and change address
-      const addresses = await wallet.getAddresses();
+      addresses = await wallet.getAddresses();
       const changedAddress = await wallet.getChangeAddress();
-      const address = changedAddress || addresses[0];
+      address = changedAddress || addresses[0];
       setWalletAddress(address);
+    } catch (error) {
+      const message = error instanceof Error ? error.message : String(error);
+      setLocalError(message);
+      setErrorDescription('Wallet connection error');
+      setErrorSuggestions(['Ensure your wallet/extension is installed and enabled', 'Reload this page and try again']);
+      return;
+    }
 
-      // Request challenge from backend
-      const challengeResponse: ChallengeResponse = await trigger({
-        method: 'POST',
-        body: JSON.stringify({ changedAddress: address, addresses }),
-      });
+    // Backend challenge + signing using swrFetcher via mutate
+    let challengeResponse: ChallengeResponse;
+    try {
+      challengeResponse = await mutate(
+        '/auth/ergo/challenge',
+        () =>
+          swrFetcher('/auth/ergo/challenge', {
+            method: 'POST',
+            body: JSON.stringify({ changedAddress: address, addresses }),
+          }),
+        false, // do not revalidate GET automatically
+      );
+    } catch (error) {
+      const message = error instanceof Error ? error.message : String(error);
+      setLocalError(message);
+      setErrorDescription('Network error while fetching challenge');
+      return;
+    }
 
-      // Sign challenge
+    // Signing
+    try {
       const proof = await wallet.signMessage(address, challengeResponse.challenge);
       setChallenge(challengeResponse.challenge);
       setProof(proof);
-
       setState('login');
     } catch (error) {
-      if (error instanceof Error) setLocalError(error.message);
+      const message = error instanceof Error ? error.message : String(error);
+      setLocalError(message);
+      setErrorDescription('Signing error');
     }
   };
 
@@ -77,7 +106,6 @@ export const WalletSelection = () => {
     <>
       {/* wallets */}
       <div className='flex flex-col space-y-2'>
-        {/* Natilus */}
         <Wallet
           onClick={() => setSelected('nautilus')}
           src='/icons/natilus-40x40.png'
@@ -86,7 +114,6 @@ export const WalletSelection = () => {
           name='Natilus'
           selected={selected == 'nautilus'}
         />
-        {/* Ergo Pay */}
         {/* <Wallet
           onClick={() => setSelected('ergopay')}
           alt='Ergo Pay icon'
@@ -98,13 +125,12 @@ export const WalletSelection = () => {
 
       {/* connect button */}
       <button
-        disabled={isMutating}
-        className={`h-11 w-[273px] cursor-pointer rounded-xl border border-green-400 px-4 whitespace-nowrap
-          ${isMutating ? 'cursor-not-allowed bg-gray-500' : 'bg-green-700 hover:bg-green-900'} text-[17px]
-          tracking-wider text-white shadow-[-2px_2px_6px_0_rgba(0,0,0)]/20 shadow-black dark:shadow-white`}
+        className={`h-11 w-25 cursor-pointer rounded-xl border border-green-400
+          ${false ? 'cursor-not-allowed bg-gray-500' : 'bg-green-700 hover:bg-green-900'} text-[17px] tracking-wider
+          text-white shadow-[-2px_2px_6px_0_rgba(0,0,0)]/20 shadow-black dark:shadow-white`}
         onClick={handleConnectButtonOnClick}
       >
-        {isMutating ? 'Connecting...' : 'Connect'}
+        Connect
       </button>
 
       {/* alert */}
@@ -113,11 +139,14 @@ export const WalletSelection = () => {
           <AlertCircleIcon />
           <AlertTitle className='text-[14px] font-semibold tracking-wide'>Unable to login</AlertTitle>
           <AlertDescription>
-            <p className='text-[11px] font-medium'>{localError}</p>
-            <ul className='list-inside list-disc text-[10px]'>
-              <li>Check if you have the tools needed</li>
-              <li>Try after a while</li>
-            </ul>
+            <p className='text-[11px] font-medium'>{errorDescription || localError}</p>
+            {errorSuggestions.length > 0 && (
+              <ul className='list-inside list-disc text-[10px]'>
+                {errorSuggestions.map((tip, idx) => (
+                  <li key={idx}>{tip}</li>
+                ))}
+              </ul>
+            )}
           </AlertDescription>
         </Alert>
       )}
