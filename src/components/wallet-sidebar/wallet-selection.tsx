@@ -3,10 +3,9 @@
 import { useEffect, useState } from 'react';
 
 import { AlertCircleIcon } from 'lucide-react';
-import { mutate } from 'swr';
 
 import { inter } from '@/fonts';
-import { swrFetcher } from '@/lib/api';
+import { apiFetch } from '@/lib/api';
 import { cn } from '@/lib/utils';
 import { WalletManager, NautilusConnector, ErgoPayConnector } from '@/lib/wallets';
 import { ChallengeResponse } from '@/types';
@@ -70,18 +69,13 @@ export const WalletSelection = () => {
       return;
     }
 
-    // Backend challenge + signing using swrFetcher via mutate
     let challengeResponse: ChallengeResponse;
     try {
-      challengeResponse = await mutate(
-        '/auth/ergo/challenge',
-        () =>
-          swrFetcher('/auth/ergo/challenge', {
-            method: 'POST',
-            body: JSON.stringify({ changedAddress: address, addresses }),
-          }),
-        false, // do not revalidate GET automatically
-      );
+      // Request challenge from backend
+      challengeResponse = await apiFetch('/auth/ergo/challenge', {
+        method: 'POST',
+        body: JSON.stringify({ changedAddress: address, addresses }),
+      });
     } catch (error) {
       const message = error instanceof Error ? error.message : String(error);
       setLocalError(message);
