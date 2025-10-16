@@ -28,3 +28,29 @@ export interface ChallengeBody {
 export interface ChallengeResponse {
   challenge: string;
 }
+
+export interface PackageAssetDto {
+  id: number;
+  tokenId: string;
+  amount: string;
+  usageDescription: string;
+}
+
+export interface PackageAuthMethodDto {
+  id: number;
+  name: string;
+  status?: string;
+}
+
+export interface GetPackagesResponse {
+  id: number;
+  name: string;
+  description: string;
+  type: string;
+  openAt: number;
+  closeAt: number;
+  delay: string;
+  numberEachUser: number;
+  assets: PackageAssetDto[];
+  authMethods: PackageAuthMethodDto[];
+}
