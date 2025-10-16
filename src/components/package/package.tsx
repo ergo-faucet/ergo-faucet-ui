@@ -8,8 +8,8 @@ interface PackageProps {
   title: string;
   assets: Asset[];
   authTypes: AuthType[];
-  startDate: Date;
-  endDate: Date;
+  startDate?: Date;
+  endDate?: Date;
   onClick?: React.MouseEventHandler<HTMLDivElement>;
 }
 
