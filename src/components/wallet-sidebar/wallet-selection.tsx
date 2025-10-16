@@ -87,13 +87,13 @@ export const WalletSelection = () => {
           selected={selected == 'nautilus'}
         />
         {/* Ergo Pay */}
-        <Wallet
+        {/* <Wallet
           onClick={() => setSelected('ergopay')}
           alt='Ergo Pay icon'
           size={40}
           name='Ergo Pay'
           selected={selected == 'ergopay'}
-        />
+        /> */}
       </div>
 
       {/* connect button */}
