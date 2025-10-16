@@ -3,10 +3,9 @@
 import { useEffect, useState } from 'react';
 
 import { AlertCircleIcon } from 'lucide-react';
-import useSWRMutation from 'swr/mutation';
 
 import { inter } from '@/fonts';
-import { swrFetcher } from '@/lib/api';
+import { apiFetch } from '@/lib/api';
 import { cn } from '@/lib/utils';
 import { WalletManager, NautilusConnector, ErgoPayConnector } from '@/lib/wallets';
 import { ChallengeResponse } from '@/types';
@@ -25,19 +24,14 @@ export const WalletSelection = () => {
   const [errorDescription, setErrorDescription] = useState('');
   const [errorSuggestions, setErrorSuggestions] = useState<string[]>([]);
 
-  const { trigger, isMutating, error } = useSWRMutation('/auth/ergo/challenge', swrFetcher);
-
   useEffect(() => {
-    if (error) {
-      const message = error instanceof Error ? error.message : String(error);
-      setLocalError(message);
-      setErrorDescription('Fetching challenge failed');
+    if (localError) {
+      setErrorDescription('Network or wallet error occurred');
     } else {
-      setLocalError('');
       setErrorDescription('');
       setErrorSuggestions([]);
     }
-  }, [error]);
+  }, [localError]);
 
   const handleConnectButtonOnClick = async () => {
     let wallet;
@@ -50,6 +44,7 @@ export const WalletSelection = () => {
         wallet = new WalletManager(new ErgoPayConnector());
         break;
     }
+
     // reset previous errors
     setLocalError('');
     setErrorDescription('');
@@ -61,6 +56,7 @@ export const WalletSelection = () => {
     try {
       const connected = await wallet.connect();
       if (!connected) throw new Error('Wallet connection rejected');
+
       addresses = await wallet.getAddresses();
       const changedAddress = await wallet.getChangeAddress();
       address = changedAddress || addresses[0];
@@ -73,22 +69,21 @@ export const WalletSelection = () => {
       return;
     }
 
-    // Backend challenge + signing
-    // Backend challenge (network)
     let challengeResponse: ChallengeResponse;
     try {
-      challengeResponse = await trigger({
+      // Request challenge from backend
+      challengeResponse = await apiFetch('/auth/ergo/challenge', {
         method: 'POST',
         body: JSON.stringify({ changedAddress: address, addresses }),
       });
     } catch (error) {
       const message = error instanceof Error ? error.message : String(error);
       setLocalError(message);
-      setErrorDescription('Network error while fetching');
+      setErrorDescription('Network error while fetching challenge');
       return;
     }
 
-    //  Signing
+    // Signing
     try {
       const proof = await wallet.signMessage(address, challengeResponse.challenge);
       setChallenge(challengeResponse.challenge);
@@ -105,7 +100,6 @@ export const WalletSelection = () => {
     <>
       {/* wallets */}
       <div className='flex flex-col space-y-2'>
-        {/* Natilus */}
         <Wallet
           onClick={() => setSelected('nautilus')}
           src='/icons/natilus-40x40.png'
@@ -114,7 +108,6 @@ export const WalletSelection = () => {
           name='Natilus'
           selected={selected == 'nautilus'}
         />
-        {/* Ergo Pay */}
         {/* <Wallet
           onClick={() => setSelected('ergopay')}
           alt='Ergo Pay icon'
@@ -126,13 +119,12 @@ export const WalletSelection = () => {
 
       {/* connect button */}
       <button
-        disabled={isMutating}
         className={`h-11 w-25 cursor-pointer rounded-xl border border-green-400
-          ${isMutating ? 'cursor-not-allowed bg-gray-500' : 'bg-green-700 hover:bg-green-900'} text-[17px]
-          tracking-wider text-white shadow-[-2px_2px_6px_0_rgba(0,0,0)]/20 shadow-black dark:shadow-white`}
+          ${false ? 'cursor-not-allowed bg-gray-500' : 'bg-green-700 hover:bg-green-900'} text-[17px] tracking-wider
+          text-white shadow-[-2px_2px_6px_0_rgba(0,0,0)]/20 shadow-black dark:shadow-white`}
         onClick={handleConnectButtonOnClick}
       >
-        {isMutating ? 'Connecting...' : 'Connect'}
+        Connect
       </button>
 
       {/* alert */}
