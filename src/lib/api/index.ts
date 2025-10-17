@@ -1,3 +1,3 @@
 export { apiFetch, swrFetcher } from './api-fetch';
 export { authFetch, swrAuthFetcher } from './auth-fetch';
-export type { useAuthStore } from './auth-store';
+export { useAuthStore } from './auth-store';
