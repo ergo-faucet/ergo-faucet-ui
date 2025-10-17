@@ -8,10 +8,10 @@ import useSWRMutation from 'swr/mutation';
 
 import { RecaptchaSiteKey } from '@/configs';
 import { inter } from '@/fonts';
-import { swrFetcher } from '@/lib/api';
+import { swrFetcher, useAuthStore } from '@/lib/api';
 import { cn } from '@/lib/utils';
 import { useWalletStore } from '@/store/wallet-store';
-import { AuthenticationBody } from '@/types';
+import { AuthenticationBody, AuthenticationResponse } from '@/types';
 
 import { Alert, AlertDescription, AlertTitle } from '../ui/alert';
 import { SheetClose } from '../ui/sheet';
@@ -27,6 +27,7 @@ export const SignIn = () => {
   const [recaptchaToken, setRecaptchaToken] = useState<string | null>(null);
   const [recaptchaKey, setRecaptchaKey] = useState(0); // to reload recaptcha
   const closeRef = useRef<HTMLButtonElement | null>(null);
+  const setAccessToken = useAuthStore((e) => e.setAccessToken);
 
   const isRecaptchaRequired = !!RecaptchaSiteKey;
 
@@ -63,11 +64,14 @@ export const SignIn = () => {
       captchaToken: 'test-token',
     };
 
-    await trigger({
+    const response: AuthenticationResponse = await trigger({
       method: 'POST',
       body: JSON.stringify(body),
       credentials: 'include',
     });
+
+    // set access token
+    setAccessToken(response.accessToken);
 
     // go to selection mode again
     setState('selection');
