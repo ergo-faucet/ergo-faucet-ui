@@ -6,6 +6,7 @@ import ReCAPTCHA from 'react-google-recaptcha';
 import { RecaptchaSiteKey } from '@/configs';
 import { inter } from '@/fonts';
 import { Asset } from '@/types';
+import { ClaimPackageRequestBody } from '@/types';
 
 import AssetDetails from './asset-details';
 import { ClaimModalButtons } from './claim-modal-buttons';
@@ -13,19 +14,26 @@ import { DestinationAddress } from './DestinationAddress';
 import ModalHeader from './modal-header';
 
 interface ClaimModalProps {
+  packageId: number;
   packageName: string;
   assets: Asset[];
 }
 
-export const ClaimModal = ({ packageName, assets }: ClaimModalProps) => {
+export const ClaimModal = ({ packageId, packageName, assets }: ClaimModalProps) => {
   const [recaptchaToken, setRecaptchaToken] = useState<string | null>(null);
   const [recaptchaKey, setRecaptchaKey] = useState(0); // to reload recaptcha
   const [isAddressValid, setIsAddressValid] = useState(false);
+  const [reqBody, setReqBody] = useState<ClaimPackageRequestBody>({
+    packageId: packageId,
+    destAddress: 'string',
+    captchaToken: 'string',
+  });
 
   const isRecaptchaRequired = !!RecaptchaSiteKey;
 
   const handleRecaptchaChange = (token: string | null) => {
     setRecaptchaToken(token);
+    setReqBody((prev) => ({ ...prev, captchaToken: token || '' }));
   };
 
   const handleRecaptchaExpired = () => {
@@ -44,7 +52,11 @@ export const ClaimModal = ({ packageName, assets }: ClaimModalProps) => {
       <AssetDetails assets={assets} />
 
       {/* Destination Address */}
-      <DestinationAddress className='mb-6 px-9.5' onValidationChange={setIsAddressValid} />
+      <DestinationAddress
+        className='mb-6 px-9.5'
+        onValidationChange={setIsAddressValid}
+        onDestAddressChange={(address) => setReqBody((prev) => ({ ...prev, destAddress: address }))}
+      />
 
       {/* ReCAPTCHA */}
       {isRecaptchaRequired && (
@@ -56,7 +68,7 @@ export const ClaimModal = ({ packageName, assets }: ClaimModalProps) => {
         />
       )}
 
-      <ClaimModalButtons disabled={isConfirmDisabled} recaptchaToken={recaptchaToken} />
+      <ClaimModalButtons disabled={isConfirmDisabled} reqBody={reqBody} />
     </div>
   );
 };

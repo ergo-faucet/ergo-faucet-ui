@@ -10,4 +10,8 @@ export type {
   RefreshTokenResponse,
   GetPackagesResponse,
   AuthLoginResponse,
+  ClaimPackageRequestBody,
+  ClaimPackageResponse,
+  PackageAssetDto,
+  PackageAuthMethodDto,
 } from './api/ergo-auth/types';
