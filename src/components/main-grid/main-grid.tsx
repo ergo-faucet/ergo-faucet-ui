@@ -212,6 +212,7 @@ export const MainGrid: React.FC = () => {
         <div className='hidden flex-col items-start justify-between gap-y-4 lg:flex'>
           <SortBy />
           <PackageDetails
+            packageId={Number(selectedPackageId)}
             title={selectedPackage.title}
             authTasks={selectedPackage.authTasks}
             assets={selectedPackage.assets}

@@ -7,9 +7,10 @@ import { cn } from '@/lib';
 interface DestinationAddressProps {
   className?: string;
   onValidationChange?: (isValid: boolean) => void;
+  onDestAddressChange?: (address: string) => void;
 }
 
-export const DestinationAddress = ({ className, onValidationChange }: DestinationAddressProps) => {
+export const DestinationAddress = ({ className, onValidationChange, onDestAddressChange }: DestinationAddressProps) => {
   const [destAddress, setDestAddress] = useState('');
 
   // TODO: actually validate it
@@ -48,7 +49,12 @@ export const DestinationAddress = ({ className, onValidationChange }: Destinatio
             showError ? 'text-red-600 dark:text-red-400' : 'text-gray-700 dark:text-gray-300',
           )}
           value={destAddress}
-          onChange={(e) => setDestAddress(e.target.value)}
+          onChange={(e) => {
+            // update local state
+            setDestAddress(e.target.value);
+            // call parent setter
+            onDestAddressChange?.(e.target.value);
+          }}
           placeholder='Enter destination address'
         />
       </div>
