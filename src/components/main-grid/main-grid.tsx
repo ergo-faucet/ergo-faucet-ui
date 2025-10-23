@@ -1,6 +1,6 @@
 'use client';
 
-import React, { useEffect, useMemo, useState, Suspense } from 'react';
+import React, { useEffect, useState, Suspense } from 'react';
 
 import { toast } from 'sonner';
 import useSWR from 'swr';
@@ -67,12 +67,13 @@ export const MainGrid: React.FC = () => {
   const sortField: SortField = 'id';
   const sortOrder: SortOrder = 'asc';
 
-  const key = useMemo<string>(
-    () => `/controller/packages?offset=${offset}&limit=${limit}&sort=${sortField}&order=${sortOrder}`,
-    [offset, limit, sortField, sortOrder],
-  );
+  const key = `/controller/packages?offset=${offset}&limit=${limit}&sort=${sortField}&order=${sortOrder}`;
 
-  const { data, error, isLoading } = useSWR<GetPackagesResponse[]>(key, accessToken ? swrAuthFetcher : swrFetcher);
+  // choose fetcher based on token
+  const fetcher = accessToken ? swrAuthFetcher : swrFetcher;
+
+  // explicitly disable cache for this request if n
+  const { data, error, isLoading } = useSWR<GetPackagesResponse[]>(key, fetcher);
 
   // Update pagination and selected package data
   useEffect(() => {
