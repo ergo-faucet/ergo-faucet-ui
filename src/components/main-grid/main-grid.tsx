@@ -52,10 +52,6 @@ export const MainGrid: React.FC = () => {
   const [didInitFromUrl, setDidInitFromUrl] = useState<boolean>(false);
 
   const accessToken = useAuthStore((s) => s.accessToken);
-  const fetcher = useMemo<<T>(url: string) => Promise<T>>(
-    () => (accessToken ? swrAuthFetcher : swrFetcher),
-    [accessToken],
-  );
 
   const entriesPerPage = usePaginationStore((s) => s.entriesPerPage);
   const currentPage = usePaginationStore((s) => s.currentPage);
@@ -76,15 +72,7 @@ export const MainGrid: React.FC = () => {
     [offset, limit, sortField, sortOrder],
   );
 
-  const {
-    data,
-    error,
-    isLoading,
-  }: {
-    data?: GetPackagesResponse[];
-    error?: unknown;
-    isLoading: boolean;
-  } = useSWR<GetPackagesResponse[]>(key, fetcher);
+  const { data, error, isLoading } = useSWR<GetPackagesResponse[]>(key, accessToken ? swrAuthFetcher : swrFetcher);
 
   // Update pagination and selected package data
   useEffect(() => {

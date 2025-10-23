@@ -85,4 +85,17 @@ export const authFetch = async (url: string, options: RequestInit = {}) => {
 };
 
 // SWR fetcher for authenticated endpoints
-export const swrAuthFetcher = (url: string) => authFetch(url);
+export const swrAuthFetcher = async (url: string, options?: RequestInit | { arg?: RequestInit }) => {
+  const token = useAuthStore.getState().accessToken;
+  if (!token) throw new Error('No access token, please login.');
+
+  let requestInit: RequestInit | undefined;
+
+  if (options && 'arg' in options) {
+    requestInit = options.arg;
+  } else {
+    requestInit = options as RequestInit | undefined;
+  }
+
+  return authFetch(url, requestInit);
+};
