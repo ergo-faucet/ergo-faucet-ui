@@ -8,12 +8,11 @@ interface ClaimModalButtonsProps {
 
 export const ClaimModalButtons = ({ disabled, reqBody }: ClaimModalButtonsProps) => {
   const handleClaim = async () => {
-    const claimResponse = await authFetch('/controller/packages/request', {
+    await authFetch('/controller/packages/request', {
       credentials: 'include',
       method: 'POST',
       body: JSON.stringify(reqBody),
     });
-    console.log(claimResponse);
   };
 
   return (
