@@ -1,5 +1,3 @@
-import { BackendUrl } from '@/configs';
-
 import { apiFetch } from './api-fetch';
 import { useAuthStore } from './auth-store';
 
@@ -46,36 +44,44 @@ export const authFetch = async (url: string, options: RequestInit = {}) => {
   let accessToken = useAuthStore.getState().accessToken;
   if (!accessToken) throw new Error('No access token, please login.');
 
-  const headers = new Headers(options.headers || {});
-  headers.set('Authorization', `Bearer ${accessToken}`);
-  headers.set('Content-Type', 'application/json');
+  // merged headers
+  const mergedHeaders = {
+    ...(options.headers || {}),
+    Authorization: `Bearer ${accessToken}`,
+  };
 
-  let response = await apiFetch(url, {
+  // first request
+  let response;
+  try {
+    response = await apiFetch(url, {
+      ...options,
+      headers: mergedHeaders,
+      credentials: 'include',
+    });
+    return response;
+  } catch (error) {
+    // only retry on 401
+    if (!(error instanceof Error) || !error.message.includes('401')) throw error;
+  }
+
+  // attempt token refresh
+  const refreshed = await refreshAccessToken();
+  if (!refreshed) throw new Error('Authentication failed, please login again.');
+
+  // retry with new token
+  accessToken = useAuthStore.getState().accessToken;
+  const retryHeaders = {
+    ...(options.headers || {}),
+    Authorization: `Bearer ${accessToken}`,
+  };
+
+  const retryResponse = await apiFetch(url, {
     ...options,
-    headers,
+    headers: retryHeaders,
     credentials: 'include',
   });
 
-  // Handle 401 → attempt refresh
-  if (response.status === 401) {
-    const refreshed = await refreshAccessToken();
-    if (!refreshed) throw new Error('Authentication failed, please login again.');
-
-    accessToken = useAuthStore.getState().accessToken;
-    headers.set('Authorization', `Bearer ${accessToken}`);
-
-    response = await fetch(`${BackendUrl}${url}`, {
-      ...options,
-      headers,
-      credentials: 'include',
-    });
-  }
-
-  if (!response.ok) {
-    throw new Error(`API error: ${response.status}`);
-  }
-
-  return response.json();
+  return retryResponse;
 };
 
 // SWR fetcher for authenticated endpoints
