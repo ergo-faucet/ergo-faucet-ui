@@ -5,8 +5,10 @@ import { Suspense } from 'react';
 
 import { ClickToCompleteButton } from '@/components/package-details/buttons';
 import { GenerateAuthTypeIcon } from '@/lib';
+import { authFetch } from '@/lib/api';
 import { useAuthStore } from '@/lib/api/auth-store';
 import { useConnectSidebarStore } from '@/stores/connect-wallet';
+import { AuthLoginResponse } from '@/types';
 
 import { CheckIcon } from './check-icon';
 import { AuthTaskType } from './types';
@@ -22,7 +24,7 @@ const AuthTaskInner = ({ authTask }: AuthTaskProps) => {
   const openSidebar = useConnectSidebarStore((s) => s.open);
   const accessToken = useAuthStore((s) => s.accessToken);
 
-  const handleComplete = () => {
+  const handleComplete = async () => {
     // If user is not logged in, open wallet connect sidebar
     if (!accessToken) {
       openSidebar();
@@ -45,9 +47,10 @@ const AuthTaskInner = ({ authTask }: AuthTaskProps) => {
     const currentQuery = searchParams.toString();
     const frontState = currentQuery ? `${pathname}?${currentQuery}` : pathname;
 
+    const response: AuthLoginResponse = await authFetch(`${endpoint}?state=${encodeURIComponent(frontState)}`);
+
     // Redirect browser directly to backend OAuth endpoint with state
-    const url = `${process.env.NEXT_PUBLIC_BACKEND_URL}${endpoint}?state=${encodeURIComponent(frontState)}`;
-    window.location.href = url;
+    window.location.href = response.redirectURL;
   };
 
   return (

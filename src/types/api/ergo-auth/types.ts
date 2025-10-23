@@ -54,3 +54,7 @@ export interface GetPackagesResponse {
   assets: PackageAssetDto[];
   authMethods: PackageAuthMethodDto[];
 }
+
+export interface AuthLoginResponse {
+  redirectURL: string;
+}
