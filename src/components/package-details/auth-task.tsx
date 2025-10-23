@@ -7,9 +7,10 @@ import { ClickToCompleteButton } from '@/components/package-details/buttons';
 import { GenerateAuthTypeIcon } from '@/lib';
 import { authFetch } from '@/lib/api';
 import { useAuthStore } from '@/lib/api/auth-store';
-import { useConnectSidebarStore } from '@/stores/connect-wallet';
 import { AuthLoginResponse } from '@/types';
 
+import { Sheet, SheetContent, SheetTrigger } from '../ui/sheet';
+import ConnectWalletSidebar from '../wallet-sidebar/connect-wallet-sidebar';
 import { CheckIcon } from './check-icon';
 import { AuthTaskType } from './types';
 
@@ -21,15 +22,9 @@ const AuthTaskInner = ({ authTask }: AuthTaskProps) => {
   const pathname = usePathname();
   const searchParams = useSearchParams();
 
-  const openSidebar = useConnectSidebarStore((s) => s.open);
   const accessToken = useAuthStore((s) => s.accessToken);
 
   const handleComplete = async () => {
-    // If user is not logged in, open wallet connect sidebar
-    if (!accessToken) {
-      openSidebar();
-      return;
-    }
     let endpoint = '';
 
     // Choose endpoint based on auth type
@@ -62,7 +57,20 @@ const AuthTaskInner = ({ authTask }: AuthTaskProps) => {
         <GenerateAuthTypeIcon authType={authTask.authType} />
       </div>
 
-      {authTask.isCompleted ? <CheckIcon /> : <ClickToCompleteButton handleOnClick={handleComplete} />}
+      {/* not logged in */}
+      {!accessToken && (
+        <Sheet>
+          <SheetTrigger>
+            <ClickToCompleteButton handleOnClick={() => {}} />
+          </SheetTrigger>
+          <SheetContent>
+            <ConnectWalletSidebar />
+          </SheetContent>
+        </Sheet>
+      )}
+
+      {/* logged in */}
+      {accessToken && (authTask.isCompleted ? <CheckIcon /> : <ClickToCompleteButton handleOnClick={handleComplete} />)}
     </div>
   );
 };
