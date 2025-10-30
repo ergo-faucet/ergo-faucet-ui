@@ -60,7 +60,7 @@ export const PackageDetails = ({
       {/* click to claim button */}
       <Dialog>
         <DialogTrigger className='self-center'>
-          <ClaimButton className='mt-6 -ml-5 self-center' />
+          <ClaimButton className='mt-6 self-center' />
         </DialogTrigger>
         <DialogContent
           showCloseButton={false}
