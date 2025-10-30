@@ -31,6 +31,7 @@ const Navbar = ({ walletType }: NavbarProps) => {
       disconnect();
     }
   };
+
   return (
     // container
     <div className='relative flex h-24 w-full flex-col items-end justify-between'>
@@ -61,11 +62,23 @@ const Navbar = ({ walletType }: NavbarProps) => {
             </DropdownMenuContent>
           </DropdownMenu>
         ) : (
-          <Sheet>
+          <Sheet modal={false}>
             <SheetTrigger asChild>
               <WalletAddress walletAddress={'Connect Wallet'} walletType={walletType} />
             </SheetTrigger>
-            <SheetContent>
+            <SheetContent
+              // safety net: prevent dismiss when interacting with iframe (recaptcha)
+              onPointerDownOutside={(e) => {
+                const originalEvent = e.detail?.originalEvent as Event | undefined;
+                const target = (originalEvent?.target ?? e.target) as HTMLElement | null;
+                if (target && target.closest('iframe')) e.preventDefault();
+              }}
+              onInteractOutside={(e) => {
+                const originalEvent = e.detail?.originalEvent as Event | undefined;
+                const target = (originalEvent?.target ?? e.target) as HTMLElement | null;
+                if (target && target.closest('iframe')) e.preventDefault();
+              }}
+            >
               <ConnectWalletSidebar />
             </SheetContent>
           </Sheet>
