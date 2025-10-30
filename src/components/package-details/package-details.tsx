@@ -12,6 +12,7 @@ import { Timeline, TimelineProps } from './timeline';
 import { AuthTaskType } from './types';
 
 interface PackageDetailsProps extends TimelineProps {
+  packageId: number;
   title: string;
   authTasks: AuthTaskType[];
   assets: Asset[];
@@ -19,6 +20,7 @@ interface PackageDetailsProps extends TimelineProps {
 }
 
 export const PackageDetails = ({
+  packageId,
   title,
   authTasks,
   assets,
@@ -58,7 +60,7 @@ export const PackageDetails = ({
           // remove its dialog looks, so only the claim modal is shown
           className='flex items-center justify-center overflow-visible border-none bg-transparent p-0 shadow-none'
         >
-          <ClaimModal packageName={title} assets={assets} />
+          <ClaimModal packageId={packageId} packageName={title} assets={assets} />
         </DialogContent>
       </Dialog>
     </div>

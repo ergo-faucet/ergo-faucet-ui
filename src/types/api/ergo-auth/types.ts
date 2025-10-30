@@ -58,3 +58,13 @@ export interface GetPackagesResponse {
 export interface AuthLoginResponse {
   redirectURL: string;
 }
+
+export interface ClaimPackageResponse {
+  requestId: number;
+}
+
+export interface ClaimPackageRequestBody {
+  packageId: number;
+  destAddress: string;
+  captchaToken: string;
+}
