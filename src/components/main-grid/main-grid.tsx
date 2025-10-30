@@ -3,7 +3,7 @@
 import React, { useEffect, useState, Suspense } from 'react';
 
 import { toast } from 'sonner';
-import useSWR from 'swr';
+import useSWR, { mutate } from 'swr';
 
 import { usePaginationStore } from '@/components/pagination/useStore';
 import { swrFetcher } from '@/lib/api';
@@ -48,7 +48,6 @@ export const MainGrid: React.FC = () => {
   const [selectedPackageId, setSelectedPackageId] = useState<string>('');
   const [didInitFromUrl, setDidInitFromUrl] = useState<boolean>(false);
 
-  // TODO: fix the sort store later
   const [sortField, setSortField] = useState<'name' | 'releaseDate'>('name');
   const [sortOrder, setSortOrder] = useState<'asc' | 'desc'>('asc');
 
@@ -67,6 +66,13 @@ export const MainGrid: React.FC = () => {
   const key = `/controller/packages?offset=${offset}&limit=${limit}&sort=${sortField}&order=${sortOrder}`;
   const fetcher = accessToken ? swrAuthFetcher : swrFetcher;
   const { data, error, isLoading } = useSWR<GetPackagesResponse[]>(didInitFromUrl ? key : null, fetcher);
+
+  // refetch packages immediately after login
+  useEffect(() => {
+    if (accessToken) {
+      mutate((k) => typeof k === 'string' && k.startsWith('/controller/packages'));
+    }
+  }, [accessToken]);
 
   // update pagination and selected package
   useEffect(() => {
@@ -107,6 +113,41 @@ export const MainGrid: React.FC = () => {
       }
     }
   }, [data, didInitFromUrl, entriesPerPage, offset, limit, selectedPackageId, setTotalEntries, setTotalPages]);
+
+  // ensure package details are updated after revalidation (login)
+  useEffect(() => {
+    if (!didInitFromUrl) return;
+    if (!selectedPackageId) return;
+    if (!Array.isArray(data)) return;
+
+    const matched = data.find((p) => String(p.id || p.name) === selectedPackageId);
+    if (!matched) return;
+
+    const mappedAuthTasks: AuthTaskType[] = (matched.authMethods || []).map(
+      (m: PackageAuthMethod): AuthTaskType => ({
+        authType: m.name as AuthType,
+        isCompleted: (m.status ?? '') === 'passed',
+      }),
+    );
+
+    const mappedAssets: Asset[] = (matched.assets || []).map(
+      (a: PackageAsset): Asset => ({
+        name: a.tokenId,
+        amount: BigInt((a.amount ?? '0').toString()),
+        decimal: 0,
+        tokenId: a.tokenId,
+      }),
+    );
+
+    const details: SelectedPackageProps = {
+      title: matched.name,
+      description: matched.description,
+      delay: matched.delay,
+      authTasks: mappedAuthTasks,
+      assets: mappedAssets,
+    };
+    setSelectedPackage(details);
+  }, [data, selectedPackageId, didInitFromUrl]);
 
   // handle error toast
   useEffect(() => {
