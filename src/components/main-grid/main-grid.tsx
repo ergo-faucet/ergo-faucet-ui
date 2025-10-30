@@ -74,7 +74,7 @@ export const MainGrid: React.FC = () => {
     }
   }, [accessToken]);
 
-  // update pagination and selected package
+  // Update pagination and selected package data
   useEffect(() => {
     if (!didInitFromUrl) return;
     if (Array.isArray(data)) {
@@ -181,6 +181,7 @@ export const MainGrid: React.FC = () => {
       </Suspense>
 
       <div className='flex w-full items-start justify-between gap-4'>
+        {/* packages & searchbar */}
         <div className='flex w-full flex-col items-start justify-between gap-y-4'>
           <Searchbar />
           <div className='justfiy-around grid w-full grid-cols-1 gap-4 md:grid-cols-2 xl:grid-cols-3 2xl:grid-cols-4'>
