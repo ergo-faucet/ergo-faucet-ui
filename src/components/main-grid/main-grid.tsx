@@ -1,9 +1,9 @@
 'use client';
 
-import React, { useEffect, useMemo, useState, Suspense } from 'react';
+import React, { useEffect, useState, Suspense } from 'react';
 
 import { toast } from 'sonner';
-import useSWR from 'swr';
+import useSWR, { mutate } from 'swr';
 
 import { usePaginationStore } from '@/components/pagination/useStore';
 import { swrFetcher } from '@/lib/api';
@@ -27,9 +27,6 @@ interface SelectedPackageProps {
   delay?: string;
 }
 
-type SortField = 'id';
-type SortOrder = 'asc';
-
 interface PackageAsset {
   tokenId: string;
   amount?: number | string | bigint;
@@ -51,11 +48,10 @@ export const MainGrid: React.FC = () => {
   const [selectedPackageId, setSelectedPackageId] = useState<string>('');
   const [didInitFromUrl, setDidInitFromUrl] = useState<boolean>(false);
 
+  const [sortField, setSortField] = useState<'name' | 'releaseDate'>('name');
+  const [sortOrder, setSortOrder] = useState<'asc' | 'desc'>('asc');
+
   const accessToken = useAuthStore((s) => s.accessToken);
-  const fetcher = useMemo<<T>(url: string) => Promise<T>>(
-    () => (accessToken ? swrAuthFetcher : swrFetcher),
-    [accessToken],
-  );
 
   const entriesPerPage = usePaginationStore((s) => s.entriesPerPage);
   const currentPage = usePaginationStore((s) => s.currentPage);
@@ -67,36 +63,27 @@ export const MainGrid: React.FC = () => {
   const offset = (currentPage - 1) * entriesPerPage;
   const limit = entriesPerPage;
 
-  // TODO: use a store later
-  const sortField: SortField = 'id';
-  const sortOrder: SortOrder = 'asc';
+  const key = `/controller/packages?offset=${offset}&limit=${limit}&sort=${sortField}&order=${sortOrder}`;
+  const fetcher = accessToken ? swrAuthFetcher : swrFetcher;
+  const { data, error, isLoading } = useSWR<GetPackagesResponse[]>(didInitFromUrl ? key : null, fetcher);
 
-  const key = useMemo<string>(
-    () => `/controller/packages?offset=${offset}&limit=${limit}&sort=${sortField}&order=${sortOrder}`,
-    [offset, limit, sortField, sortOrder],
-  );
-
-  const {
-    data,
-    error,
-    isLoading,
-  }: {
-    data?: GetPackagesResponse[];
-    error?: unknown;
-    isLoading: boolean;
-  } = useSWR<GetPackagesResponse[]>(key, fetcher);
+  // refetch packages immediately after login
+  useEffect(() => {
+    if (accessToken) {
+      mutate((k) => typeof k === 'string' && k.startsWith('/controller/packages'));
+    }
+  }, [accessToken]);
 
   // Update pagination and selected package data
   useEffect(() => {
+    if (!didInitFromUrl) return;
     if (Array.isArray(data)) {
       const approximateTotal: number = offset + data.length + (data.length === limit ? limit : 0);
       setTotalEntries(approximateTotal);
       setTotalPages(Math.max(1, Math.ceil(approximateTotal / entriesPerPage)));
 
       if (selectedPackageId) {
-        const matched: GetPackagesResponse | undefined = data.find(
-          (p: GetPackagesResponse) => String(p.id || p.name) === selectedPackageId,
-        );
+        const matched: GetPackagesResponse | undefined = data.find((p) => String(p.id || p.name) === selectedPackageId);
         if (matched) {
           const mappedAuthTasks: AuthTaskType[] = (matched.authMethods || []).map(
             (m: PackageAuthMethod): AuthTaskType => ({
@@ -125,9 +112,44 @@ export const MainGrid: React.FC = () => {
         }
       }
     }
-  }, [data, entriesPerPage, offset, limit, selectedPackageId, setTotalEntries, setTotalPages]);
+  }, [data, didInitFromUrl, entriesPerPage, offset, limit, selectedPackageId, setTotalEntries, setTotalPages]);
 
-  // Handle error toast
+  // ensure package details are updated after revalidation (login)
+  useEffect(() => {
+    if (!didInitFromUrl) return;
+    if (!selectedPackageId) return;
+    if (!Array.isArray(data)) return;
+
+    const matched = data.find((p) => String(p.id || p.name) === selectedPackageId);
+    if (!matched) return;
+
+    const mappedAuthTasks: AuthTaskType[] = (matched.authMethods || []).map(
+      (m: PackageAuthMethod): AuthTaskType => ({
+        authType: m.name as AuthType,
+        isCompleted: (m.status ?? '') === 'passed',
+      }),
+    );
+
+    const mappedAssets: Asset[] = (matched.assets || []).map(
+      (a: PackageAsset): Asset => ({
+        name: a.tokenId,
+        amount: BigInt((a.amount ?? '0').toString()),
+        decimal: 0,
+        tokenId: a.tokenId,
+      }),
+    );
+
+    const details: SelectedPackageProps = {
+      title: matched.name,
+      description: matched.description,
+      delay: matched.delay,
+      authTasks: mappedAuthTasks,
+      assets: mappedAssets,
+    };
+    setSelectedPackage(details);
+  }, [data, selectedPackageId, didInitFromUrl]);
+
+  // handle error toast
   useEffect(() => {
     if (error) {
       let message: string = 'Failed to load packages';
@@ -146,8 +168,11 @@ export const MainGrid: React.FC = () => {
           entriesPerPage={entriesPerPage}
           setEntriesPerPage={setEntriesPerPage}
           setCurrentPage={setCurrentPage}
-          setSortField={() => {}}
-          setSortOrder={() => {}}
+          currentPage={currentPage}
+          sortField={sortField}
+          setSortField={setSortField}
+          sortOrder={sortOrder}
+          setSortOrder={setSortOrder}
           setSelectedPackageId={setSelectedPackageId}
           selectedPackageId={selectedPackageId}
           didInitFromUrl={didInitFromUrl}

@@ -3,16 +3,7 @@
 import { useSearchParams } from 'next/navigation';
 import React from 'react';
 
-const MainGridSearchParamsSync = ({
-  entriesPerPage,
-  setEntriesPerPage,
-  setCurrentPage,
-  setSortField,
-  setSortOrder,
-  setSelectedPackageId,
-  selectedPackageId,
-  setDidInitFromUrl,
-}: {
+interface Props {
   entriesPerPage: number;
   setEntriesPerPage: (n: number) => void;
   setCurrentPage: (n: number) => void;
@@ -20,13 +11,33 @@ const MainGridSearchParamsSync = ({
   setSortOrder: (v: 'asc' | 'desc') => void;
   setSelectedPackageId: (v: string) => void;
   selectedPackageId: string;
+  currentPage: number;
+  sortField: 'name' | 'releaseDate';
+  sortOrder: 'asc' | 'desc';
   didInitFromUrl: boolean;
   setDidInitFromUrl: (v: boolean) => void;
+}
+
+const MainGridSearchParamsSync: React.FC<Props> = ({
+  entriesPerPage,
+  setEntriesPerPage,
+  setCurrentPage,
+  setSortField,
+  setSortOrder,
+  setSelectedPackageId,
+  selectedPackageId,
+  currentPage,
+  sortField,
+  sortOrder,
+  didInitFromUrl,
+  setDidInitFromUrl,
 }) => {
   const searchParams = useSearchParams();
 
+  // initialize from url
   React.useEffect(() => {
     const sp = new URLSearchParams(searchParams?.toString());
+
     const pageParam = sp.get('page');
     const perPageParam = sp.get('perPage');
     const sortParam = sp.get('sort');
@@ -37,35 +48,58 @@ const MainGridSearchParamsSync = ({
 
     if (perPageParam) {
       const per = parseInt(perPageParam);
-      if (allowedPerPage.includes(per)) {
-        if (per !== entriesPerPage) setEntriesPerPage(per);
-      } else {
-        if (entriesPerPage !== 10) setEntriesPerPage(10);
-      }
+      if (allowedPerPage.includes(per)) setEntriesPerPage(per);
     }
+
     if (pageParam) {
-      const pageNum = Math.max(1, parseInt(pageParam));
-      if (!Number.isNaN(pageNum)) setCurrentPage(pageNum);
+      const num = parseInt(pageParam);
+      if (!Number.isNaN(num) && num >= 1) setCurrentPage(num);
     }
-    if (sortParam === 'name' || sortParam === 'releaseDate') {
-      setSortField(sortParam);
-    }
-    if (orderParam === 'asc' || orderParam === 'desc') {
-      setSortOrder(orderParam);
-    }
-    if (selectedParam) {
-      setSelectedPackageId(selectedParam);
-    }
+
+    if (sortParam === 'name' || sortParam === 'releaseDate') setSortField(sortParam);
+    if (orderParam === 'asc' || orderParam === 'desc') setSortOrder(orderParam);
+    if (selectedParam) setSelectedPackageId(selectedParam);
+
     setDidInitFromUrl(true);
   }, []);
 
+  // update when search params change (keep selected, sort, order in sync)
   React.useEffect(() => {
     const sp = new URLSearchParams(searchParams?.toString());
+
     const selectedParam = sp.get('selected') || '';
-    if (selectedParam !== selectedPackageId) {
-      setSelectedPackageId(selectedParam);
+    if (selectedParam !== selectedPackageId) setSelectedPackageId(selectedParam);
+
+    const sortParam = sp.get('sort');
+    if ((sortParam === 'name' || sortParam === 'releaseDate') && sortParam !== sortField) {
+      setSortField(sortParam);
     }
-  }, [searchParams, selectedPackageId, setSelectedPackageId]);
+
+    const orderParam = sp.get('order');
+    if ((orderParam === 'asc' || orderParam === 'desc') && orderParam !== sortOrder) {
+      setSortOrder(orderParam);
+    }
+  }, [searchParams]);
+
+  // write state to url
+  React.useEffect(() => {
+    if (!didInitFromUrl) return;
+
+    const sp = new URLSearchParams(window.location.search);
+    sp.set('page', String(currentPage));
+    sp.set('perPage', String(entriesPerPage));
+    sp.set('sort', sortField);
+    sp.set('order', sortOrder);
+
+    if (selectedPackageId) sp.set('selected', selectedPackageId);
+    else sp.delete('selected');
+
+    const newUrl = `?${sp.toString()}`;
+    const currentUrl = window.location.search;
+    if (newUrl !== currentUrl) {
+      window.history.replaceState({}, '', newUrl);
+    }
+  }, [didInitFromUrl, currentPage, entriesPerPage, sortField, sortOrder, selectedPackageId]);
 
   return null;
 };
