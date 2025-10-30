@@ -27,9 +27,6 @@ interface SelectedPackageProps {
   delay?: string;
 }
 
-type SortField = 'id';
-type SortOrder = 'asc';
-
 interface PackageAsset {
   tokenId: string;
   amount?: number | string | bigint;
@@ -51,6 +48,9 @@ export const MainGrid: React.FC = () => {
   const [selectedPackageId, setSelectedPackageId] = useState<string>('');
   const [didInitFromUrl, setDidInitFromUrl] = useState<boolean>(false);
 
+  const [sortField, setSortField] = useState<'name' | 'releaseDate'>('name');
+  const [sortOrder, setSortOrder] = useState<'asc' | 'desc'>('asc');
+
   const accessToken = useAuthStore((s) => s.accessToken);
 
   const entriesPerPage = usePaginationStore((s) => s.entriesPerPage);
@@ -63,29 +63,20 @@ export const MainGrid: React.FC = () => {
   const offset = (currentPage - 1) * entriesPerPage;
   const limit = entriesPerPage;
 
-  // TODO: use a store later
-  const sortField: SortField = 'id';
-  const sortOrder: SortOrder = 'asc';
-
   const key = `/controller/packages?offset=${offset}&limit=${limit}&sort=${sortField}&order=${sortOrder}`;
-
-  // choose fetcher based on token
   const fetcher = accessToken ? swrAuthFetcher : swrFetcher;
+  const { data, error, isLoading } = useSWR<GetPackagesResponse[]>(didInitFromUrl ? key : null, fetcher);
 
-  // explicitly disable cache for this request if n
-  const { data, error, isLoading } = useSWR<GetPackagesResponse[]>(key, fetcher);
-
-  // Update pagination and selected package data
+  // update pagination and selected package
   useEffect(() => {
+    if (!didInitFromUrl) return;
     if (Array.isArray(data)) {
       const approximateTotal: number = offset + data.length + (data.length === limit ? limit : 0);
       setTotalEntries(approximateTotal);
       setTotalPages(Math.max(1, Math.ceil(approximateTotal / entriesPerPage)));
 
       if (selectedPackageId) {
-        const matched: GetPackagesResponse | undefined = data.find(
-          (p: GetPackagesResponse) => String(p.id || p.name) === selectedPackageId,
-        );
+        const matched: GetPackagesResponse | undefined = data.find((p) => String(p.id || p.name) === selectedPackageId);
         if (matched) {
           const mappedAuthTasks: AuthTaskType[] = (matched.authMethods || []).map(
             (m: PackageAuthMethod): AuthTaskType => ({
@@ -114,12 +105,12 @@ export const MainGrid: React.FC = () => {
         }
       }
     }
-  }, [data, entriesPerPage, offset, limit, selectedPackageId, setTotalEntries, setTotalPages]);
+  }, [data, didInitFromUrl, entriesPerPage, offset, limit, selectedPackageId, setTotalEntries, setTotalPages]);
 
-  // Handle error toast
+  // handle error toast
   useEffect(() => {
     if (error) {
-      let message: string = 'Failed to load packages';
+      let message = 'Failed to load packages';
       if (typeof error === 'object' && error !== null && 'message' in error) {
         const possibleMessage = (error as { message?: unknown }).message;
         if (typeof possibleMessage === 'string') message = possibleMessage;
@@ -135,8 +126,11 @@ export const MainGrid: React.FC = () => {
           entriesPerPage={entriesPerPage}
           setEntriesPerPage={setEntriesPerPage}
           setCurrentPage={setCurrentPage}
-          setSortField={() => {}}
-          setSortOrder={() => {}}
+          currentPage={currentPage}
+          sortField={sortField}
+          setSortField={setSortField}
+          sortOrder={sortOrder}
+          setSortOrder={setSortOrder}
           setSelectedPackageId={setSelectedPackageId}
           selectedPackageId={selectedPackageId}
           didInitFromUrl={didInitFromUrl}
@@ -145,14 +139,13 @@ export const MainGrid: React.FC = () => {
       </Suspense>
 
       <div className='flex w-full items-start justify-between gap-4'>
-        {/* packages & searchbar */}
         <div className='flex w-full flex-col items-start justify-between gap-y-4'>
           <Searchbar />
           <div className='justfiy-around grid w-full grid-cols-1 gap-4 md:grid-cols-2 xl:grid-cols-3 2xl:grid-cols-4'>
             {isLoading ? (
-              <div className='flex h-screen items-center justify-center text-gray-400'>Loading packages...</div>
+              <div className='flex h-screen items-center justify-center text-gray-400'>loading packages...</div>
             ) : Array.isArray(data) && data.length === 0 && !error ? (
-              <div className='flex h-screen items-center justify-center text-gray-500'>No packages found</div>
+              <div className='flex h-screen items-center justify-center text-gray-500'>no packages found</div>
             ) : (
               Array.isArray(data) &&
               data.map((pkg: GetPackagesResponse) => {
@@ -197,7 +190,6 @@ export const MainGrid: React.FC = () => {
           </div>
         </div>
 
-        {/* sortby & package details */}
         <div className='hidden flex-col items-start justify-between gap-y-4 lg:flex'>
           <SortBy />
           <PackageDetails
