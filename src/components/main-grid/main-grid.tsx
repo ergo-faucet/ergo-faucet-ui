@@ -48,6 +48,7 @@ export const MainGrid: React.FC = () => {
   const [selectedPackageId, setSelectedPackageId] = useState<string>('');
   const [didInitFromUrl, setDidInitFromUrl] = useState<boolean>(false);
 
+  // TODO: fix the sort store later
   const [sortField, setSortField] = useState<'name' | 'releaseDate'>('name');
   const [sortOrder, setSortOrder] = useState<'asc' | 'desc'>('asc');
 

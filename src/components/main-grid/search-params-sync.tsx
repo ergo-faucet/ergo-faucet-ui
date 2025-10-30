@@ -63,11 +63,22 @@ const MainGridSearchParamsSync: React.FC<Props> = ({
     setDidInitFromUrl(true);
   }, []);
 
-  // update when search params change
+  // update when search params change (keep selected, sort, and order in sync)
   React.useEffect(() => {
     const sp = new URLSearchParams(searchParams?.toString());
+
     const selectedParam = sp.get('selected') || '';
     if (selectedParam !== selectedPackageId) setSelectedPackageId(selectedParam);
+
+    const sortParam = sp.get('sort');
+    if ((sortParam === 'name' || sortParam === 'releaseDate') && sortParam !== sortField) {
+      setSortField(sortParam);
+    }
+
+    const orderParam = sp.get('order');
+    if ((orderParam === 'asc' || orderParam === 'desc') && orderParam !== sortOrder) {
+      setSortOrder(orderParam);
+    }
   }, [searchParams]);
 
   // write state to url
