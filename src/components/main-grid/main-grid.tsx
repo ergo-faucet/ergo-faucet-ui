@@ -152,7 +152,7 @@ export const MainGrid: React.FC = () => {
   // handle error toast
   useEffect(() => {
     if (error) {
-      let message = 'Failed to load packages';
+      let message: string = 'Failed to load packages';
       if (typeof error === 'object' && error !== null && 'message' in error) {
         const possibleMessage = (error as { message?: unknown }).message;
         if (typeof possibleMessage === 'string') message = possibleMessage;
@@ -185,9 +185,9 @@ export const MainGrid: React.FC = () => {
           <Searchbar />
           <div className='justfiy-around grid w-full grid-cols-1 gap-4 md:grid-cols-2 xl:grid-cols-3 2xl:grid-cols-4'>
             {isLoading ? (
-              <div className='flex h-screen items-center justify-center text-gray-400'>loading packages...</div>
+              <div className='flex h-screen items-center justify-center text-gray-400'>Loading packages...</div>
             ) : Array.isArray(data) && data.length === 0 && !error ? (
-              <div className='flex h-screen items-center justify-center text-gray-500'>no packages found</div>
+              <div className='flex h-screen items-center justify-center text-gray-500'>No packages found</div>
             ) : (
               Array.isArray(data) &&
               data.map((pkg: GetPackagesResponse) => {
@@ -232,6 +232,7 @@ export const MainGrid: React.FC = () => {
           </div>
         </div>
 
+        {/* sortby & package details */}
         <div className='hidden flex-col items-start justify-between gap-y-4 lg:flex'>
           <SortBy />
           <PackageDetails
