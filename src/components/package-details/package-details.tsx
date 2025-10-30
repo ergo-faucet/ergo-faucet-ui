@@ -36,7 +36,14 @@ export const PackageDetails = ({
         border-gray-400 bg-gray-100 px-5 pb-8 dark:border-gray-700'
     >
       {/* header */}
-      <span className={cn('mt-8 block w-full text-center text-[24px]', volkhov.className)}>{title}</span>
+      <span
+        className={cn(
+          'mt-8 block w-full text-center text-[24px] leading-snug break-words text-gray-900 dark:text-gray-100',
+          volkhov.className,
+        )}
+      >
+        {title}
+      </span>
 
       {/* timeline */}
       <Timeline cooldownTime={cooldownTime} lastRequestDate={lastRequestDate} lastRequestStatus={lastRequestStatus} />
