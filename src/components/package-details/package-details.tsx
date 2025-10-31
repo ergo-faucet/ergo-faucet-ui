@@ -55,7 +55,7 @@ export const PackageDetails = ({
       <PackageAssets assets={assets} />
 
       {/* description */}
-      <PackageDescription className='-mt-5' info={description} />
+      <PackageDescription info={description} />
 
       {/* click to claim button */}
       <Dialog>
