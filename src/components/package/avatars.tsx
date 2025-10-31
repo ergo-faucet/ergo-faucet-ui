@@ -12,7 +12,7 @@ interface AvatarsProps {
 
 const Avatars = ({ assets, className }: AvatarsProps) => {
   return (
-    <div className={cn('flex items-center', className)}>
+    <div className={cn('relative isolate flex items-center', className)}>
       {assets.slice(0, 4).map((asset, index) => (
         <Avatar
           key={index}
