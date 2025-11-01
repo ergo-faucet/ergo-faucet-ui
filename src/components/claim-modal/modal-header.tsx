@@ -12,14 +12,16 @@ const ModalHeader = ({ packageName }: ModalHeaderProps) => {
         text-black dark:text-white`}
     >
       {/* title */}
-      <div>
-        <span className='text-start text-[18px] font-extrabold text-gray-800 dark:text-[#AAA]'>Claiming </span>
-        <span className='text-start text-[20px] font-extrabold'>{packageName} Package</span>
+      <div className='flex w-full max-w-[310px] items-center justify-center overflow-hidden px-4'>
+        <span className='flex-shrink-0 text-[18px] font-extrabold text-gray-800 dark:text-[#AAA]'>Claiming&nbsp;</span>
+        <span className='min-w-0 truncate text-[20px] font-extrabold text-ellipsis' title={packageName}>
+          {packageName} Package
+        </span>
       </div>
 
       {/* description */}
-      <div>
-        <span className='h-auto w-[310px] text-start text-[13px] font-light'>This package includes:</span>
+      <div className='w-full max-w-[310px] px-4'>
+        <span className='block h-auto truncate text-start text-[13px] font-light'>This package includes:</span>
       </div>
     </div>
   );

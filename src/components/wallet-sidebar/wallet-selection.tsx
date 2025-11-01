@@ -98,34 +98,37 @@ export const WalletSelection = () => {
 
   return (
     <>
-      {/* wallets */}
-      <div className='flex flex-col space-y-2'>
-        <Wallet
-          onClick={() => setSelected('nautilus')}
-          src='/icons/natilus-40x40.png'
-          alt='Natilus icon'
-          size={40}
-          name='Natilus'
-          selected={selected == 'nautilus'}
-        />
-        {/* <Wallet
-          onClick={() => setSelected('ergopay')}
-          alt='Ergo Pay icon'
-          size={40}
-          name='Ergo Pay'
-          selected={selected == 'ergopay'}
-        /> */}
-      </div>
+      {/* wallets + connect button with same width */}
+      <div className='flex w-[273px] flex-col items-center space-y-3'>
+        {/* wallets */}
+        <div className='flex w-full flex-col space-y-2'>
+          <Wallet
+            onClick={() => setSelected('nautilus')}
+            src='/icons/natilus-40x40.png'
+            alt='Natilus icon'
+            size={40}
+            name='Natilus'
+            selected={selected == 'nautilus'}
+          />
+          {/* <Wallet
+            onClick={() => setSelected('ergopay')}
+            alt='Ergo Pay icon'
+            size={40}
+            name='Ergo Pay'
+            selected={selected == 'ergopay'}
+          /> */}
+        </div>
 
-      {/* connect button */}
-      <button
-        className={`h-11 w-25 cursor-pointer rounded-xl border border-green-400
-          ${false ? 'cursor-not-allowed bg-gray-500' : 'bg-green-700 hover:bg-green-900'} text-[17px] tracking-wider
-          text-white shadow-[-2px_2px_6px_0_rgba(0,0,0)]/20 shadow-black dark:shadow-white`}
-        onClick={handleConnectButtonOnClick}
-      >
-        Connect
-      </button>
+        {/* connect button */}
+        <button
+          className={`h-11 w-full cursor-pointer rounded-xl border border-green-400
+            ${false ? 'cursor-not-allowed bg-gray-500' : 'bg-green-700 hover:bg-green-900'} text-[17px] tracking-wider
+            text-white shadow-[-2px_2px_6px_0_rgba(0,0,0)]/20 shadow-black dark:shadow-white`}
+          onClick={handleConnectButtonOnClick}
+        >
+          Connect
+        </button>
+      </div>
 
       {/* alert */}
       {localError && (
