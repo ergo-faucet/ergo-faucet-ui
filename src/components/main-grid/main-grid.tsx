@@ -30,6 +30,7 @@ interface SelectedPackageProps {
 interface PackageAsset {
   tokenId: string;
   amount?: number | string | bigint;
+  decimals?: number;
 }
 
 interface PackageAuthMethod {
@@ -96,7 +97,7 @@ export const MainGrid: React.FC = () => {
             (a: PackageAsset): Asset => ({
               name: a.tokenId,
               amount: BigInt((a.amount ?? '0').toString()),
-              decimal: 0,
+              decimals: a.decimals ?? 0,
               tokenId: a.tokenId,
             }),
           );
@@ -134,7 +135,7 @@ export const MainGrid: React.FC = () => {
       (a: PackageAsset): Asset => ({
         name: a.tokenId,
         amount: BigInt((a.amount ?? '0').toString()),
-        decimal: 0,
+        decimals: a.decimals ?? 0,
         tokenId: a.tokenId,
       }),
     );
@@ -196,7 +197,7 @@ export const MainGrid: React.FC = () => {
                   (a: PackageAsset): Asset => ({
                     name: a.tokenId,
                     amount: BigInt((a.amount ?? '0').toString()),
-                    decimal: 0,
+                    decimals: a.decimals ?? 0,
                     tokenId: a.tokenId,
                   }),
                 );
