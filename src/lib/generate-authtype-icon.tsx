@@ -1,5 +1,6 @@
 import DiscordIcon from '@/components/icons/discord';
 import GoogleIcon from '@/components/icons/google';
+import XPlatformIcon from '@/components/icons/x-platform';
 import { inter } from '@/fonts';
 import { AuthType } from '@/types';
 
@@ -30,6 +31,13 @@ const GenerateAuthTypeIcon = ({ authType }: { authType: AuthType }) => {
         <div className='flex items-center'>
           <DiscordIcon />
           <IconText text='Discord' />
+        </div>
+      );
+    case 'x-platform':
+      return (
+        <div className='flex items-center'>
+          <XPlatformIcon />
+          <IconText text='X (Twitter)' />
         </div>
       );
     default:
