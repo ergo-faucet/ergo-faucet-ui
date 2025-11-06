@@ -1,4 +1,5 @@
 import { ScrollArea } from '@/components/ui/scroll-area';
+import { TokenExplorerURL } from '@/configs';
 import { Asset } from '@/types';
 
 import { LineAfterText } from './line-after-text';
@@ -24,7 +25,13 @@ const PackageAssets = ({ assets }: PackageAssetsProps) => {
         {/* internal padding so scrollbar never overlaps content */}
         <div className='flex w-full max-w-full min-w-0 flex-col gap-1 pr-4 pl-[2px]'>
           {assets.map((asset, idx) => (
-            <div key={idx} className='w-full min-w-0'>
+            <div
+              onClick={() => {
+                window.open(`${TokenExplorerURL}/${asset.tokenId}`);
+              }}
+              key={idx}
+              className='w-full min-w-0 cursor-pointer'
+            >
               <TokenDetails asset={asset} />
             </div>
           ))}
