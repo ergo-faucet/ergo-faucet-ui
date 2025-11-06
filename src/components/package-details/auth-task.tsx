@@ -53,7 +53,7 @@ const AuthTaskInner = ({ authTask }: AuthTaskProps) => {
       className='flex h-11 w-72 items-center justify-between rounded-[5px] border border-gray-300 bg-gray-50 px-2
         transition-colors duration-300 dark:border-gray-600 dark:bg-gray-700'
     >
-      <div className='h-8.5 w-30'>
+      <div className='h-8.5 w-32'>
         <GenerateAuthTypeIcon authType={authTask.authType} />
       </div>
 
