@@ -23,6 +23,7 @@ export const WalletSelection = () => {
   const [localError, setLocalError] = useState('');
   const [errorDescription, setErrorDescription] = useState('');
   const [errorSuggestions, setErrorSuggestions] = useState<string[]>([]);
+  const [isConnecting, setIsConnecting] = useState(false);
 
   useEffect(() => {
     if (localError) {
@@ -50,7 +51,9 @@ export const WalletSelection = () => {
     setErrorDescription('');
     setErrorSuggestions([]);
 
-    // Wallet operations
+    // show connecting state
+    setIsConnecting(true);
+
     let address = '';
     let addresses: string[] = [];
     try {
@@ -66,6 +69,7 @@ export const WalletSelection = () => {
       setLocalError(message);
       setErrorDescription('Wallet connection error');
       setErrorSuggestions(['Ensure your wallet/extension is installed and enabled', 'Reload this page and try again']);
+      setIsConnecting(false);
       return;
     }
 
@@ -80,6 +84,7 @@ export const WalletSelection = () => {
       const message = error instanceof Error ? error.message : String(error);
       setLocalError(message);
       setErrorDescription('Network error while fetching challenge');
+      setIsConnecting(false);
       return;
     }
 
@@ -93,46 +98,50 @@ export const WalletSelection = () => {
       const message = error instanceof Error ? error.message : String(error);
       setLocalError(message);
       setErrorDescription('Signing error');
+    } finally {
+      setIsConnecting(false);
     }
   };
 
   return (
     <>
-      {/* wallets + connect button with same width */}
-      <div className='flex w-[273px] flex-col items-center space-y-3'>
-        {/* wallets */}
-        <div className='flex w-full flex-col space-y-2'>
-          <Wallet
-            onClick={() => setSelected('nautilus')}
-            src='/icons/natilus-40x40.png'
-            alt='Natilus icon'
-            size={40}
-            name='Natilus'
-            selected={selected == 'nautilus'}
-          />
-          {/* <Wallet
-            onClick={() => setSelected('ergopay')}
-            alt='Ergo Pay icon'
-            size={40}
-            name='Ergo Pay'
-            selected={selected == 'ergopay'}
-          /> */}
-        </div>
+      {/* wallets + connect button (centered horizontally) */}
+      <div className='flex w-full flex-col items-center justify-center'>
+        <div className='flex w-[273px] flex-col items-center justify-center space-y-3'>
+          {/* wallets */}
+          <div className='flex w-full flex-col items-center justify-center space-y-2'>
+            <Wallet
+              onClick={() => setSelected('nautilus')}
+              src='/icons/natilus-40x40.png'
+              alt='Natilus icon'
+              size={40}
+              name='Natilus'
+              selected={selected == 'nautilus'}
+            />
+            {/* <Wallet
+              onClick={() => setSelected('ergopay')}
+              alt='Ergo Pay icon'
+              size={40}
+              name='Ergo Pay'
+              selected={selected == 'ergopay'}
+            /> */}
+          </div>
 
-        {/* connect button */}
-        <button
-          className={`h-11 w-full cursor-pointer rounded-xl border border-green-400
-            ${false ? 'cursor-not-allowed bg-gray-500' : 'bg-green-700 hover:bg-green-900'} text-[17px] tracking-wider
-            text-white shadow-[-2px_2px_6px_0_rgba(0,0,0)]/20 shadow-black dark:shadow-white`}
-          onClick={handleConnectButtonOnClick}
-        >
-          Connect
-        </button>
+          {/* connect button */}
+          <button
+            disabled={isConnecting}
+            className={`h-10.5 w-full rounded-[10px] text-[17px] font-semibold tracking-widest text-white
+              ${isConnecting ? 'cursor-not-allowed bg-gray-500' : 'cursor-pointer bg-green-700 hover:bg-green-800'}`}
+            onClick={handleConnectButtonOnClick}
+          >
+            {isConnecting ? 'Connecting...' : 'Connect'}
+          </button>
+        </div>
       </div>
 
       {/* alert */}
       {localError && (
-        <Alert variant='destructive' className={cn('max-w-[273px]', inter.className)}>
+        <Alert variant='destructive' className={cn('mx-auto mt-3 max-w-[273px]', inter.className)}>
           <AlertCircleIcon />
           <AlertTitle className='text-[14px] font-semibold tracking-wide'>Unable to login</AlertTitle>
           <AlertDescription>
