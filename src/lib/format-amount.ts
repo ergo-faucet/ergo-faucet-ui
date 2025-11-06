@@ -23,10 +23,10 @@ export const getWholePart = (amount: bigint, decimals: number): string => {
 };
 
 /**
- * Returns the fractional part (zero-padded) of a fixed-point value using Decimal.js for precise arithmetic.
+ * Returns the fractional part (trimmed of trailing zeros) of a fixed-point value using Decimal.js for precise arithmetic.
  * @param amount - The integer amount in base units
  * @param decimals - The number of fractional decimal places used by `amount`.
- * @returns The fractional digits as a zero-padded string with length exactly `decimals`.
+ * @returns The fractional digits as a trimmed string (no unnecessary trailing zeros).
  * @throws RangeError - If decimals or amount are not integers
  */
 export const getFractionalPart = (amount: bigint, decimals: number): string => {
@@ -43,6 +43,12 @@ export const getFractionalPart = (amount: bigint, decimals: number): string => {
   // remainder = amount % base
   const fractional = value.mod(base);
 
-  // pad with leading zeros to always match `decimals` length
-  return fractional.toFixed(0).padStart(decimals, '0');
+  // pad with leading zeros first, then remove trailing zeros
+  const padded = fractional.toFixed(0).padStart(decimals, '0');
+
+  // trim trailing zeros (but not all digits)
+  const trimmed = padded.replace(/0+$/, '');
+
+  // if all digits were zeros, return '0'
+  return trimmed === '' ? '0' : trimmed;
 };
