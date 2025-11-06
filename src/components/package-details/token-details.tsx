@@ -14,7 +14,7 @@ interface TokenDetailsProps {
 }
 
 const TokenDetails = ({ asset }: TokenDetailsProps) => {
-  const url = `${ExplorerURL}/tokens/${asset.tokenId}`;
+  const url = `${ExplorerURL}/en/token/${asset.tokenId}`;
   const colors = getAssetColors(asset.name);
 
   return (

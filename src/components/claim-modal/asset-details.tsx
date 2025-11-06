@@ -48,7 +48,7 @@ export default function AssetDetails({ assets }: AssetDetailsProps) {
                 <TokenAvatar colors={getAssetColors(asset.name)} assetName={asset.name} />
                 <TooltipTokenId tokenId={asset.tokenId}>
                   <a
-                    href={`${ExplorerURL}/tokens/${asset.tokenId}`}
+                    href={`${ExplorerURL}/en/token/${asset.tokenId}`}
                     target='_blank'
                     className='flex max-w-[160px] min-w-0 cursor-pointer items-center gap-1 overflow-hidden
                       text-gray-700 dark:text-white'
