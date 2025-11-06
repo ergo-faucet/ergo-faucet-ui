@@ -35,7 +35,6 @@ export const PackageDetails = ({
   const hasDescription = Boolean(description && description.trim() !== '');
 
   if (!hasPackageSelected) {
-    // ✅ Best-practice empty state for no selection (fixed height + centering)
     return (
       <div
         className='dark:bg-gray-1000 flex min-h-[500px] w-83 flex-col items-center justify-center rounded-[22px] border
@@ -50,7 +49,7 @@ export const PackageDetails = ({
     );
   }
 
-  // ✅ Regular details view when a package is selected
+  // Regular details view when a package is selected
   return (
     <div
       className='dark:bg-gray-1000 flex w-83 flex-col items-start justify-center gap-y-6 rounded-[22px] border
@@ -66,8 +65,10 @@ export const PackageDetails = ({
         {title}
       </span>
 
-      {/* timeline */}
-      <Timeline cooldownTime={cooldownTime} lastRequestDate={lastRequestDate} lastRequestStatus={lastRequestStatus} />
+      {/* timeline - only show if cooldownTime is not 0 */}
+      {cooldownTime !== '0' && (
+        <Timeline cooldownTime={cooldownTime} lastRequestDate={lastRequestDate} lastRequestStatus={lastRequestStatus} />
+      )}
 
       {/* authentication section */}
       <div className='w-full'>
