@@ -31,7 +31,7 @@ const TokenDetails = ({ asset }: TokenDetailsProps) => {
 
       {/* middle: formatted amount (right-aligned, no wrapping) */}
       <div className='flex flex-shrink-0 items-center justify-end px-3 text-right'>
-        <FormattedAmount amount={asset.amount} decimal={asset.decimal} />
+        <FormattedAmount amount={asset.amount} decimals={asset.decimals} />
       </div>
 
       {/* right: token ID & external link */}
