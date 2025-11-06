@@ -79,6 +79,13 @@ export const SignIn = () => {
     // persist wallet address globally for navbar display
     setGlobalWalletAddress(walletAddress);
 
+    // save wallet address to localStorage
+    try {
+      localStorage.setItem('walletAddress', walletAddress);
+    } catch (err) {
+      console.error('Failed to save wallet address to localStorage:', err);
+    }
+
     // close the sheet
     closeRef.current?.click();
   };
