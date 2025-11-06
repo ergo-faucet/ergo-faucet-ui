@@ -7,7 +7,7 @@ let refreshQueue: Array<() => void> = [];
 /**
  * Refresh access token using HttpOnly refresh cookie
  */
-const refreshAccessToken = async (): Promise<boolean> => {
+export const refreshAccessToken = async (): Promise<boolean> => {
   if (isRefreshing) {
     return new Promise((resolve) => refreshQueue.push(() => resolve(true)));
   }
@@ -20,10 +20,7 @@ const refreshAccessToken = async (): Promise<boolean> => {
       credentials: 'include',
     });
 
-    if (!response.ok) return false;
-
-    const data = await response.json();
-    useAuthStore.getState().setAccessToken(data.newToken);
+    useAuthStore.getState().setAccessToken(response.newToken);
 
     refreshQueue.forEach((cb) => cb());
     refreshQueue = [];
