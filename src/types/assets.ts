@@ -1,6 +1,6 @@
 export interface Asset {
   name: string;
   amount: bigint;
-  decimal: number;
+  decimals: number;
   tokenId: string;
 }

@@ -63,7 +63,7 @@ export default function AssetDetails({ assets }: AssetDetailsProps) {
 
               {/* amount */}
               <div className='flex-shrink-0 pr-1 text-right'>
-                <FormattedAmount amount={asset.amount} decimal={asset.decimal} />
+                <FormattedAmount amount={asset.amount} decimals={asset.decimals} />
               </div>
             </div>
           ))}
