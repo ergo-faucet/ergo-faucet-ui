@@ -15,8 +15,7 @@ const PackageAssets = ({ assets }: PackageAssetsProps) => {
 
       {/* scrollable list */}
       <ScrollArea
-        className='/* --- FIX for Radix viewport wrapper expanding width --- */ mt-1 h-28 w-full overflow-hidden
-          rounded-md [&_[data-orientation=vertical]_>div]:bg-gray-700
+        className='mt-1 max-h-28 w-full overflow-hidden rounded-md [&_[data-orientation=vertical]_>div]:bg-gray-700
           dark:[&_[data-orientation=vertical]_>div]:bg-gray-300 [&_[data-radix-scroll-area-viewport]]:max-w-full
           [&_[data-radix-scroll-area-viewport]]:min-w-0 [&_[data-radix-scroll-area-viewport]>div]:!block
           [&_[data-radix-scroll-area-viewport]>div]:!min-w-0'
