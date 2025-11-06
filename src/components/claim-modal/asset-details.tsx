@@ -1,9 +1,8 @@
 import { FaExternalLinkAlt } from 'react-icons/fa';
 
 import { ScrollArea } from '@/components/ui/scroll-area';
-import { TokenExplorerURL } from '@/configs';
 import { inter } from '@/fonts';
-import { getAssetColors } from '@/lib';
+import { generateTokenUrl, getAssetColors } from '@/lib';
 import { Asset } from '@/types';
 
 import { FormattedAmount } from '../formatted-amount';
@@ -40,7 +39,7 @@ export default function AssetDetails({ assets }: AssetDetailsProps) {
             <div
               key={idx}
               onClick={() => {
-                window.open(`${TokenExplorerURL}/${asset.tokenId}`);
+                window.open(generateTokenUrl(asset.tokenId));
               }}
               className='flex h-7 w-full max-w-[311px] cursor-pointer items-center justify-between gap-x-3
                 overflow-hidden rounded-[5px] border border-gray-700 bg-transparent px-6 py-2 text-[10px] text-black
@@ -51,7 +50,7 @@ export default function AssetDetails({ assets }: AssetDetailsProps) {
                 <TokenAvatar colors={getAssetColors(asset.name)} assetName={asset.name} />
                 <TooltipTokenId tokenId={asset.tokenId}>
                   <a
-                    href={`${TokenExplorerURL}/${asset.tokenId}`}
+                    href={generateTokenUrl(asset.tokenId)}
                     target='_blank'
                     className='flex max-w-[160px] min-w-0 cursor-pointer items-center gap-1 overflow-hidden
                       text-gray-700 dark:text-white'

@@ -1,5 +1,5 @@
 import { ScrollArea } from '@/components/ui/scroll-area';
-import { TokenExplorerURL } from '@/configs';
+import { generateTokenUrl } from '@/lib';
 import { Asset } from '@/types';
 
 import { LineAfterText } from './line-after-text';
@@ -27,7 +27,7 @@ const PackageAssets = ({ assets }: PackageAssetsProps) => {
           {assets.map((asset, idx) => (
             <div
               onClick={() => {
-                window.open(`${TokenExplorerURL}/${asset.tokenId}`);
+                window.open(generateTokenUrl(asset.tokenId));
               }}
               key={idx}
               className='w-full min-w-0 cursor-pointer'
