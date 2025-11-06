@@ -39,9 +39,12 @@ export default function AssetDetails({ assets }: AssetDetailsProps) {
           {assets.map((asset, idx) => (
             <div
               key={idx}
-              className='flex h-7 w-full max-w-[311px] items-center justify-between gap-x-3 overflow-hidden
-                rounded-[5px] border border-gray-700 bg-transparent px-6 py-2 text-[10px] text-black hover:bg-[#B5B2B2]
-                dark:border-gray-500 dark:hover:bg-[#473F3F]'
+              onClick={() => {
+                window.open(`${TokenExplorerURL}/${asset.tokenId}`);
+              }}
+              className='flex h-7 w-full max-w-[311px] cursor-pointer items-center justify-between gap-x-3
+                overflow-hidden rounded-[5px] border border-gray-700 bg-transparent px-6 py-2 text-[10px] text-black
+                hover:bg-[#B5B2B2] dark:border-gray-500 dark:hover:bg-[#473F3F]'
             >
               {/* logo and name */}
               <div className='flex min-w-0 flex-1 items-center gap-2 text-gray-700 dark:text-white'>
