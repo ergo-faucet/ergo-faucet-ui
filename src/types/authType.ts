@@ -1,1 +1,1 @@
-export type AuthType = 'discord' | 'google';
+export type AuthType = 'discord' | 'google' | 'x-platform';
