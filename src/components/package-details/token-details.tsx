@@ -2,7 +2,7 @@ import { FaExternalLinkAlt } from 'react-icons/fa';
 
 import TokenAvatar from '@/components/token-avatar';
 import { TooltipTokenId } from '@/components/tooltip-tokenid';
-import { ExplorerURL } from '@/configs';
+import { TokenExplorerURL } from '@/configs';
 import { inter } from '@/fonts';
 import { getAssetColors } from '@/lib';
 import { Asset } from '@/types';
@@ -14,7 +14,7 @@ interface TokenDetailsProps {
 }
 
 const TokenDetails = ({ asset }: TokenDetailsProps) => {
-  const url = `${ExplorerURL}/en/token/${asset.tokenId}`;
+  const url = `${TokenExplorerURL}/${asset.tokenId}`;
   const colors = getAssetColors(asset.name);
 
   return (
