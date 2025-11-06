@@ -34,7 +34,7 @@ const Card = ({ label, value }: { label: string; value: number }) => {
 // Renderer for countdown
 const renderer = ({ days, hours, minutes, seconds, completed }: CountdownRenderProps) => {
   if (completed) {
-    return <span className='text-sm text-gray-500 dark:text-gray-400'>Time’s up!</span>;
+    return <span className='text-sm text-gray-500 dark:text-gray-400'>Time&apos;s up!</span>;
   }
 
   return (
