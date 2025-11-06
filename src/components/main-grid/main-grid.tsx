@@ -185,53 +185,56 @@ export const MainGrid: React.FC = () => {
         {/* packages & searchbar */}
         <div className='flex w-full flex-col items-start justify-between gap-y-4'>
           <Searchbar />
-          <div className='justfiy-around grid w-full grid-cols-1 gap-4 md:grid-cols-2 xl:grid-cols-3 2xl:grid-cols-4'>
-            {isLoading ? (
-              <div className='flex h-screen items-center justify-center text-gray-400'>Loading packages...</div>
-            ) : Array.isArray(data) && data.length === 0 && !error ? (
-              <div className='flex h-screen items-center justify-center text-gray-500'>No packages found</div>
-            ) : (
-              Array.isArray(data) &&
-              data.map((pkg: GetPackagesResponse) => {
-                const mappedAssets: Asset[] = (pkg.assets || []).map(
-                  (a: PackageAsset): Asset => ({
-                    name: a.tokenId,
-                    amount: BigInt((a.amount ?? '0').toString()),
-                    decimals: a.decimals ?? 0,
-                    tokenId: a.tokenId,
-                  }),
-                );
 
-                const mappedAuthTasks: AuthTaskType[] = (pkg.authMethods || []).map(
-                  (method: PackageAuthMethod): AuthTaskType => ({
-                    authType: method.name as AuthType,
-                    isCompleted: (method.status ?? '') === 'passed',
-                  }),
-                );
+          {isLoading ? (
+            <div className='flex min-h-[400px] w-full items-center justify-center text-gray-400'>
+              Loading packages...
+            </div>
+          ) : Array.isArray(data) && data.length === 0 && !error ? (
+            <div className='flex min-h-[400px] w-full items-center justify-center text-gray-500'>No packages found</div>
+          ) : (
+            <div className='justfiy-around grid w-full grid-cols-1 gap-4 md:grid-cols-2 xl:grid-cols-3 2xl:grid-cols-4'>
+              {Array.isArray(data) &&
+                data.map((pkg: GetPackagesResponse) => {
+                  const mappedAssets: Asset[] = (pkg.assets || []).map(
+                    (a: PackageAsset): Asset => ({
+                      name: a.tokenId,
+                      amount: BigInt((a.amount ?? '0').toString()),
+                      decimals: a.decimals ?? 0,
+                      tokenId: a.tokenId,
+                    }),
+                  );
 
-                return (
-                  <Package
-                    key={pkg.id || pkg.name}
-                    title={pkg.name}
-                    assets={mappedAssets}
-                    authTypes={(pkg.authMethods || []).map((m: PackageAuthMethod): AuthType => m.name as AuthType)}
-                    startDate={pkg.openAt ? new Date(pkg.openAt) : undefined}
-                    endDate={pkg.closeAt ? new Date(pkg.closeAt) : undefined}
-                    onClick={() => {
-                      setSelectedPackageId(String(pkg.id || pkg.name));
-                      setSelectedPackage({
-                        title: pkg.name,
-                        description: pkg.description,
-                        delay: pkg.delay,
-                        assets: mappedAssets,
-                        authTasks: mappedAuthTasks,
-                      });
-                    }}
-                  />
-                );
-              })
-            )}
-          </div>
+                  const mappedAuthTasks: AuthTaskType[] = (pkg.authMethods || []).map(
+                    (method: PackageAuthMethod): AuthTaskType => ({
+                      authType: method.name as AuthType,
+                      isCompleted: (method.status ?? '') === 'passed',
+                    }),
+                  );
+
+                  return (
+                    <Package
+                      key={pkg.id || pkg.name}
+                      title={pkg.name}
+                      assets={mappedAssets}
+                      authTypes={(pkg.authMethods || []).map((m: PackageAuthMethod): AuthType => m.name as AuthType)}
+                      startDate={pkg.openAt ? new Date(pkg.openAt) : undefined}
+                      endDate={pkg.closeAt ? new Date(pkg.closeAt) : undefined}
+                      onClick={() => {
+                        setSelectedPackageId(String(pkg.id || pkg.name));
+                        setSelectedPackage({
+                          title: pkg.name,
+                          description: pkg.description,
+                          delay: pkg.delay,
+                          assets: mappedAssets,
+                          authTasks: mappedAuthTasks,
+                        });
+                      }}
+                    />
+                  );
+                })}
+            </div>
+          )}
         </div>
 
         {/* sortby & package details */}
