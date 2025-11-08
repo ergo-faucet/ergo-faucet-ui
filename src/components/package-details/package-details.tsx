@@ -1,4 +1,4 @@
-import { Dialog, DialogContent, DialogTrigger } from '@/components/ui/dialog';
+import { Dialog, DialogContent, DialogTitle, DialogTrigger } from '@/components/ui/dialog';
 import { volkhov } from '@/fonts';
 import { cn } from '@/lib';
 import { Asset } from '@/types';
@@ -104,6 +104,7 @@ export const PackageDetails = ({
           showCloseButton={false}
           className='flex items-center justify-center overflow-visible border-none bg-transparent p-0 shadow-none'
         >
+          <DialogTitle>Claim Modal</DialogTitle>
           <ClaimModal packageId={packageId} packageName={title} assets={assets} />
         </DialogContent>
       </Dialog>
