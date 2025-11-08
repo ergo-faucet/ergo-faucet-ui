@@ -1,7 +1,7 @@
 import { refreshAccessToken } from '@/lib/api/auth-fetch';
 import { useWalletStore } from '@/store/wallet-store';
 
-export const func = () => {
+export const updateLoginState = () => {
   const setAddress = useWalletStore.getState().setAddress;
 
   // read from localStorage
@@ -18,8 +18,9 @@ export const func = () => {
   // refresh access token
   refreshAccessToken()
     .then((a) => {
-      console.log('Access token refreshed successfully');
-      console.log(a.valueOf());
+      if (a.valueOf()) {
+        console.log('Access token refreshed successfully');
+      } else console.log('failed to refresh');
     })
     .catch((err) => {
       console.error('Failed to refresh access token:', err);
