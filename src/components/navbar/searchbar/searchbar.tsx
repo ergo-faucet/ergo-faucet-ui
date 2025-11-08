@@ -32,7 +32,7 @@ const Searchbar = () => {
               addHistory(searchQuery);
             }}
             size={27}
-            className='text-gray-900 transition-transform duration-300 ease-in-out group-hover:scale-125
+            className='cursor-pointer text-gray-900 transition-transform duration-300 ease-in-out group-hover:scale-125
               dark:text-gray-200'
           />
         </button>
