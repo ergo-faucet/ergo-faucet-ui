@@ -61,7 +61,7 @@ export const SignIn = () => {
       address: walletAddress.toString(),
       challenge: challenge.toString(),
       proof: proof.toString(),
-      captchaToken: recaptchaToken || '',
+      captchaToken: recaptchaToken || 'minimum 10 chars placeholder token',
     };
 
     const response: AuthenticationResponse = await trigger({
