@@ -29,16 +29,24 @@ interface ClaimButtonProps {
 
 export const ClaimButton = ({ className }: ClaimButtonProps) => {
   return (
-    <button
+    <span
+      role='button'
+      tabIndex={0}
+      onKeyDown={(e) => {
+        if (e.key === 'Enter' || e.key === ' ') {
+          e.preventDefault();
+        }
+      }}
       className={cn(
-        `flex h-10.5 w-42.5 cursor-pointer items-center justify-center rounded-[12px] border border-green-400
+        `inline-flex h-10.5 w-42.5 cursor-pointer items-center justify-center rounded-[12px] border border-green-400
         bg-green-700 text-[18px] leading-none font-extrabold tracking-wider text-white
-        shadow-[-2px_2px_6px_0_rgba(0,0,0)]/20 shadow-black select-none hover:bg-green-900`,
+        shadow-[-2px_2px_6px_0_rgba(0,0,0)]/20 shadow-black select-none hover:bg-green-900 focus:outline-none
+        focus-visible:ring-2 focus-visible:ring-green-500 focus-visible:ring-offset-2`,
         inter.className,
         className,
       )}
     >
       Claim Package
-    </button>
+    </span>
   );
 };
