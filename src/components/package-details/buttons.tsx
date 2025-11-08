@@ -3,14 +3,23 @@ import { cn } from '@/lib';
 
 export const ClickToCompleteButton = ({ handleOnClick }: { handleOnClick: () => void }) => {
   return (
-    <button
+    <span
+      role='button'
+      tabIndex={0}
       onClick={handleOnClick}
-      className={`${inter.className} mr-0.5 h-4.5 w-20 cursor-pointer rounded-[5px] bg-green-600 text-[8px]
-        font-semibold tracking-wider text-[#EBEBE5] shadow-[-1px_1px_4px_rgba(0,0,0,0.2)]/40 shadow-black
-        hover:bg-green-700 dark:bg-green-800 dark:hover:bg-green-900`}
+      onKeyDown={(e) => {
+        if (e.key === 'Enter' || e.key === ' ') {
+          e.preventDefault();
+          handleOnClick();
+        }
+      }}
+      className={`${inter.className} mr-0.5 inline-flex h-4.5 w-20 cursor-pointer items-center justify-center
+        rounded-[5px] bg-green-600 text-[8px] font-semibold tracking-wider text-[#EBEBE5]
+        shadow-[-1px_1px_4px_rgba(0,0,0,0.2)]/40 shadow-black select-none hover:bg-green-700 dark:bg-green-800
+        dark:hover:bg-green-900`}
     >
       Click to complete
-    </button>
+    </span>
   );
 };
 
