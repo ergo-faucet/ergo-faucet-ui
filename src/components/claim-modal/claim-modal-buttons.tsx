@@ -30,15 +30,17 @@ export const ClaimModalButtons = ({ disabled, reqBody }: ClaimModalButtonsProps)
       </DialogClose>
 
       {/* Confirm */}
-      <button
-        type='button'
-        disabled={disabled}
-        onClick={handleClaim}
-        className={`h-[37px] w-[87px] rounded-[10px] text-[16px] font-semibold text-white
-          ${disabled ? 'cursor-not-allowed bg-gray-500' : 'cursor-pointer bg-green-700 hover:bg-green-800'}`}
-      >
-        Confirm
-      </button>
+      <DialogClose>
+        <button
+          type='button'
+          disabled={disabled}
+          onClick={handleClaim}
+          className={`h-[37px] w-[87px] rounded-[10px] text-[16px] font-semibold text-white
+            ${disabled ? 'cursor-not-allowed bg-gray-500' : 'cursor-pointer bg-green-700 hover:bg-green-800'}`}
+        >
+          Confirm
+        </button>
+      </DialogClose>
     </div>
   );
 };
