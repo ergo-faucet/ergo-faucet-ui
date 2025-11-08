@@ -1,3 +1,4 @@
+// import { useWalletStore } from '@/store/wallet-store';
 import { apiFetch } from './api-fetch';
 import { useAuthStore } from './auth-store';
 
@@ -13,6 +14,8 @@ export const refreshAccessToken = async (): Promise<boolean> => {
   }
 
   isRefreshing = true;
+  // const setAccessToken = useAuthStore((e) => e.setAccessToken);
+  // const setAddress = useWalletStore((e) => e.setAddress)
 
   try {
     const response = await apiFetch('/auth/ergo/refresh-token', {
@@ -20,12 +23,26 @@ export const refreshAccessToken = async (): Promise<boolean> => {
       credentials: 'include',
     });
 
-    useAuthStore.getState().setAccessToken(response.newToken);
+    // handle 401 error from apiFetch
+    if (response.status === 401) {
+      localStorage.removeItem('walletAddress');
+      // setAccessToken(null);
+      // setAddress('');
+      console.log('here it is');
+      return false;
+    }
+
+    // setAccessToken(response.newToken);
 
     refreshQueue.forEach((cb) => cb());
     refreshQueue = [];
     return true;
   } catch {
+    //  handle case where apiFetch might throw a 401 error instead of returning it
+    localStorage.removeItem('walletAddress');
+    // setAccessToken(null);
+    // setAddress('');
+    console.log('here it is');
     return false;
   } finally {
     isRefreshing = false;

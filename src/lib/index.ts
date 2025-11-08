@@ -5,3 +5,4 @@ export { getWholePart, getFractionalPart } from './format-amount';
 export { copyToClipboard } from './copy-to-clipboard';
 export { GenerateWalletIcon } from './generate-wallet-icon';
 export { generateTokenUrl } from './generateTokenUrl';
+export { updateLoginState } from './updateLoginState';

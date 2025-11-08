@@ -3,7 +3,7 @@
 import { MainGrid } from '@/components/main-grid/main-grid';
 import Navbar from '@/components/navbar/navbar';
 import { Toaster } from '@/components/ui/sonner';
-import { updateLoginState } from '@/lib/updateLoginState';
+import { updateLoginState } from '@/lib';
 
 export default function Home() {
   updateLoginState();
