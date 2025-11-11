@@ -96,13 +96,25 @@ export const PackageDetails = ({
       </div>
 
       {/* claim button */}
-      <Dialog>
+      <Dialog modal={false}>
         <DialogTrigger className='self-center'>
           <ClaimButton className='mt-6 self-center' />
         </DialogTrigger>
         <DialogContent
+          // safety net: prevent dismiss when interacting with iframe (recaptcha)
+          onPointerDownOutside={(e) => {
+            const originalEvent = e.detail?.originalEvent as Event | undefined;
+            const target = (originalEvent?.target ?? e.target) as HTMLElement | null;
+            if (target && target.closest('iframe')) e.preventDefault();
+          }}
+          onInteractOutside={(e) => {
+            const originalEvent = e.detail?.originalEvent as Event | undefined;
+            const target = (originalEvent?.target ?? e.target) as HTMLElement | null;
+            if (target && target.closest('iframe')) e.preventDefault();
+          }}
           showCloseButton={false}
-          className='flex items-center justify-center overflow-visible border-none bg-transparent p-0 shadow-none'
+          className='flex min-h-screen min-w-screen items-center justify-center overflow-visible border-none bg-black/50
+            p-0 shadow-none'
         >
           <ClaimModal packageId={packageId} packageName={title} assets={assets} />
         </DialogContent>
