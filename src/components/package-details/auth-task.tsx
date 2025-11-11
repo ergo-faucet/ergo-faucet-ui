@@ -9,7 +9,7 @@ import { authFetch } from '@/lib/api';
 import { useAuthStore } from '@/lib/api/auth-store';
 import { AuthLoginResponse } from '@/types';
 
-import { Sheet, SheetContent, SheetTrigger } from '../ui/sheet';
+import { Sheet, SheetContent, SheetTitle, SheetTrigger } from '../ui/sheet';
 import ConnectWalletSidebar from '../wallet-sidebar/connect-wallet-sidebar';
 import { CheckIcon } from './check-icon';
 import { AuthTaskType } from './types';
@@ -64,6 +64,7 @@ const AuthTaskInner = ({ authTask }: AuthTaskProps) => {
             <ClickToCompleteButton handleOnClick={() => {}} />
           </SheetTrigger>
           <SheetContent>
+            <SheetTitle>Connect Wallet sidebar</SheetTitle>
             <ConnectWalletSidebar />
           </SheetContent>
         </Sheet>
