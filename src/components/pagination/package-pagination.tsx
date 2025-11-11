@@ -38,10 +38,10 @@ const PackagePagination = () => {
               aria-label='Previous page'
               onClick={() => decreaseCurrentPage()}
               className={cn(
-                'flex cursor-pointer items-center justify-center rounded-full px-2.5 sm:pl-2.5',
+                'flex items-center justify-center rounded-full px-2.5 sm:pl-2.5',
                 hasPreviousPage
-                  ? 'text-black hover:text-gray-900 dark:text-white'
-                  : 'pointer-events-none text-gray-700 dark:text-gray-500',
+                  ? 'cursor-pointer text-black hover:text-gray-900 dark:text-white'
+                  : 'cursor-not-allowed text-gray-700 dark:text-gray-500',
               )}
             >
               <ChevronLeftIcon />
@@ -57,10 +57,10 @@ const PackagePagination = () => {
               aria-label='Next page'
               onClick={() => increaseCurrentPage()}
               className={cn(
-                'flex cursor-pointer items-center justify-center rounded-full px-2.5 sm:pl-2.5',
+                'flex items-center justify-center rounded-full px-2.5 sm:pl-2.5',
                 hasNextPage
-                  ? 'text-black hover:text-gray-900 dark:text-white'
-                  : 'pointer-events-none text-gray-700 dark:text-gray-500',
+                  ? 'cursor-pointer text-black hover:text-gray-900 dark:text-white'
+                  : 'cursor-not-allowed text-gray-700 dark:text-gray-500',
               )}
             >
               <ChevronRightIcon />

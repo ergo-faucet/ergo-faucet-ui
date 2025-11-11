@@ -13,7 +13,7 @@ const SearchbarInput = () => {
   return (
     <DropdownMenu>
       {/* to avoid changing left space */}
-      <div className='flex items-center'>
+      <div className='flex w-full items-center'>
         {/* standard gap */}
         <div className='flex items-center justify-start gap-0.5'>
           {/* filter components */}
