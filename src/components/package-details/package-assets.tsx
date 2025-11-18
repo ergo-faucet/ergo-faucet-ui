@@ -14,21 +14,18 @@ const PackageAssets = ({ assets }: PackageAssetsProps) => {
     <div className='flex h-auto w-[286px] flex-col items-start justify-start'>
       <LineAfterText text='Assets' />
 
-      {/* scrollable list */}
+      {/* Scrollable list */}
       <ScrollArea
-        className='mt-1 max-h-28 w-full overflow-hidden rounded-md [&_[data-orientation=vertical]_>div]:bg-gray-700
+        className='mt-1 h-28 w-full rounded-md [&_[data-orientation=vertical]_>div]:bg-gray-700
           dark:[&_[data-orientation=vertical]_>div]:bg-gray-300 [&_[data-radix-scroll-area-viewport]]:max-w-full
           [&_[data-radix-scroll-area-viewport]]:min-w-0 [&_[data-radix-scroll-area-viewport]>div]:!block
           [&_[data-radix-scroll-area-viewport]>div]:!min-w-0'
       >
-        {/* internal padding so scrollbar never overlaps content */}
-        <div className='flex w-full max-w-full min-w-0 flex-col gap-1 pr-4 pl-[2px]'>
+        <div className='flex w-full max-w-full min-w-0 flex-col gap-1 overflow-y-auto pr-4 pl-[2px]'>
           {assets.map((asset, idx) => (
             <div
-              onClick={() => {
-                window.open(generateTokenUrl(asset.tokenId));
-              }}
               key={idx}
+              onClick={() => window.open(generateTokenUrl(asset.tokenId))}
               className='w-full min-w-0 cursor-pointer'
             >
               <TokenDetails asset={asset} />
