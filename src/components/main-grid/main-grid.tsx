@@ -9,7 +9,7 @@ import { usePaginationStore } from '@/components/pagination/useStore';
 import { swrFetcher } from '@/lib/api';
 import { swrAuthFetcher } from '@/lib/api/auth-fetch';
 import { useAuthStore } from '@/lib/api/auth-store';
-import { Asset, AuthType, GetPackagesResponse } from '@/types';
+import { Asset, AuthType, PackageType, GetPackagesResponse } from '@/types';
 
 import Searchbar from '../navbar/searchbar/searchbar';
 import SortBy from '../navbar/sort-by';
@@ -66,7 +66,7 @@ export const MainGrid: React.FC = () => {
 
   const key = `/controller/packages?offset=${offset}&limit=${limit}&sort=${sortField}&order=${sortOrder}`;
   const fetcher = accessToken ? swrAuthFetcher : swrFetcher;
-  const { data, error, isLoading } = useSWR<GetPackagesResponse[]>(didInitFromUrl ? key : null, fetcher);
+  const { data, error, isLoading } = useSWR<GetPackagesResponse>(didInitFromUrl ? key : null, fetcher);
 
   // refetch packages immediately after login
   useEffect(() => {
@@ -78,13 +78,14 @@ export const MainGrid: React.FC = () => {
   // Update pagination and selected package data
   useEffect(() => {
     if (!didInitFromUrl) return;
-    if (Array.isArray(data)) {
-      const approximateTotal: number = offset + data.length + (data.length === limit ? limit : 0);
-      setTotalEntries(approximateTotal);
-      setTotalPages(Math.max(1, Math.ceil(approximateTotal / entriesPerPage)));
+    if (data) {
+      setTotalEntries(data.total);
+      setTotalPages(Math.max(1, Math.ceil(data.total / entriesPerPage)));
 
       if (selectedPackageId) {
-        const matched: GetPackagesResponse | undefined = data.find((p) => String(p.id || p.name) === selectedPackageId);
+        const matched: PackageType | undefined = data.packages.find(
+          (p) => String(p.id || p.name) === selectedPackageId,
+        );
         if (matched) {
           const mappedAuthTasks: AuthTaskType[] = (matched.authMethods || []).map(
             (m: PackageAuthMethod): AuthTaskType => ({
@@ -119,9 +120,9 @@ export const MainGrid: React.FC = () => {
   useEffect(() => {
     if (!didInitFromUrl) return;
     if (!selectedPackageId) return;
-    if (!Array.isArray(data)) return;
+    if (!data) return;
 
-    const matched = data.find((p) => String(p.id || p.name) === selectedPackageId);
+    const matched = data.packages.find((p) => String(p.id || p.name) === selectedPackageId);
     if (!matched) return;
 
     const mappedAuthTasks: AuthTaskType[] = (matched.authMethods || []).map(
@@ -190,12 +191,12 @@ export const MainGrid: React.FC = () => {
             <div className='flex min-h-[400px] w-full items-center justify-center text-gray-400'>
               Loading packages...
             </div>
-          ) : Array.isArray(data) && data.length === 0 && !error ? (
+          ) : data && data.packages.length === 0 && !error ? (
             <div className='flex min-h-[400px] w-full items-center justify-center text-gray-500'>No packages found</div>
           ) : (
             <div className='justfiy-around grid w-full grid-cols-1 gap-4 md:grid-cols-2 xl:grid-cols-3 2xl:grid-cols-4'>
-              {Array.isArray(data) &&
-                data.map((pkg: GetPackagesResponse) => {
+              {data &&
+                data.packages.map((pkg: PackageType) => {
                   const mappedAssets: Asset[] = (pkg.assets || []).map(
                     (a: PackageAsset): Asset => ({
                       name: a.tokenId,
