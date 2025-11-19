@@ -42,7 +42,7 @@ export interface PackageAuthMethodDto {
   status?: string;
 }
 
-export interface GetPackagesResponse {
+export interface PackageType {
   id: number;
   name: string;
   description: string;
@@ -53,6 +53,11 @@ export interface GetPackagesResponse {
   numberEachUser: number;
   assets: PackageAssetDto[];
   authMethods: PackageAuthMethodDto[];
+}
+
+export interface GetPackagesResponse {
+  total: number;
+  packages: PackageType[];
 }
 
 export interface AuthLoginResponse {

@@ -18,9 +18,9 @@ const Package = ({ title, assets, authTypes, startDate, endDate, onClick }: Pack
     // container
     <div
       onClick={onClick}
-      className={`${robotoCondensed.className} dark:bg-gray-1000 flex h-[195px] max-w-full min-w-[250px] flex-col
-        overflow-hidden rounded-[18px] border border-gray-500 bg-gray-100 shadow-[-1px_3px_10px_rgba(0,0,0,0.5)]
-        transition-transform dark:border-gray-700`}
+      className={`${robotoCondensed.className} dark:bg-gray-1000 flex h-[195px] max-w-full min-w-[250px] cursor-pointer
+        flex-col overflow-hidden rounded-[18px] border border-gray-500 bg-gray-100
+        shadow-[-1px_3px_10px_rgba(0,0,0,0.5)] transition-transform hover:scale-[1.04] dark:border-gray-700`}
     >
       {/* title */}
       <div

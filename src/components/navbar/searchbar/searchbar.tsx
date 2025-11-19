@@ -17,7 +17,7 @@ const Searchbar = () => {
         transition-all duration-300 ease-linear dark:border-gray-400 dark:via-gray-900 dark:to-gray-800`}
     >
       {/* history and input area */}
-      <div className='m-3 flex flex-1 items-center'>
+      <div className='m-3 flex w-full flex-1 items-center'>
         <History />
         <div className='m-3 h-6 w-px bg-gray-500'></div>
         {/* input area */}
@@ -32,7 +32,7 @@ const Searchbar = () => {
               addHistory(searchQuery);
             }}
             size={27}
-            className='text-gray-900 transition-transform duration-300 ease-in-out group-hover:scale-125
+            className='cursor-pointer text-gray-900 transition-transform duration-300 ease-in-out group-hover:scale-125
               dark:text-gray-200'
           />
         </button>

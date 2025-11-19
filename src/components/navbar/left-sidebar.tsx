@@ -21,23 +21,35 @@ const LeftSidebar = ({ className }: LeftSidebarProps) => {
     <div
       className={cn(
         `dark:bg-gray-1100 flex min-h-screen w-24 flex-col items-center justify-start gap-y-6 bg-gray-50 pt-30
-        dark:border dark:border-gray-700 [&>*]:transition-colors [&>*]:duration-300`,
+        dark:border dark:border-gray-700 [&>*]:transition-all [&>*]:duration-300 [&>*]:ease-out`,
         className,
       )}
     >
       {/* explore */}
       <LeftSidebarIcon title='Explore' selected={selected === 'Explore'} onClick={() => setSelected('Explore')}>
-        <MdOutlineExplore size={50} />
+        <MdOutlineExplore
+          size={50}
+          className='transition-transform duration-300 hover:scale-125 hover:drop-shadow-[0_0_8px_rgba(0,0,0,0.25)]
+            active:scale-95'
+        />
       </LeftSidebarIcon>
 
       {/* history */}
       <LeftSidebarIcon title='History' selected={selected === 'History'} onClick={() => setSelected('History')}>
-        <RiHistoryLine size={35} />
+        <RiHistoryLine
+          size={35}
+          className='transition-transform duration-300 hover:scale-125 hover:drop-shadow-[0_0_8px_rgba(0,0,0,0.25)]
+            active:scale-95'
+        />
       </LeftSidebarIcon>
 
       {/* about us */}
       <LeftSidebarIcon title='About Us' selected={selected === 'About Us'} onClick={() => setSelected('About Us')}>
-        <HiUsers className='scale-x-[-1]' size={40} />
+        <HiUsers
+          className='scale-x-[-1] transition-transform duration-300 hover:-translate-x-1 hover:scale-125
+            hover:drop-shadow-[0_0_8px_rgba(0,0,0,0.25)] active:scale-95'
+          size={40}
+        />
       </LeftSidebarIcon>
     </div>
   );

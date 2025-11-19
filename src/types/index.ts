@@ -9,6 +9,7 @@ export type {
   ChallengeResponse,
   RefreshTokenResponse,
   GetPackagesResponse,
+  PackageType,
   AuthLoginResponse,
   ClaimPackageRequestBody,
   ClaimPackageResponse,

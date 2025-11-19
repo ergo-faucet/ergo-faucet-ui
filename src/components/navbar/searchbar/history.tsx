@@ -13,12 +13,13 @@ import {
 import { useSearchbar } from './useStore';
 
 const History = () => {
-  const { history, clearHistory } = useSearchbar();
+  const { history, clearHistory, setSearchQuery } = useSearchbar();
   return (
     <DropdownMenu>
       <DropdownMenuTrigger asChild>
         <button
-          className='dark:hover:bg-dark-green-ergo-navbar rounded-full p-1 transition-colors hover:bg-gray-100'
+          className='dark:hover:bg-dark-green-ergo-navbar cursor-pointer rounded-full p-1 transition-colors
+            hover:bg-gray-100'
           aria-label='Search settings'
         >
           <VscHistory size={28} className='stroke-[0.5px] text-gray-900 dark:text-gray-200' />
@@ -41,11 +42,21 @@ const History = () => {
         )}
 
         {history.map((his, id) => {
-          return <DropdownMenuItem key={id}>{his}</DropdownMenuItem>;
+          return (
+            <DropdownMenuItem
+              onClick={() => {
+                setSearchQuery(his);
+              }}
+              key={id}
+              className='cursor-pointer'
+            >
+              {his}
+            </DropdownMenuItem>
+          );
         })}
 
         <DropdownMenuSeparator />
-        <DropdownMenuItem onClick={clearHistory}>
+        <DropdownMenuItem onClick={clearHistory} className='cursor-pointer'>
           <span className='text-[11px] text-gray-800 dark:text-gray-300'>Cleaer recent searches</span>
         </DropdownMenuItem>
       </DropdownMenuContent>
