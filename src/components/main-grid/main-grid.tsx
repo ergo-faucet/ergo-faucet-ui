@@ -1,5 +1,6 @@
 'use client';
 
+import { useSession } from 'next-auth/react';
 import React, { useEffect, useState, Suspense } from 'react';
 
 import { toast } from 'sonner';
@@ -8,7 +9,6 @@ import useSWR, { mutate } from 'swr';
 import { usePaginationStore } from '@/components/pagination/useStore';
 import { swrFetcher } from '@/lib/api';
 import { swrAuthFetcher } from '@/lib/api/auth-fetch';
-import { useAuthStore } from '@/lib/api/auth-store';
 import { Asset, AuthType, PackageType, GetPackagesResponse } from '@/types';
 
 import Searchbar from '../navbar/searchbar/searchbar';
@@ -52,7 +52,8 @@ export const MainGrid: React.FC = () => {
   const [sortField, setSortField] = useState<'name' | 'releaseDate'>('name');
   const [sortOrder, setSortOrder] = useState<'asc' | 'desc'>('asc');
 
-  const accessToken = useAuthStore((s) => s.accessToken);
+  const { data: session } = useSession();
+  const hasAccessToken = Boolean(session?.accessToken);
 
   const entriesPerPage = usePaginationStore((s) => s.entriesPerPage);
   const currentPage = usePaginationStore((s) => s.currentPage);
@@ -65,15 +66,15 @@ export const MainGrid: React.FC = () => {
   const limit = entriesPerPage;
 
   const key = `/controller/packages?offset=${offset}&limit=${limit}&sort=${sortField}&order=${sortOrder}`;
-  const fetcher = accessToken ? swrAuthFetcher : swrFetcher;
+  const fetcher = hasAccessToken ? swrAuthFetcher : swrFetcher;
   const { data, error, isLoading } = useSWR<GetPackagesResponse>(didInitFromUrl ? key : null, fetcher);
 
   // refetch packages immediately after login
   useEffect(() => {
-    if (accessToken) {
+    if (hasAccessToken) {
       mutate((k) => typeof k === 'string' && k.startsWith('/controller/packages'));
     }
-  }, [accessToken]);
+  }, [hasAccessToken]);
 
   // Update pagination and selected package data
   useEffect(() => {

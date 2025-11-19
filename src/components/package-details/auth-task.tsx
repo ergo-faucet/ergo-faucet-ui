@@ -1,15 +1,15 @@
 'use client';
 
+import { useSession } from 'next-auth/react';
 import { usePathname, useSearchParams } from 'next/navigation';
 import { Suspense } from 'react';
 
 import { ClickToCompleteButton } from '@/components/package-details/buttons';
 import { GenerateAuthTypeIcon } from '@/lib';
 import { authFetch } from '@/lib/api';
-import { useAuthStore } from '@/lib/api/auth-store';
 import { AuthLoginResponse } from '@/types';
 
-import { Sheet, SheetContent, SheetTitle, SheetTrigger } from '../ui/sheet';
+import { Sheet, SheetContent, SheetTrigger } from '../ui/sheet';
 import ConnectWalletSidebar from '../wallet-sidebar/connect-wallet-sidebar';
 import { CheckIcon } from './check-icon';
 import { AuthTaskType } from './types';
@@ -21,8 +21,8 @@ interface AuthTaskProps {
 const AuthTaskInner = ({ authTask }: AuthTaskProps) => {
   const pathname = usePathname();
   const searchParams = useSearchParams();
-
-  const accessToken = useAuthStore((s) => s.accessToken);
+  const { data: session } = useSession();
+  const hasAccessToken = Boolean(session?.accessToken);
 
   const handleComplete = async () => {
     let endpoint = '';
@@ -58,20 +58,20 @@ const AuthTaskInner = ({ authTask }: AuthTaskProps) => {
       </div>
 
       {/* not logged in */}
-      {!accessToken && (
+      {!hasAccessToken && (
         <Sheet>
           <SheetTrigger>
             <ClickToCompleteButton handleOnClick={() => {}} />
           </SheetTrigger>
           <SheetContent>
-            <SheetTitle>Connect Wallet sidebar</SheetTitle>
             <ConnectWalletSidebar />
           </SheetContent>
         </Sheet>
       )}
 
       {/* logged in */}
-      {accessToken && (authTask.isCompleted ? <CheckIcon /> : <ClickToCompleteButton handleOnClick={handleComplete} />)}
+      {hasAccessToken &&
+        (authTask.isCompleted ? <CheckIcon /> : <ClickToCompleteButton handleOnClick={handleComplete} />)}
     </div>
   );
 };

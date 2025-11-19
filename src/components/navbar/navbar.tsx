@@ -1,14 +1,15 @@
 'use client';
 
+import { signOut, useSession } from 'next-auth/react';
+import { useEffect } from 'react';
 import { FiLogOut } from 'react-icons/fi';
 
 import { authFetch } from '@/lib/api';
-import { useAuthStore } from '@/lib/api/auth-store';
 import { useWalletStore } from '@/store/wallet-store';
 import { WalletType } from '@/types';
 
 import { DropdownMenu, DropdownMenuContent, DropdownMenuItem, DropdownMenuTrigger } from '../ui/dropdown-menu';
-import { Sheet, SheetContent, SheetTitle, SheetTrigger } from '../ui/sheet';
+import { Sheet, SheetContent, SheetTrigger } from '../ui/sheet';
 import ConnectWalletSidebar from '../wallet-sidebar/connect-wallet-sidebar';
 import ToggleThemeButton from './toggle-theme-button';
 import WalletAddress from './wallet-address';
@@ -20,14 +21,24 @@ interface NavbarProps {
 const Navbar = ({ walletType }: NavbarProps) => {
   const address = useWalletStore((s) => s.address);
   const disconnect = useWalletStore((s) => s.disconnect);
-  const setAccessToken = useAuthStore((s) => s.setAccessToken);
+  const setAddress = useWalletStore((s) => s.setAddress);
+  const { data: session, status } = useSession();
+  const addressFromSession = session?.user?.address ?? '';
+
+  useEffect(() => {
+    if (addressFromSession) {
+      setAddress(addressFromSession);
+    } else if (status === 'unauthenticated') {
+      disconnect();
+    }
+  }, [addressFromSession, status, setAddress, disconnect]);
 
   const handleLogout = async () => {
     try {
       await authFetch('/auth/ergo/logout', { method: 'GET', credentials: 'include' });
     } catch {
     } finally {
-      setAccessToken(null);
+      await signOut({ redirect: false });
       disconnect();
     }
   };
@@ -79,7 +90,6 @@ const Navbar = ({ walletType }: NavbarProps) => {
                 if (target && target.closest('iframe')) e.preventDefault();
               }}
             >
-              <SheetTitle>Connect Wallet sidebar</SheetTitle>
               <ConnectWalletSidebar />
             </SheetContent>
           </Sheet>
