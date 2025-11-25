@@ -2,14 +2,16 @@
 
 import { useSession } from 'next-auth/react';
 import { usePathname, useSearchParams } from 'next/navigation';
-import { Suspense } from 'react';
+import { Suspense, useState } from 'react';
+
+import { toast } from 'sonner';
 
 import { ClickToCompleteButton } from '@/components/package-details/buttons';
 import { GenerateAuthTypeIcon } from '@/lib';
 import { authFetch } from '@/lib/api';
 import { AuthLoginResponse } from '@/types';
 
-import { Sheet, SheetContent, SheetTrigger } from '../ui/sheet';
+import { Sheet, SheetContent, SheetTitle, SheetTrigger } from '../ui/sheet';
 import ConnectWalletSidebar from '../wallet-sidebar/connect-wallet-sidebar';
 import { CheckIcon } from './check-icon';
 import { AuthTaskType } from './types';
@@ -22,7 +24,8 @@ const AuthTaskInner = ({ authTask }: AuthTaskProps) => {
   const pathname = usePathname();
   const searchParams = useSearchParams();
   const { data: session } = useSession();
-  const hasAccessToken = Boolean(session?.accessToken);
+  const hasAccessToken = Boolean(session?.accessToken && !session.error);
+  const [showConnectSheet, setShowConnectSheet] = useState(false);
 
   const handleComplete = async () => {
     let endpoint = '';
@@ -43,6 +46,11 @@ const AuthTaskInner = ({ authTask }: AuthTaskProps) => {
     const frontState = currentQuery ? `${pathname}?${currentQuery}` : pathname;
 
     const response: AuthLoginResponse = await authFetch(`${endpoint}?state=${encodeURIComponent(frontState)}`);
+    if (!response.redirectURL) {
+      toast.error('Please login to complete this task !');
+      setShowConnectSheet(true);
+      return;
+    }
 
     // Redirect browser directly to backend OAuth endpoint with state
     window.location.href = response.redirectURL;
@@ -60,10 +68,11 @@ const AuthTaskInner = ({ authTask }: AuthTaskProps) => {
       {/* not logged in */}
       {!hasAccessToken && (
         <Sheet>
-          <SheetTrigger>
+          <SheetTrigger asChild>
             <ClickToCompleteButton handleOnClick={() => {}} />
           </SheetTrigger>
           <SheetContent>
+            <SheetTitle className='sr-only'>Connect your wallet</SheetTitle>
             <ConnectWalletSidebar />
           </SheetContent>
         </Sheet>
@@ -72,6 +81,13 @@ const AuthTaskInner = ({ authTask }: AuthTaskProps) => {
       {/* logged in */}
       {hasAccessToken &&
         (authTask.isCompleted ? <CheckIcon /> : <ClickToCompleteButton handleOnClick={handleComplete} />)}
+
+      <Sheet open={showConnectSheet} onOpenChange={setShowConnectSheet}>
+        <SheetContent>
+          <SheetTitle className='sr-only'>Connect your wallet</SheetTitle>
+          <ConnectWalletSidebar />
+        </SheetContent>
+      </Sheet>
     </div>
   );
 };

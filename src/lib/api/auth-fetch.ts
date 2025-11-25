@@ -1,18 +1,14 @@
-// import { useWalletStore } from '@/store/wallet-store';
 'use client';
 
 import { getSession } from 'next-auth/react';
 
 import { apiFetch } from './api-fetch';
 
-// import { useWalletStore } from '@/store/wallet-store';
-
-// import { useWalletStore } from '@/store/wallet-store';
-
-// import { useWalletStore } from '@/store/wallet-store';
-
 const getAccessToken = async (): Promise<string | null> => {
   const session = await getSession();
+  if (session?.error === 'RefreshAccessTokenError') {
+    return null;
+  }
   return session?.accessToken ?? null;
 };
 
