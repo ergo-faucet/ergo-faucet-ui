@@ -68,7 +68,7 @@ const AuthTaskInner = ({ authTask }: AuthTaskProps) => {
       {/* not logged in */}
       {!hasAccessToken && (
         <Sheet>
-          <SheetTrigger asChild>
+          <SheetTrigger>
             <ClickToCompleteButton handleOnClick={() => {}} />
           </SheetTrigger>
           <SheetContent>

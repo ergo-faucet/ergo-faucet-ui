@@ -9,7 +9,7 @@ import { useWalletStore } from '@/store/wallet-store';
 import { WalletType } from '@/types';
 
 import { DropdownMenu, DropdownMenuContent, DropdownMenuItem, DropdownMenuTrigger } from '../ui/dropdown-menu';
-import { Sheet, SheetContent, SheetTrigger } from '../ui/sheet';
+import { Sheet, SheetContent, SheetTitle, SheetTrigger } from '../ui/sheet';
 import ConnectWalletSidebar from '../wallet-sidebar/connect-wallet-sidebar';
 import ToggleThemeButton from './toggle-theme-button';
 import WalletAddress from './wallet-address';
@@ -90,6 +90,7 @@ const Navbar = ({ walletType }: NavbarProps) => {
                 if (target && target.closest('iframe')) e.preventDefault();
               }}
             >
+              <SheetTitle className='sr-only'>Connect your wallet</SheetTitle>
               <ConnectWalletSidebar />
             </SheetContent>
           </Sheet>
