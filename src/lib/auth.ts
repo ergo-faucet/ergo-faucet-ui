@@ -37,16 +37,28 @@ export const { handlers, auth, signIn, signOut } = NextAuth({
       },
     }),
   ],
-
+  session: { strategy: 'jwt' },
   callbacks: {
+    jwt: async ({ token, user }) => {
+      if (user) {
+        token.accessToken = (user as unknown as { accessToken?: string }).accessToken;
+        token.address = (user as unknown as { address?: string }).address;
+        token.name = user.name ?? null;
+      }
+      return token;
+    },
     session: async ({ session, token }) => {
+      session.accessToken = token.accessToken as string | undefined;
       if (session.user) {
-        session.user.address = token.address as string;
-        session.user.name = token.name as string;
+        if (token.address) {
+          session.user.address = token.address as string;
+        }
+        if (typeof token.name === 'string') {
+          session.user.name = token.name;
+        }
       }
       return session;
     },
   },
-
   trustHost: true,
 });
