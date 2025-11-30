@@ -38,8 +38,6 @@ export const { handlers, auth, signIn, signOut } = NextAuth({
     }),
   ],
 
-  session: { strategy: 'database' },
-
   callbacks: {
     session: async ({ session, token }) => {
       if (session.user) {
