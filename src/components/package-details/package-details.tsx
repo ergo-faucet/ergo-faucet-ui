@@ -116,7 +116,7 @@ export const PackageDetails = ({
           className='flex min-h-screen min-w-screen items-center justify-center overflow-visible border-none bg-black/50
             p-0 shadow-none'
         >
-          <DialogTitle>Claim Modal</DialogTitle>
+          <DialogTitle className='sr-only'>Claim Modal</DialogTitle>
           <ClaimModal packageId={packageId} packageName={title} assets={assets} />
         </DialogContent>
       </Dialog>

@@ -1,17 +1,16 @@
 'use client';
 
-import { useEffect, useRef, useState } from 'react';
+import { signIn } from 'next-auth/react';
+import { useRef, useState } from 'react';
 import ReCAPTCHA from 'react-google-recaptcha';
 
 import { AlertCircleIcon } from 'lucide-react';
-import useSWRMutation from 'swr/mutation';
 
 import { RecaptchaSiteKey } from '@/configs';
 import { inter } from '@/fonts';
-import { swrFetcher, useAuthStore } from '@/lib/api';
 import { cn } from '@/lib/utils';
 import { useWalletStore } from '@/store/wallet-store';
-import { AuthenticationBody, AuthenticationResponse } from '@/types';
+import { AuthenticationBody } from '@/types';
 
 import { Alert, AlertDescription, AlertTitle } from '../ui/alert';
 import { SheetClose } from '../ui/sheet';
@@ -27,24 +26,14 @@ export const SignIn = () => {
   const [recaptchaToken, setRecaptchaToken] = useState<string | null>(null);
   const [recaptchaKey, setRecaptchaKey] = useState(0); // to reload recaptcha
   const closeRef = useRef<HTMLButtonElement | null>(null);
-  const setAccessToken = useAuthStore((e) => e.setAccessToken);
+  const [isSubmitting, setIsSubmitting] = useState(false);
 
   const isRecaptchaRequired = !!RecaptchaSiteKey;
 
   // TODO: actually validate it
   const isAddressValid = walletAddress.trim().length > 10;
-  const isLoginDisabled = !isAddressValid || (isRecaptchaRequired && !recaptchaToken);
-
-  const { trigger, isMutating, error } = useSWRMutation('/auth/ergo/auth', swrFetcher);
+  const isLoginDisabled = !isAddressValid || (isRecaptchaRequired && !recaptchaToken) || isSubmitting;
   const [errorDescription, setErrorDescription] = useState('');
-
-  useEffect(() => {
-    if (error) {
-      setErrorDescription('Authentication request failed');
-    } else {
-      setErrorDescription('');
-    }
-  }, [error]);
 
   const handleRecaptchaChange = (token: string | null) => {
     setRecaptchaToken(token);
@@ -61,23 +50,41 @@ export const SignIn = () => {
       address: walletAddress.toString(),
       challenge: challenge.toString(),
       proof: proof.toString(),
-      captchaToken: recaptchaToken || '',
+      captchaToken: recaptchaToken || 'minimum 10 chars placeholder token',
     };
 
-    const response: AuthenticationResponse = await trigger({
-      method: 'POST',
-      body: JSON.stringify(body),
-      credentials: 'include',
-    });
+    setErrorDescription('');
+    setIsSubmitting(true);
+    try {
+      const result = await signIn('credentials', {
+        redirect: false,
+        ...body,
+      });
 
-    // set access token
-    setAccessToken(response.accessToken);
+      if (result?.error) {
+        setErrorDescription(result.error);
+        return;
+      }
+    } catch (err) {
+      const message = err instanceof Error ? err.message : 'Authentication request failed';
+      setErrorDescription(message);
+      return;
+    } finally {
+      setIsSubmitting(false);
+    }
 
     // go to selection mode again
     setState('selection');
 
     // persist wallet address globally for navbar display
     setGlobalWalletAddress(walletAddress);
+
+    // save wallet address to localStorage
+    try {
+      localStorage.setItem('walletAddress', walletAddress);
+    } catch (err) {
+      console.error('Failed to save wallet address to localStorage:', err);
+    }
 
     // close the sheet
     closeRef.current?.click();
@@ -108,21 +115,21 @@ export const SignIn = () => {
 
       {/* login button */}
       <button
-        disabled={isLoginDisabled || isMutating}
+        disabled={isLoginDisabled}
         onClick={handleLoginOnClick}
         className={`h-10.5 w-full rounded-[10px] text-[17px] font-semibold tracking-widest text-white
-          ${isLoginDisabled || isMutating ? 'cursor-not-allowed bg-gray-500' : 'cursor-pointer bg-green-700 hover:bg-green-800'}`}
+          ${isLoginDisabled ? 'cursor-not-allowed bg-gray-500' : 'cursor-pointer bg-green-700 hover:bg-green-800'}`}
       >
-        {isMutating ? 'Logging in...' : 'Login'}
+        {isSubmitting ? 'Logging in...' : 'Login'}
       </button>
 
       {/* alert */}
-      {error && (
+      {errorDescription && (
         <Alert variant='destructive' className={cn('w-full', inter.className)}>
           <AlertCircleIcon />
           <AlertTitle className='text-[14px] font-semibold tracking-wide'>Unable to login</AlertTitle>
           <AlertDescription>
-            <p className='text-[11px] font-medium'>{errorDescription || (error as Error).message}</p>
+            <p className='text-[11px] font-medium'>{errorDescription}</p>
           </AlertDescription>
         </Alert>
       )}

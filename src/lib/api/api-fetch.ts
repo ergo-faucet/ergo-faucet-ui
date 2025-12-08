@@ -10,10 +10,6 @@ export const apiFetch = async (url: string, options: RequestInit = {}) => {
     },
   });
 
-  if (!response.ok) {
-    throw new Error(`API error: ${response.statusText}`);
-  }
-
   return response.json();
 };
 
