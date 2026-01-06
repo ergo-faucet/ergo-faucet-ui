@@ -25,6 +25,8 @@ interface SelectedPackageProps {
   assets: Asset[];
   description: string;
   delay?: string;
+  openAt?: number;
+  closeAt?: number;
 }
 
 interface PackageAsset {
@@ -111,6 +113,8 @@ export const MainGrid: React.FC = () => {
             delay: matched.delay,
             authTasks: mappedAuthTasks,
             assets: mappedAssets,
+            openAt: matched.openAt,
+            closeAt: matched.closeAt,
           };
           setSelectedPackage(details);
         }
@@ -149,6 +153,8 @@ export const MainGrid: React.FC = () => {
       delay: matched.delay,
       authTasks: mappedAuthTasks,
       assets: mappedAssets,
+      openAt: matched.openAt,
+      closeAt: matched.closeAt,
     };
     setSelectedPackage(details);
   }, [data, selectedPackageId, didInitFromUrl]);
@@ -231,6 +237,8 @@ export const MainGrid: React.FC = () => {
                           delay: pkg.delay,
                           assets: mappedAssets,
                           authTasks: mappedAuthTasks,
+                          openAt: pkg.openAt,
+                          closeAt: pkg.closeAt,
                         });
                       }}
                     />
@@ -250,6 +258,8 @@ export const MainGrid: React.FC = () => {
             assets={selectedPackage.assets}
             description={selectedPackage.description}
             cooldownTime={selectedPackage.delay}
+            openAt={selectedPackage.openAt}
+            closeAt={selectedPackage.closeAt}
           />
         </div>
       </div>

@@ -17,6 +17,8 @@ interface PackageDetailsProps extends TimelineProps {
   authTasks: AuthTaskType[];
   assets: Asset[];
   description: string;
+  openAt?: number;
+  closeAt?: number;
 }
 
 export const PackageDetails = ({
@@ -28,11 +30,20 @@ export const PackageDetails = ({
   cooldownTime,
   lastRequestDate,
   lastRequestStatus,
+  openAt,
+  closeAt,
 }: PackageDetailsProps) => {
   const hasPackageSelected = Boolean(packageId && title && title.trim() !== '');
   const hasAuth = Array.isArray(authTasks) && authTasks.length > 0;
   const hasAssets = Array.isArray(assets) && assets.length > 0;
   const hasDescription = Boolean(description && description.trim() !== '');
+
+  // Calculate if claim button should be disabled (before openAt or after closeAt)
+  // openAt and closeAt are Unix timestamps in seconds, convert to milliseconds for comparison
+  const now = Date.now();
+  const openAtMs = openAt !== undefined ? openAt * 1000 : undefined;
+  const closeAtMs = closeAt !== undefined ? closeAt * 1000 : undefined;
+  const isDisabled = (openAtMs !== undefined && now < openAtMs) || (closeAtMs !== undefined && now > closeAtMs);
 
   if (!hasPackageSelected) {
     return (
@@ -97,8 +108,17 @@ export const PackageDetails = ({
 
       {/* claim button */}
       <Dialog modal={false}>
-        <DialogTrigger className='self-center'>
-          <ClaimButton className='mt-6 self-center' />
+        <DialogTrigger
+          className='self-center'
+          disabled={isDisabled}
+          onClick={(e) => {
+            if (isDisabled) {
+              e.preventDefault();
+              e.stopPropagation();
+            }
+          }}
+        >
+          <ClaimButton className='mt-6 self-center' disabled={isDisabled} />
         </DialogTrigger>
         <DialogContent
           // safety net: prevent dismiss when interacting with iframe (recaptcha)
