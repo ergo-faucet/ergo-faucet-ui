@@ -55,6 +55,8 @@ export interface PackageType {
   numberEachUser: number;
   assets: PackageAssetDto[];
   authMethods: PackageAuthMethodDto[];
+  lastRequestTime?: number;
+  lastRequestStatus?: string;
 }
 
 export interface GetPackagesResponse {

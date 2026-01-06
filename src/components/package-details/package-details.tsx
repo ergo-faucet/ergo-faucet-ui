@@ -11,7 +11,7 @@ import PackageDescription from './package-description';
 import { Timeline, TimelineProps } from './timeline';
 import { AuthTaskType } from './types';
 
-interface PackageDetailsProps extends TimelineProps {
+interface PackageDetailsProps extends Omit<TimelineProps, 'cooldownTime' | 'lastRequestDate' | 'lastRequestStatus'> {
   packageId: number;
   title: string;
   authTasks: AuthTaskType[];
@@ -19,6 +19,9 @@ interface PackageDetailsProps extends TimelineProps {
   description: string;
   openAt?: number;
   closeAt?: number;
+  delay?: string;
+  lastRequestTime?: number;
+  lastRequestStatus?: string;
 }
 
 export const PackageDetails = ({
@@ -27,8 +30,8 @@ export const PackageDetails = ({
   authTasks,
   assets,
   description,
-  cooldownTime,
-  lastRequestDate,
+  delay,
+  lastRequestTime,
   lastRequestStatus,
   openAt,
   closeAt,
@@ -44,6 +47,16 @@ export const PackageDetails = ({
   const openAtMs = openAt !== undefined ? openAt * 1000 : undefined;
   const closeAtMs = closeAt !== undefined ? closeAt * 1000 : undefined;
   const isDisabled = (openAtMs !== undefined && now < openAtMs) || (closeAtMs !== undefined && now > closeAtMs);
+
+  // Calculate cooldown end time: lastRequestTime (seconds) + delay (seconds) = end time
+  // Both lastRequestTime and delay are in seconds from backend
+  // Convert to milliseconds for Date object: (seconds) * 1000
+  const delaySeconds = delay ? parseInt(delay, 10) : 0;
+  const cooldownEndTime =
+    lastRequestTime !== undefined && delay && delaySeconds > 0
+      ? new Date((lastRequestTime + delaySeconds) * 1000)
+      : undefined;
+  const lastRequestDate = lastRequestTime !== undefined ? new Date(lastRequestTime * 1000) : undefined;
 
   if (!hasPackageSelected) {
     return (
@@ -76,9 +89,13 @@ export const PackageDetails = ({
         {title}
       </span>
 
-      {/* timeline - only show if cooldownTime is not 0 */}
-      {cooldownTime !== '0' && (
-        <Timeline cooldownTime={cooldownTime} lastRequestDate={lastRequestDate} lastRequestStatus={lastRequestStatus} />
+      {/* timeline - show if we have lastRequestTime (to show last request date) or if we have cooldown to show */}
+      {(lastRequestTime !== undefined || (delay && delay !== '0' && cooldownEndTime)) && (
+        <Timeline
+          cooldownTime={cooldownEndTime}
+          lastRequestDate={lastRequestDate}
+          lastRequestStatus={lastRequestStatus}
+        />
       )}
 
       {/* authentication section */}

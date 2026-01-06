@@ -4,10 +4,9 @@ import { CountdownTimer } from './countdown';
 import { formatDate } from './format-date';
 import { LineAfterText } from './line-after-text';
 import { StatusBadge } from './status-badge';
-import { LastRequestStatus } from './types';
 
 export interface TimelineProps {
-  lastRequestStatus?: LastRequestStatus;
+  lastRequestStatus?: string;
   lastRequestDate?: Date;
   cooldownTime?: Date | number | string;
 }
@@ -33,7 +32,7 @@ export const Timeline = ({ lastRequestStatus, lastRequestDate, cooldownTime }: T
       {/* cooldown time */}
       {cooldownTime && (
         <div className='flex h-15 w-full flex-col items-start justify-start gap-0'>
-          <LineAfterText text='Cooldoown Time' />
+          <LineAfterText text='Cooldown Time' />
           <CountdownTimer date={cooldownTime} />
         </div>
       )}

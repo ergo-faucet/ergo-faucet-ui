@@ -27,6 +27,8 @@ interface SelectedPackageProps {
   delay?: string;
   openAt?: number;
   closeAt?: number;
+  lastRequestTime?: number;
+  lastRequestStatus?: string;
 }
 
 interface PackageAsset {
@@ -115,6 +117,8 @@ export const MainGrid: React.FC = () => {
             assets: mappedAssets,
             openAt: matched.openAt,
             closeAt: matched.closeAt,
+            lastRequestTime: matched.lastRequestTime,
+            lastRequestStatus: matched.lastRequestStatus,
           };
           setSelectedPackage(details);
         }
@@ -239,6 +243,8 @@ export const MainGrid: React.FC = () => {
                           authTasks: mappedAuthTasks,
                           openAt: pkg.openAt,
                           closeAt: pkg.closeAt,
+                          lastRequestTime: pkg.lastRequestTime,
+                          lastRequestStatus: pkg.lastRequestStatus,
                         });
                       }}
                     />
@@ -257,7 +263,9 @@ export const MainGrid: React.FC = () => {
             authTasks={selectedPackage.authTasks}
             assets={selectedPackage.assets}
             description={selectedPackage.description}
-            cooldownTime={selectedPackage.delay}
+            delay={selectedPackage.delay}
+            lastRequestTime={selectedPackage.lastRequestTime}
+            lastRequestStatus={selectedPackage.lastRequestStatus}
             openAt={selectedPackage.openAt}
             closeAt={selectedPackage.closeAt}
           />
