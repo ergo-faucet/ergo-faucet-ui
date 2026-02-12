@@ -46,7 +46,8 @@ export const PackageDetails = ({
   const now = Date.now();
   const openAtMs = openAt !== undefined ? openAt * 1000 : undefined;
   const closeAtMs = closeAt !== undefined ? closeAt * 1000 : undefined;
-  const isDisabled = (openAtMs !== undefined && now < openAtMs) || (closeAtMs !== undefined && now > closeAtMs);
+  const isDisabled =
+    !hasAssets || (openAtMs !== undefined && now < openAtMs) || (closeAtMs !== undefined && now > closeAtMs);
 
   // Calculate cooldown end time: lastRequestTime (seconds) + delay (seconds) = end time
   // Both lastRequestTime and delay are in seconds from backend
