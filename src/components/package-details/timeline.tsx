@@ -1,4 +1,5 @@
 import { inter } from '@/fonts';
+import type { LastRequestStatusType } from '@/types';
 
 import { CountdownTimer } from './countdown';
 import { formatDate } from './format-date';
@@ -6,7 +7,7 @@ import { LineAfterText } from './line-after-text';
 import { StatusBadge } from './status-badge';
 
 export interface TimelineProps {
-  lastRequestStatus?: string;
+  lastRequestStatus?: LastRequestStatusType;
   lastRequestDate?: Date;
   cooldownTime?: Date | number | string;
 }

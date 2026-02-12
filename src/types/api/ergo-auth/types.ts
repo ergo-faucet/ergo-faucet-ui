@@ -44,6 +44,8 @@ export interface PackageAuthMethodDto {
   status?: string;
 }
 
+export type LastRequestStatusType = 'paid' | 'failed' | 'pending' | 'submitted';
+
 export interface PackageType {
   id: number;
   name: string;
@@ -56,7 +58,7 @@ export interface PackageType {
   assets: PackageAssetDto[];
   authMethods: PackageAuthMethodDto[];
   lastRequestTime?: number;
-  lastRequestStatus?: string;
+  lastRequestStatus?: LastRequestStatusType;
 }
 
 export interface GetPackagesResponse {

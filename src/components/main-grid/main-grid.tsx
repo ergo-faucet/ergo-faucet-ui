@@ -9,7 +9,7 @@ import useSWR, { mutate } from 'swr';
 import { usePaginationStore } from '@/components/pagination/useStore';
 import { swrFetcher } from '@/lib/api';
 import { swrAuthFetcher } from '@/lib/api/auth-fetch';
-import { Asset, AuthType, PackageType, GetPackagesResponse } from '@/types';
+import { Asset, AuthType, PackageType, GetPackagesResponse, type LastRequestStatusType } from '@/types';
 
 import Searchbar from '../navbar/searchbar/searchbar';
 import SortBy from '../navbar/sort-by';
@@ -28,7 +28,7 @@ interface SelectedPackageProps {
   openAt?: number;
   closeAt?: number;
   lastRequestTime?: number;
-  lastRequestStatus?: string;
+  lastRequestStatus?: LastRequestStatusType;
 }
 
 interface PackageAsset {

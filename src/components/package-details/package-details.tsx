@@ -2,6 +2,7 @@ import { Dialog, DialogContent, DialogTitle, DialogTrigger } from '@/components/
 import { volkhov } from '@/fonts';
 import { cn } from '@/lib';
 import { Asset } from '@/types';
+import type { LastRequestStatusType } from '@/types';
 
 import { ClaimModal } from '../claim-modal/claim-modal';
 import { ClaimButton } from './buttons';
@@ -21,7 +22,7 @@ interface PackageDetailsProps extends Omit<TimelineProps, 'cooldownTime' | 'last
   closeAt?: number;
   delay?: string;
   lastRequestTime?: number;
-  lastRequestStatus?: string;
+  lastRequestStatus?: LastRequestStatusType;
 }
 
 export const PackageDetails = ({
