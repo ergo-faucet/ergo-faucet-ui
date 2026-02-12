@@ -41,22 +41,28 @@ export const PackageDetails = ({
   const hasAssets = Array.isArray(assets) && assets.length > 0;
   const hasDescription = Boolean(description && description.trim() !== '');
 
-  // Calculate if claim button should be disabled (before openAt or after closeAt)
-  // openAt and closeAt are Unix timestamps in seconds, convert to milliseconds for comparison
+  // Calculate if claim button should be disabled:
+  // 1. Not in package time window (before openAt or after closeAt)
+  // 2. Not all auth methods passed
+  // 3. Still in cooldown
   const now = Date.now();
+  // backend timestamps in seconds → convert to ms for Date
   const openAtMs = openAt !== undefined ? openAt * 1000 : undefined;
   const closeAtMs = closeAt !== undefined ? closeAt * 1000 : undefined;
-  const isDisabled =
-    !hasAssets || (openAtMs !== undefined && now < openAtMs) || (closeAtMs !== undefined && now > closeAtMs);
-
-  // Calculate cooldown end time: lastRequestTime (seconds) + delay (seconds) = end time
-  // Both lastRequestTime and delay are in seconds from backend
-  // Convert to milliseconds for Date object: (seconds) * 1000
+  // cooldown duration in seconds
   const delaySeconds = delay ? parseInt(delay, 10) : 0;
   const cooldownEndTime =
     lastRequestTime !== undefined && delay && delaySeconds > 0
       ? new Date((lastRequestTime + delaySeconds) * 1000)
       : undefined;
+  // before open or after close
+  const notInTimeWindow = (openAtMs !== undefined && now < openAtMs) || (closeAtMs !== undefined && now > closeAtMs);
+  // has auth tasks but not all passed
+  const notAllAuthPassed = hasAuth && !authTasks.every((t) => t.isCompleted);
+  // user requested recently and cooldown not ended
+  const inCooldown = cooldownEndTime !== undefined && now < cooldownEndTime.getTime();
+  const isDisabled = !hasAssets || notInTimeWindow || notAllAuthPassed || inCooldown;
+
   const lastRequestDate = lastRequestTime !== undefined ? new Date(lastRequestTime * 1000) : undefined;
 
   if (!hasPackageSelected) {
