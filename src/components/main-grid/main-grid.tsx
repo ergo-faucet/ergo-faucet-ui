@@ -231,8 +231,8 @@ export const MainGrid: React.FC = () => {
                       title={pkg.name}
                       assets={mappedAssets}
                       authTypes={(pkg.authMethods || []).map((m: PackageAuthMethod): AuthType => m.name as AuthType)}
-                      startDate={pkg.openAt ? new Date(pkg.openAt) : undefined}
-                      endDate={pkg.closeAt ? new Date(pkg.closeAt) : undefined}
+                      startDate={pkg.openAt !== undefined ? new Date(pkg.openAt * 1000) : undefined}
+                      endDate={pkg.closeAt !== undefined ? new Date(pkg.closeAt * 1000) : undefined}
                       onClick={() => {
                         setSelectedPackageId(String(pkg.id || pkg.name));
                         setSelectedPackage({
