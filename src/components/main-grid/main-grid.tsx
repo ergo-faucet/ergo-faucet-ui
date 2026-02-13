@@ -29,6 +29,7 @@ interface SelectedPackageProps {
 
 interface PackageAsset {
   tokenId: string;
+  assetName: string;
   amount?: number | string | bigint;
   decimals?: number;
 }
@@ -97,7 +98,7 @@ export const MainGrid: React.FC = () => {
 
           const mappedAssets: Asset[] = (matched.assets || []).map(
             (a: PackageAsset): Asset => ({
-              name: a.tokenId,
+              name: a.assetName,
               amount: BigInt((a.amount ?? '0').toString()),
               decimals: a.decimals ?? 0,
               tokenId: a.tokenId,
@@ -135,7 +136,7 @@ export const MainGrid: React.FC = () => {
 
     const mappedAssets: Asset[] = (matched.assets || []).map(
       (a: PackageAsset): Asset => ({
-        name: a.tokenId,
+        name: a.assetName,
         amount: BigInt((a.amount ?? '0').toString()),
         decimals: a.decimals ?? 0,
         tokenId: a.tokenId,
@@ -200,7 +201,7 @@ export const MainGrid: React.FC = () => {
                 data.packages.map((pkg: PackageType) => {
                   const mappedAssets: Asset[] = (pkg.assets || []).map(
                     (a: PackageAsset): Asset => ({
-                      name: a.tokenId,
+                      name: a.assetName,
                       amount: BigInt((a.amount ?? '0').toString()),
                       decimals: a.decimals ?? 0,
                       tokenId: a.tokenId,

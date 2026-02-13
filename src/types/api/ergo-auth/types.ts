@@ -32,7 +32,9 @@ export interface ChallengeResponse {
 export interface PackageAssetDto {
   id: number;
   tokenId: string;
+  assetName: string;
   amount: string;
+  decimals: number;
   usageDescription: string;
 }
 
