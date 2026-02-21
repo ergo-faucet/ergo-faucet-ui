@@ -29,6 +29,8 @@ interface SelectedPackageProps {
   closeAt?: number;
   lastRequestTime?: number;
   lastRequestStatus?: LastRequestStatusType;
+  totalRequestCount?: number;
+  numberEachUser?: number;
 }
 
 interface PackageAsset {
@@ -119,6 +121,8 @@ export const MainGrid: React.FC = () => {
             closeAt: matched.closeAt,
             lastRequestTime: matched.lastRequestTime,
             lastRequestStatus: matched.lastRequestStatus,
+            totalRequestCount: matched.totalRequestCount,
+            numberEachUser: matched.numberEachUser,
           };
           setSelectedPackage(details);
         }
@@ -159,6 +163,10 @@ export const MainGrid: React.FC = () => {
       assets: mappedAssets,
       openAt: matched.openAt,
       closeAt: matched.closeAt,
+      lastRequestTime: matched.lastRequestTime,
+      lastRequestStatus: matched.lastRequestStatus,
+      totalRequestCount: matched.totalRequestCount,
+      numberEachUser: matched.numberEachUser,
     };
     setSelectedPackage(details);
   }, [data, selectedPackageId, didInitFromUrl]);
@@ -245,6 +253,8 @@ export const MainGrid: React.FC = () => {
                           closeAt: pkg.closeAt,
                           lastRequestTime: pkg.lastRequestTime,
                           lastRequestStatus: pkg.lastRequestStatus,
+                          totalRequestCount: pkg.totalRequestCount,
+                          numberEachUser: pkg.numberEachUser,
                         });
                       }}
                     />
@@ -268,6 +278,8 @@ export const MainGrid: React.FC = () => {
             lastRequestStatus={selectedPackage.lastRequestStatus}
             openAt={selectedPackage.openAt}
             closeAt={selectedPackage.closeAt}
+            totalRequestCount={selectedPackage.totalRequestCount}
+            numberEachUser={selectedPackage.numberEachUser}
           />
         </div>
       </div>

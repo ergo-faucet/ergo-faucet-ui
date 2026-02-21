@@ -23,6 +23,8 @@ interface PackageDetailsProps extends Omit<TimelineProps, 'cooldownTime' | 'last
   delay?: string;
   lastRequestTime?: number;
   lastRequestStatus?: LastRequestStatusType;
+  totalRequestCount?: number;
+  numberEachUser?: number;
 }
 
 export const PackageDetails = ({
@@ -36,6 +38,8 @@ export const PackageDetails = ({
   lastRequestStatus,
   openAt,
   closeAt,
+  totalRequestCount,
+  numberEachUser,
 }: PackageDetailsProps) => {
   const hasPackageSelected = Boolean(packageId && title && title.trim() !== '');
   const hasAuth = Array.isArray(authTasks) && authTasks.length > 0;
@@ -62,7 +66,10 @@ export const PackageDetails = ({
   const notAllAuthPassed = hasAuth && !authTasks.every((t) => t.isCompleted);
   // user requested recently and cooldown not ended
   const inCooldown = cooldownEndTime !== undefined && now < cooldownEndTime.getTime();
-  const isDisabled = !hasAssets || notInTimeWindow || notAllAuthPassed || inCooldown;
+  // user has reached their per-user claim limit for this package
+  const limitReached =
+    totalRequestCount !== undefined && numberEachUser !== undefined && totalRequestCount >= numberEachUser;
+  const isDisabled = !hasAssets || notInTimeWindow || notAllAuthPassed || inCooldown || limitReached;
 
   const lastRequestDate = lastRequestTime !== undefined ? new Date(lastRequestTime * 1000) : undefined;
 
