@@ -30,7 +30,6 @@ export interface ChallengeResponse {
 }
 
 export interface PackageAssetDto {
-  id: number;
   tokenId: string;
   assetName: string;
   amount: string;
@@ -57,8 +56,9 @@ export interface PackageType {
   numberEachUser: number;
   assets: PackageAssetDto[];
   authMethods: PackageAuthMethodDto[];
-  lastRequestTime?: number;
-  lastRequestStatus?: LastRequestStatusType;
+  totalRequestCount: number;
+  lastRequestStatus: LastRequestStatusType;
+  lastRequestTime: number;
 }
 
 export interface GetPackagesResponse {
