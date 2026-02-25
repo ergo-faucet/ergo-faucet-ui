@@ -2,6 +2,7 @@ import { Dialog, DialogContent, DialogTitle, DialogTrigger } from '@/components/
 import { volkhov } from '@/fonts';
 import { cn } from '@/lib';
 import { Asset } from '@/types';
+import type { LastRequestStatusType } from '@/types';
 
 import { ClaimModal } from '../claim-modal/claim-modal';
 import { ClaimButton } from './buttons';
@@ -11,12 +12,19 @@ import PackageDescription from './package-description';
 import { Timeline, TimelineProps } from './timeline';
 import { AuthTaskType } from './types';
 
-interface PackageDetailsProps extends TimelineProps {
+interface PackageDetailsProps extends Omit<TimelineProps, 'cooldownTime' | 'lastRequestDate' | 'lastRequestStatus'> {
   packageId: number;
   title: string;
   authTasks: AuthTaskType[];
   assets: Asset[];
   description: string;
+  openAt?: number;
+  closeAt?: number;
+  delay?: string;
+  lastRequestTime?: number;
+  lastRequestStatus?: LastRequestStatusType;
+  totalRequestCount?: number;
+  numberEachUser?: number;
 }
 
 export const PackageDetails = ({
@@ -25,14 +33,45 @@ export const PackageDetails = ({
   authTasks,
   assets,
   description,
-  cooldownTime,
-  lastRequestDate,
+  delay,
+  lastRequestTime,
   lastRequestStatus,
+  openAt,
+  closeAt,
+  totalRequestCount,
+  numberEachUser,
 }: PackageDetailsProps) => {
   const hasPackageSelected = Boolean(packageId && title && title.trim() !== '');
   const hasAuth = Array.isArray(authTasks) && authTasks.length > 0;
   const hasAssets = Array.isArray(assets) && assets.length > 0;
   const hasDescription = Boolean(description && description.trim() !== '');
+
+  // Calculate if claim button should be disabled:
+  // 1. Not in package time window (before openAt or after closeAt)
+  // 2. Not all auth methods passed
+  // 3. Still in cooldown
+  const now = Date.now();
+  // backend timestamps in seconds → convert to ms for Date
+  const openAtMs = openAt !== undefined ? openAt * 1000 : undefined;
+  const closeAtMs = closeAt !== undefined ? closeAt * 1000 : undefined;
+  // cooldown duration in seconds
+  const delaySeconds = delay ? parseInt(delay, 10) : 0;
+  const cooldownEndTime =
+    lastRequestTime !== undefined && delay && delaySeconds > 0
+      ? new Date((lastRequestTime + delaySeconds) * 1000)
+      : undefined;
+  // before open or after close
+  const notInTimeWindow = (openAtMs !== undefined && now < openAtMs) || (closeAtMs !== undefined && now > closeAtMs);
+  // has auth tasks but not all passed
+  const notAllAuthPassed = hasAuth && !authTasks.every((t) => t.isCompleted);
+  // user requested recently and cooldown not ended
+  const inCooldown = cooldownEndTime !== undefined && now < cooldownEndTime.getTime();
+  // user has reached their per-user claim limit for this package
+  const limitReached =
+    totalRequestCount !== undefined && numberEachUser !== undefined && totalRequestCount >= numberEachUser;
+  const isDisabled = !hasAssets || notInTimeWindow || notAllAuthPassed || inCooldown || limitReached;
+
+  const lastRequestDate = lastRequestTime !== undefined ? new Date(lastRequestTime * 1000) : undefined;
 
   if (!hasPackageSelected) {
     return (
@@ -65,9 +104,13 @@ export const PackageDetails = ({
         {title}
       </span>
 
-      {/* timeline - only show if cooldownTime is not 0 */}
-      {cooldownTime !== '0' && (
-        <Timeline cooldownTime={cooldownTime} lastRequestDate={lastRequestDate} lastRequestStatus={lastRequestStatus} />
+      {/* timeline - show if we have lastRequestTime (to show last request date) or if we have cooldown to show */}
+      {(lastRequestTime !== undefined || (delay && delay !== '0' && cooldownEndTime)) && (
+        <Timeline
+          cooldownTime={cooldownEndTime}
+          lastRequestDate={lastRequestDate}
+          lastRequestStatus={lastRequestStatus}
+        />
       )}
 
       {/* authentication section */}
@@ -97,8 +140,17 @@ export const PackageDetails = ({
 
       {/* claim button */}
       <Dialog modal={false}>
-        <DialogTrigger className='self-center'>
-          <ClaimButton className='mt-6 self-center' />
+        <DialogTrigger
+          className='self-center'
+          disabled={isDisabled}
+          onClick={(e) => {
+            if (isDisabled) {
+              e.preventDefault();
+              e.stopPropagation();
+            }
+          }}
+        >
+          <ClaimButton className='mt-6 self-center' disabled={isDisabled} />
         </DialogTrigger>
         <DialogContent
           // safety net: prevent dismiss when interacting with iframe (recaptcha)

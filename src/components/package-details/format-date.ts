@@ -28,10 +28,10 @@ export const formatDate = (date: Date): string => {
     ' ' +
     getMonthName(date.getMonth()) +
     ' ' +
-    date.getDay() +
+    date.getDate() +
     ' ' +
     date.getHours() +
     ':' +
-    date.getMinutes()
+    String(date.getMinutes()).padStart(2, '0')
   );
 };

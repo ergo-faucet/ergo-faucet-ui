@@ -1,6 +1,7 @@
+import type { LastRequestStatusType } from '@/types/api/ergo-auth/types';
 import { AuthType } from '@/types/authType';
 
-export type LastRequestStatus = 'success' | 'rejected' | 'pending';
+export type { LastRequestStatusType };
 
 export type AuthTaskType = {
   authType: AuthType;

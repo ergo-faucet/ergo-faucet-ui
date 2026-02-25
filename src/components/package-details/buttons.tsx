@@ -25,23 +25,32 @@ export const ClickToCompleteButton = ({ handleOnClick }: { handleOnClick: () => 
 
 interface ClaimButtonProps {
   className?: string;
+  disabled?: boolean;
 }
 
-export const ClaimButton = ({ className }: ClaimButtonProps) => {
+export const ClaimButton = ({ className, disabled }: ClaimButtonProps) => {
   return (
     <span
       role='button'
-      tabIndex={0}
+      tabIndex={disabled ? -1 : 0}
+      onClick={(e) => {
+        if (disabled) {
+          e.preventDefault();
+          e.stopPropagation();
+        }
+      }}
       onKeyDown={(e) => {
-        if (e.key === 'Enter' || e.key === ' ') {
+        if (disabled || e.key === 'Enter' || e.key === ' ') {
           e.preventDefault();
         }
       }}
       className={cn(
-        `inline-flex h-10.5 w-42.5 cursor-pointer items-center justify-center rounded-[12px] border border-green-400
-        bg-green-700 text-[18px] leading-none font-extrabold tracking-wider text-white
-        shadow-[-2px_2px_6px_0_rgba(0,0,0)]/20 shadow-black select-none hover:bg-green-900 focus:outline-none
-        focus-visible:ring-2 focus-visible:ring-green-500 focus-visible:ring-offset-2`,
+        `inline-flex h-10.5 w-42.5 items-center justify-center rounded-[12px] border text-[18px] leading-none
+        font-extrabold tracking-wider text-white shadow-[-2px_2px_6px_0_rgba(0,0,0)]/20 shadow-black select-none
+        focus:outline-none focus-visible:ring-2 focus-visible:ring-green-500 focus-visible:ring-offset-2`,
+        disabled
+          ? 'cursor-not-allowed border-gray-400 bg-gray-500'
+          : 'cursor-pointer border-green-400 bg-green-700 hover:bg-green-900',
         inter.className,
         className,
       )}

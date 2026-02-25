@@ -30,7 +30,6 @@ export interface ChallengeResponse {
 }
 
 export interface PackageAssetDto {
-  id: number;
   tokenId: string;
   assetName: string;
   amount: string;
@@ -44,6 +43,8 @@ export interface PackageAuthMethodDto {
   status?: string;
 }
 
+export type LastRequestStatusType = 'paid' | 'failed' | 'pending' | 'submitted';
+
 export interface PackageType {
   id: number;
   name: string;
@@ -55,6 +56,9 @@ export interface PackageType {
   numberEachUser: number;
   assets: PackageAssetDto[];
   authMethods: PackageAuthMethodDto[];
+  totalRequestCount: number;
+  lastRequestStatus: LastRequestStatusType;
+  lastRequestTime: number;
 }
 
 export interface GetPackagesResponse {

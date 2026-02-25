@@ -9,7 +9,7 @@ import useSWR, { mutate } from 'swr';
 import { usePaginationStore } from '@/components/pagination/useStore';
 import { swrFetcher } from '@/lib/api';
 import { swrAuthFetcher } from '@/lib/api/auth-fetch';
-import { Asset, AuthType, PackageType, GetPackagesResponse } from '@/types';
+import { Asset, AuthType, PackageType, GetPackagesResponse, type LastRequestStatusType } from '@/types';
 
 import Searchbar from '../navbar/searchbar/searchbar';
 import SortBy from '../navbar/sort-by';
@@ -25,6 +25,12 @@ interface SelectedPackageProps {
   assets: Asset[];
   description: string;
   delay?: string;
+  openAt?: number;
+  closeAt?: number;
+  lastRequestTime?: number;
+  lastRequestStatus?: LastRequestStatusType;
+  totalRequestCount?: number;
+  numberEachUser?: number;
 }
 
 interface PackageAsset {
@@ -111,6 +117,12 @@ export const MainGrid: React.FC = () => {
             delay: matched.delay,
             authTasks: mappedAuthTasks,
             assets: mappedAssets,
+            openAt: matched.openAt,
+            closeAt: matched.closeAt,
+            lastRequestTime: matched.lastRequestTime,
+            lastRequestStatus: matched.lastRequestStatus,
+            totalRequestCount: matched.totalRequestCount,
+            numberEachUser: matched.numberEachUser,
           };
           setSelectedPackage(details);
         }
@@ -149,6 +161,12 @@ export const MainGrid: React.FC = () => {
       delay: matched.delay,
       authTasks: mappedAuthTasks,
       assets: mappedAssets,
+      openAt: matched.openAt,
+      closeAt: matched.closeAt,
+      lastRequestTime: matched.lastRequestTime,
+      lastRequestStatus: matched.lastRequestStatus,
+      totalRequestCount: matched.totalRequestCount,
+      numberEachUser: matched.numberEachUser,
     };
     setSelectedPackage(details);
   }, [data, selectedPackageId, didInitFromUrl]);
@@ -221,8 +239,8 @@ export const MainGrid: React.FC = () => {
                       title={pkg.name}
                       assets={mappedAssets}
                       authTypes={(pkg.authMethods || []).map((m: PackageAuthMethod): AuthType => m.name as AuthType)}
-                      startDate={pkg.openAt ? new Date(pkg.openAt) : undefined}
-                      endDate={pkg.closeAt ? new Date(pkg.closeAt) : undefined}
+                      startDate={pkg.openAt !== undefined ? new Date(pkg.openAt * 1000) : undefined}
+                      endDate={pkg.closeAt !== undefined ? new Date(pkg.closeAt * 1000) : undefined}
                       onClick={() => {
                         setSelectedPackageId(String(pkg.id || pkg.name));
                         setSelectedPackage({
@@ -231,6 +249,12 @@ export const MainGrid: React.FC = () => {
                           delay: pkg.delay,
                           assets: mappedAssets,
                           authTasks: mappedAuthTasks,
+                          openAt: pkg.openAt,
+                          closeAt: pkg.closeAt,
+                          lastRequestTime: pkg.lastRequestTime,
+                          lastRequestStatus: pkg.lastRequestStatus,
+                          totalRequestCount: pkg.totalRequestCount,
+                          numberEachUser: pkg.numberEachUser,
                         });
                       }}
                     />
@@ -249,7 +273,13 @@ export const MainGrid: React.FC = () => {
             authTasks={selectedPackage.authTasks}
             assets={selectedPackage.assets}
             description={selectedPackage.description}
-            cooldownTime={selectedPackage.delay}
+            delay={selectedPackage.delay}
+            lastRequestTime={selectedPackage.lastRequestTime}
+            lastRequestStatus={selectedPackage.lastRequestStatus}
+            openAt={selectedPackage.openAt}
+            closeAt={selectedPackage.closeAt}
+            totalRequestCount={selectedPackage.totalRequestCount}
+            numberEachUser={selectedPackage.numberEachUser}
           />
         </div>
       </div>

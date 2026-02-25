@@ -15,4 +15,5 @@ export type {
   ClaimPackageResponse,
   PackageAssetDto,
   PackageAuthMethodDto,
+  LastRequestStatusType,
 } from './api/ergo-auth/types';
